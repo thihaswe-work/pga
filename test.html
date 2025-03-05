@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Number Validation</title>
+    <style>
+      .error-message {
+        color: red;
+        display: none; /* Hidden by default */
+      }
+      input[aria-invalid="true"] {
+        border: 2px solid red;
+      }
+    </style>
+  </head>
+  <body>
+    <h2>Number Validation: Must be 10 or less</h2>
+
+    <!-- Form starts here -->
+    <form id="numberForm">
+      <label for="number">Enter a Number:</label>
+      <input type="number" id="number" name="number" aria-invalid="false" />
+      <!-- Error message -->
+      <span id="numberError" class="error-message"
+        >Number must be 10 or less.</span
+      >
+
+      <br /><br />
+      <button type="submit">Submit</button>
+    </form>
+
+    <script>
+      const form = document.getElementById("numberForm");
+      const numberInput = document.getElementById("number");
+      const numberError = document.getElementById("numberError");
+
+      // Form submission handler
+      form.addEventListener("submit", function (event) {
+        event.preventDefault(); // Prevent the form from submitting (for demo purposes)
+
+        const numberValue = numberInput.value;
+
+        // Check if the number is greater than 10
+        if (numberValue > 10) {
+          // If invalid, set aria-invalid to true and show error message
+          numberInput.setAttribute("aria-invalid", "true");
+          numberError.style.display = "inline"; // Show error message
+        } else {
+          // If valid, set aria-invalid to false and hide error message
+          numberInput.setAttribute("aria-invalid", "false");
+          numberError.style.display = "none"; // Hide error message
+        }
+      });
+
+      // Event listener for when the input value changes (while typing or pasting)
+      numberInput.addEventListener("input", function () {
+        const numberValue = numberInput.value;
+
+        // Check if the number is greater than 10
+        if (numberValue > 10) {
+          // If invalid, set aria-invalid to true and show error message
+          numberInput.setAttribute("aria-invalid", "true");
+          numberError.style.display = "inline"; // Show error message
+        } else {
+          // If valid, set aria-invalid to false and hide error message
+          numberInput.setAttribute("aria-invalid", "false");
+          numberError.style.display = "none"; // Hide error message
+        }
+      });
+    </script>
+  </body>
+</html>
