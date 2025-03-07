@@ -192,29 +192,65 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
                 <div className="flex h-16 shrink-0 items-center px-4">
                   <Logo />
                 </div>
-                {navigation.map((item) => (
-                  <NavLink
-                    key={item.name}
-                    to={item.to}
-                    end
-                    className={({ isActive }) =>
-                      cn(
-                        "text-gray-300 hover:bg-gray-700 hover:text-white",
-                        "group flex flex-1 w-full items-center rounded-md p-2 text-base font-medium",
-                        isActive && "bg-gray-900 text-white"
-                      )
-                    }
-                  >
-                    <item.icon
-                      className={cn(
-                        "text-gray-400 group-hover:text-gray-300",
-                        "mr-4 size-6 shrink-0"
-                      )}
-                      aria-hidden="true"
-                    />
-                    {item.name}
-                  </NavLink>
-                ))}
+                {navigation.map((item, index) => {
+                  if ("title" in item) {
+                    // It's a title section
+                    return (
+                      <h3 key={index} className="text-gray-500 px-4">
+                        {item.title}
+                      </h3>
+                    );
+                  }
+
+                  if ("subRoute" in item) {
+                    // It's a submenu item
+                    return (
+                      <div key={index} className="menu-group">
+                        <div className="menu-group-header flex items-center px-4 py-2">
+                          <item.icon className="w-5 h-5 mr-2" />
+                          <span>{item.name}</span>
+                        </div>
+                        <div className="menu-group-items pl-6">
+                          {item.subRoute[0].map((subItem, subIndex) => (
+                            <a
+                              key={subIndex}
+                              href={subItem.to}
+                              className="flex items-center px-4 py-2 hover:bg-gray-100"
+                            >
+                              <subItem.icon className="w-4 h-4 mr-2" />
+                              {subItem.name}
+                            </a>
+                          ))}
+                        </div>
+                      </div>
+                    );
+                  }
+
+                  // It's a standard navigation item
+                  return (
+                    <NavLink
+                      key={item.name}
+                      to={item.to}
+                      end={item.name !== "Discussions"}
+                      className={({ isActive }) =>
+                        cn(
+                          "text-gray-300 hover:bg-gray-700 hover:text-white",
+                          "group flex flex-1 w-full items-center rounded-md p-2 text-base font-medium",
+                          isActive && "bg-gray-900 text-white"
+                        )
+                      }
+                    >
+                      <item.icon
+                        className={cn(
+                          "text-gray-400 group-hover:text-gray-300",
+                          "mr-4 size-6 shrink-0"
+                        )}
+                        aria-hidden="true"
+                      />
+                      {item.name}
+                    </NavLink>
+                  );
+                })}
               </nav>
             </DrawerContent>
           </Drawer>

@@ -5,8 +5,8 @@
 @custom-variant dark (&:is(.dark *));
 
 :root {
-  --primaryText:#ed1c24;
-  --secondaryText:#999999;
+  --primaryText: #ed1c24;
+  --secondaryText: #999999;
   --background: #f5f5f5;
   --foreground: oklch(0.145 0 0);
   --card: oklch(1 0 0);
@@ -78,7 +78,6 @@
 }
 
 @theme inline {
-  --color--primaryText:var()
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);

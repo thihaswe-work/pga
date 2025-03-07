@@ -67,6 +67,11 @@ export const createAppRouter = (queryClient: QueryClient) =>
           lazy: () =>
             import("./routes/app/feedback").then(convert(queryClient)),
         },
+        {
+          path: paths.app.milestone.path,
+          lazy: () =>
+            import("./routes/app/milestone").then(convert(queryClient)),
+        },
       ],
     },
     {
