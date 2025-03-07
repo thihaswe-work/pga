@@ -1,28 +1,84 @@
-import Home from "@/app/routes/app/home";
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { QueryClient, useQueryClient } from "@tanstack/react-query";
+import { useMemo } from "react";
+import { createBrowserRouter } from "react-router";
+import { RouterProvider } from "react-router/dom";
 
-import { BrowserRouter, Route, Routes } from "react-router";
+import { paths } from "@/config/paths";
 
-import Login from "./routes/auth/login";
-import Register from "./routes/auth/register";
-import Setting from "./routes/app/setting";
-import { AuthLayout, DashboardLayout } from "@/components/layouts";
+import {
+  default as AppRoot,
+  ErrorBoundary as AppRootErrorBoundary,
+} from "./routes/app/root";
+import { ProtectedRoute } from "@/lib/auth";
 
-const AppRouter = () => {
-  return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<DashboardLayout />}>
-          <Route index element={<Home />} />
-          <Route path="/dashboard/home" element={<Home />} />
-          <Route path="/dashboard/setting" element={<Setting />} />
-        </Route>
-        <Route path="/auth" element={<AuthLayout />}>
-          <Route path="/auth/login" element={<Login />}></Route>
-          <Route path="/auth/register" element={<Register />}></Route>
-        </Route>
-      </Routes>
-    </BrowserRouter>
-  );
+const convert = (queryClient: QueryClient) => (m: any) => {
+  const { clientLoader, clientAction, default: Component, ...rest } = m;
+  return {
+    ...rest,
+    loader: clientLoader?.(queryClient),
+    action: clientAction?.(queryClient),
+    Component,
+  };
 };
 
-export default AppRouter;
+export const createAppRouter = (queryClient: QueryClient) =>
+  createBrowserRouter([
+    {
+      path: "/",
+      lazy: () => import("./routes/landing").then(convert(queryClient)),
+    },
+    {
+      path: paths.auth.register.path,
+      lazy: () => import("./routes/auth/register").then(convert(queryClient)),
+    },
+    {
+      path: paths.auth.login.path,
+      lazy: () => import("./routes/auth/login").then(convert(queryClient)),
+    },
+    {
+      path: paths.app.root.path,
+      element: (
+        <ProtectedRoute>
+          <AppRoot />
+        </ProtectedRoute>
+      ),
+      ErrorBoundary: AppRootErrorBoundary,
+      children: [
+        {
+          path: paths.app.dashboard.path,
+          lazy: () =>
+            import("./routes/app/dashboard").then(convert(queryClient)),
+        },
+        {
+          path: paths.app.home.path,
+          lazy: () => import("./routes/app/home").then(convert(queryClient)),
+        },
+        {
+          path: paths.app.aboutus.path,
+          lazy: () => import("./routes/app/aboutus").then(convert(queryClient)),
+        },
+        {
+          path: paths.app.banner.path,
+          lazy: () => import("./routes/app/banner").then(convert(queryClient)),
+        },
+        {
+          path: paths.app.feedback.path,
+          lazy: () =>
+            import("./routes/app/feedback").then(convert(queryClient)),
+        },
+      ],
+    },
+    {
+      path: "*",
+      lazy: () => import("./routes/not-found").then(convert(queryClient)),
+    },
+  ]);
+
+export const AppRouter = () => {
+  const queryClient = useQueryClient();
+
+  const router = useMemo(() => createAppRouter(queryClient), [queryClient]);
+
+  return <RouterProvider router={router} />;
+};
