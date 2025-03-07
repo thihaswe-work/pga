@@ -1,4 +1,5 @@
 import { Home, PanelLeft, Folder, User2 } from "lucide-react";
+
 import { JSX, useEffect, useState } from "react";
 import { NavLink, useNavigate, useNavigation } from "react-router";
 
@@ -100,14 +101,32 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
   // const logout = useLogout({
   //   onSuccess: () => navigate(paths.auth.login.getHref(location.pathname)),
   // });
-
-  const navigation = [
+  const navigation: NavigationItem[] = [
     { name: "Dashboard", to: paths.app.dashboard.getHref(), icon: Home },
+
+    { title: "Content & Images" }, // Added at the second place
+
     { name: "Home Page", to: paths.app.home.getHref(), icon: Folder },
     { name: "About Us", to: paths.app.aboutus.getHref(), icon: Folder },
     { name: "Miles Stone", to: paths.app.milestone.getHref(), icon: Folder },
-    { name: "Blog", to: paths.app.dashboard.getHref(), icon: Folder },
-  ].filter(Boolean) as NavigationItem[];
+
+    {
+      name: "Blog",
+      icon: Folder,
+      subRoute: [
+        [
+          { name: "Blogs", to: paths.app.blog.getHref(), icon: Folder },
+          {
+            name: "Categories",
+            to: "/app/blog/categories",
+            icon: Folder,
+          },
+        ],
+      ],
+    },
+
+    { title: "Maintenance" }, // Added at the end
+  ];
 
   return (
     <div className="flex min-h-screen w-full flex-col bg-muted/40">
