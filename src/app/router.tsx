@@ -72,6 +72,24 @@ export const createAppRouter = (queryClient: QueryClient) =>
           lazy: () =>
             import("./routes/app/milestone").then(convert(queryClient)),
         },
+        {
+          path: paths.app.categories.path,
+          lazy: () =>
+            import("./routes/app/categories").then(convert(queryClient)),
+        },
+        {
+          path: paths.app.blogs.path,
+          lazy: () => import("./routes/app/blogs").then(convert(queryClient)),
+        },
+        {
+          path: paths.app.roles.path,
+          lazy: () => import("./routes/app/roles").then(convert(queryClient)),
+        },
+        {
+          path: paths.app.userMaintain.path,
+          lazy: () =>
+            import("./routes/app/userMaintain").then(convert(queryClient)),
+        },
       ],
     },
     {

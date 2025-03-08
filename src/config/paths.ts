@@ -52,11 +52,18 @@ export const paths = {
         return "/app/milestone";
       },
     },
-    blog: {
+    blogs: {
       // name: "Blog",
-      path: "blog",
+      path: "blogs",
       getHref: () => {
-        return "/app/blog";
+        return "/app/blogs";
+      },
+    },
+    categories: {
+      // name: "Blog",
+      path: "categories",
+      getHref: () => {
+        return "/app/categories";
       },
     },
     banner: {
@@ -71,6 +78,20 @@ export const paths = {
       path: "feedback",
       getHref: () => {
         return "/app/feedback";
+      },
+    },
+    roles: {
+      // name: "Banner",
+      path: "roles",
+      getHref: () => {
+        return "/app/roles";
+      },
+    },
+    userMaintain: {
+      // name: "Banner",
+      path: "feedback",
+      getHref: () => {
+        return "/app/user-maintian";
       },
     },
   },

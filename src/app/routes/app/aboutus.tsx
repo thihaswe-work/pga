@@ -1,7 +1,9 @@
+import { ContentLayout } from "@/components/layouts/content-layout";
+
 export default function AboutUs() {
   return (
-    <div>
+    <ContentLayout title={"About Us"}>
       <h1>About Us</h1>
-    </div>
+    </ContentLayout>
   );
 }

@@ -8,7 +8,7 @@
   --primaryText: #ed1c24;
   --secondaryText: #999999;
   --background: #f5f5f5;
-  --foreground: oklch(0.145 0 0);
+  --foreground:#06090D
   --card: oklch(1 0 0);
   --card-foreground: oklch(0.145 0 0);
   --popover: oklch(1 0 0);
@@ -128,4 +128,8 @@
 @theme {
   --color-primaryText: #ed1c24;
   --color-secondaryText: #999999;
+  --color-secondBackground: #f0f0f0;
+  --color-hover: rgba(153, 153, 153, 0.2);
+  --color-active: rgba(237, 28, 36, 0.2);
+  --color-disable: rgba(245, 245, 245, 1);
 }
