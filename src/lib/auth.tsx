@@ -1,8 +1,9 @@
-import { Navigate, useLocation } from "react-router";
+import { useLocation } from "react-router";
 // import { configureAuth } from "react-query-auth";
 // import { z } from "zod";
 
 // import { paths } from "@/config/paths";
+import useAuth from "@/store/store";
 // import { AuthResponse, User } from "@/types/api";
 
 // import { api } from "./api-client";
@@ -77,6 +78,7 @@ import { Navigate, useLocation } from "react-router";
 
 export const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
   const location = useLocation();
+  const user = useAuth();
 
   // if (!user.data) {
   //   return (

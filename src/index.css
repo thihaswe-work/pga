@@ -5,6 +5,7 @@
 @custom-variant dark (&:is(.dark *));
 
 :root {
+  --secondBackground:#f0f0f0;
   --primaryText: #ed1c24;
   --secondaryText: #999999;
   --background: #f5f5f5;
@@ -128,7 +129,7 @@
 @theme {
   --color-primaryText: #ed1c24;
   --color-secondaryText: #999999;
-  --color-secondBackground: #f0f0f0;
+  --color-secondBackground: var(--secondBackground);
   --color-hover: rgba(153, 153, 153, 0.2);
   --color-active: rgba(237, 28, 36, 0.2);
   --color-disable: rgba(245, 245, 245, 1);

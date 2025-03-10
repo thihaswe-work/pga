@@ -66,12 +66,12 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
   // });
 
   return (
-    <div className="flex min-h-screen w-full flex-col bg-muted/40">
+    <div className="flex min-h-screen w-full flex-col bg-background">
       <aside className="fixed inset-y-0 left-0 z-10 hidden w-60 flex-col border-r sm:flex">
         <SideBar />
       </aside>
       <div className="flex flex-col sm:gap-4 sm:py-4 sm:pl-60">
-        <header className="sticky top-0 z-30 flex h-14 items-center justify-between gap-4 border-b bg-background px-4 sm:static sm:h-auto sm:justify-end sm:border-0 sm:bg-transparent sm:px-6">
+        <header className="sticky top-0 z-30 flex h-20 items-center justify-between gap-4 border-b bg-background px-4 sm:static sm:h-auto sm:justify-end sm:border-0 sm:bg-transparent sm:px-6">
           <Progress />
           <Drawer>
             <DrawerTrigger asChild>
@@ -85,16 +85,22 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
             </DrawerContent>
           </Drawer>
           <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button
-                variant="outline"
-                size="icon"
-                className="overflow-hidden rounded-full"
-              >
-                <span className="sr-only">Open user menu</span>
-                <User2 className="size-6 rounded-full" />
-              </Button>
-            </DropdownMenuTrigger>
+            <div className="flex gap-2">
+              <DropdownMenuTrigger asChild>
+                <Button
+                  variant="outline"
+                  size="icon"
+                  className="overflow-hidden rounded-full"
+                >
+                  <span className="sr-only">Open user menu</span>
+                  <User2 className="size-6 rounded-full" />
+                </Button>
+              </DropdownMenuTrigger>
+              <div className="flex flex-col">
+                <div className="text-sm">hello world</div>
+                <span className="text-secondaryText text-xs">Admin</span>
+              </div>
+            </div>
             <DropdownMenuContent align="end">
               <DropdownMenuItem
                 onClick={() => navigate(paths.app.aboutus.getHref())}
@@ -112,7 +118,7 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
             </DropdownMenuContent>
           </DropdownMenu>
         </header>
-        <main className="grid flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8">
+        <main className="grid flex-1 items-start gap-4 p-4 lg:py-0 sm:px-6 sm:py-0 md:gap-8 bg-secondBackground min-h-[calc(100vh-86px)] ">
           {children}
         </main>
       </div>

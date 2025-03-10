@@ -14,7 +14,6 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Checkbox } from "@/components/ui/checkbox";
 
 const formSchema = z.object({
   email: z.string().email({
@@ -23,7 +22,6 @@ const formSchema = z.object({
   password: z.string().min(8, {
     message: "Password must be at least 8 characters.",
   }),
-  rememberMe: z.boolean().optional(),
 });
 
 const RegisterForm = () => {
@@ -35,7 +33,6 @@ const RegisterForm = () => {
     defaultValues: {
       email: "",
       password: "",
-      rememberMe: false,
     },
   });
 
@@ -117,23 +114,6 @@ const RegisterForm = () => {
                   </div>
                 </FormControl>
                 <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          {/* Remember Me Checkbox */}
-          <FormField
-            control={form.control}
-            name="rememberMe"
-            render={({ field }) => (
-              <FormItem className="flex items-center gap-2">
-                <FormControl>
-                  <Checkbox
-                    checked={field.value}
-                    onCheckedChange={field.onChange}
-                  />
-                </FormControl>
-                <FormLabel>Remember me</FormLabel>
               </FormItem>
             )}
           />
