@@ -99,11 +99,16 @@ const LoginForm = () => {
                       aria-invalid={
                         form.formState.errors.password ? "true" : "false"
                       } // Add this line
-                      className={`pr-10 ${
-                        form.formState.errors.password
-                          ? "aria-invalid:ring-destructive/20 aria-invalid:text-destructive"
-                          : ""
-                      }`}
+                      className={`pr-10 
+                        ${
+                          form.formState.errors.password
+                            ? `aria-invalid:ring-destructive/20    ${
+                                !showPassword
+                                  ? "aria-invalid:text-destructive "
+                                  : ""
+                              }`
+                            : ""
+                        }`}
                     />
                     <button
                       type="button"
