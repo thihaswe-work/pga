@@ -1,3 +1,5 @@
+import { ContentLayout } from "@/components/layouts/content-layout";
+
 export default function UserMaintain() {
-  return <div> </div>;
+  return <ContentLayout title="user maintain">usermain</ContentLayout>;
 }

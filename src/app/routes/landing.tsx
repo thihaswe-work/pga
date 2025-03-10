@@ -32,7 +32,6 @@ const LandingRoute = () => {
             <div className="inline-flex rounded-md shadow">
               <Button
                 onClick={() => {
-                  console.log("hello");
                   handleStart();
                 }}
                 icon={

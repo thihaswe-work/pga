@@ -1,3 +1,5 @@
+import { ContentLayout } from "@/components/layouts/content-layout";
+
 export default function Roles() {
-  return <div> roles</div>;
+  return <ContentLayout title="roles">roles</ContentLayout>;
 }

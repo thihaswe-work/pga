@@ -1,7 +1,9 @@
+import { ContentLayout } from "@/components/layouts/content-layout";
+
 export default function Setting() {
   return (
-    <div className="flex flex-col">
+    <ContentLayout title="setting">
       <h1>Settings Page</h1>
-    </div>
+    </ContentLayout>
   );
 }

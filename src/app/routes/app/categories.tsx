@@ -1,3 +1,5 @@
+import { ContentLayout } from "@/components/layouts/content-layout";
+
 export default function Categories() {
-  return <div> categories</div>;
+  return <ContentLayout title="categories">categories</ContentLayout>;
 }

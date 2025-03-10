@@ -1,7 +1,9 @@
+import { ContentLayout } from "@/components/layouts/content-layout";
+
 export default function Milestone() {
   return (
-    <div>
+    <ContentLayout title="milestone">
       <h1>Milestone</h1>
-    </div>
+    </ContentLayout>
   );
 }

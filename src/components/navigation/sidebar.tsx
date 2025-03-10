@@ -99,12 +99,12 @@ export const SideBar = () => {
             <div key={index} className="menu-group">
               {/* Header - Click to Toggle */}
               <div
-                className="menu-group-header flex items-center p-2 cursor-pointer justify-between"
+                className="menu-group-header flex items-center p-2 cursor-pointer justify-between group flex-1 w-full rounded-md text-base font-medium"
                 onClick={() => toggleMenu(item.name)}
               >
                 <div className="flex items-center ">
-                  <item.icon className="w-5 h-5 mr-2" />
-                  <span>{item.name}</span>
+                  <item.icon className="mr-4 size-6 shrink-0" />
+                  <span className=" ">{item.name}</span>
                 </div>
                 {/* Arrow Icon - Changes Based on Open State */}
                 {openMenus[item.name] ? (

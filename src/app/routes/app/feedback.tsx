@@ -1,7 +1,9 @@
+import { ContentLayout } from "@/components/layouts/content-layout";
+
 export default function Feedback() {
   return (
-    <div>
+    <ContentLayout title="feedback">
       <h1>Feedback</h1>
-    </div>
+    </ContentLayout>
   );
 }

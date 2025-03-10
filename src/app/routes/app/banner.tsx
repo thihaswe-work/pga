@@ -1,7 +1,9 @@
+import { ContentLayout } from "@/components/layouts/content-layout";
+
 export default function Banner() {
   return (
-    <div>
+    <ContentLayout title={"title"}>
       <h1>Banner</h1>
-    </div>
+    </ContentLayout>
   );
 }
