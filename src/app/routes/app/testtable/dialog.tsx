@@ -4,15 +4,15 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { Home } from "./columns";
+import { Payment } from "./columns";
 
 interface Prop {
-  payment: Home | null;
+  payment: Payment | null;
   open: boolean;
   setOpen: (open: boolean) => void;
 }
 
-export function HomeDialog({ payment, open, setOpen }: Prop) {
+export function PaymentDialog({ payment, open, setOpen }: Prop) {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogContent>

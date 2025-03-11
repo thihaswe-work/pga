@@ -36,6 +36,7 @@ export const createAppRouter = (queryClient: QueryClient) =>
       path: paths.auth.login.path,
       lazy: () => import("./routes/auth/login").then(convert(queryClient)),
     },
+
     {
       path: paths.app.root.path,
       element: (
@@ -89,6 +90,13 @@ export const createAppRouter = (queryClient: QueryClient) =>
           path: paths.app.userMaintain.path,
           lazy: () =>
             import("./routes/app/userMaintain").then(convert(queryClient)),
+        },
+        {
+          path: "test",
+          lazy: () =>
+            import("./routes/app/testtable/test-page").then(
+              convert(queryClient)
+            ),
         },
       ],
     },

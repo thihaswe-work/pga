@@ -1,106 +1,104 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { ColumnDef } from "@tanstack/react-table";
-import { ArrowUpDown, MoreHorizontal } from "lucide-react";
-
 import { Button } from "@/components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
-export type Payment = {
-  id: string;
-  amount: number;
-  status: "pending" | "processing" | "success" | "failed" | "completed";
-  email: string;
+export type Home = {
+  id: number;
+  sectionType: string;
+  image: string;
+  header: string;
+  label: string;
+  description: string;
+  status: boolean;
+  createdAt: string;
+  updatedAt: string;
 };
 
 export const getColumns = (
-  onViewClick: (payment: Payment) => void
-): ColumnDef<Payment>[] => [
-  {
-    accessorKey: "status",
-    header: "Status",
-  },
-  {
-    accessorKey: "email",
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Email
-          <ArrowUpDown className="ml-2 h-4 w-4" />
-        </Button>
-      );
+  onViewClick: (payment: Home) => void
+): ColumnDef<Home>[] => {
+  return [
+    {
+      accessorKey: "id",
+      header: "ID",
     },
-  },
-  {
-    accessorKey: "amount",
-    header: () => <div className="text-right">Amount</div>,
-    cell: ({ row }) => {
-      const amount = parseFloat(row.getValue("amount"));
-      const formatted = new Intl.NumberFormat("en-US", {
-        style: "currency",
-        currency: "USD",
-      }).format(amount);
+    {
+      accessorKey: "sectionType",
+      header: "Section",
+    },
+    {
+      accessorKey: "image",
+      header: () => <div className="text-left">Image</div>,
+      cell: ({ row }) => {
+        const image = row.getValue("image") as string;
 
-      return <div className="text-right font-medium">{formatted}</div>;
+        return (
+          <div className="px-4 py-3 w-[213px]">
+            <img
+              className="w-[180px] h-[43px] object-cover"
+              src={image}
+              alt="image"
+            />
+          </div>
+        );
+      },
     },
-  },
-  {
-    id: "actions",
-    cell: ({ row }) => {
-      const payment = row.original;
-
-      return (
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="h-8 w-8 p-0">
-              <span className="sr-only">Open menu</span>
-              <MoreHorizontal className="h-4 w-4" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            <DropdownMenuItem
-              onClick={() => navigator.clipboard.writeText(payment.id)}
-            >
-              Copy payment ID
-            </DropdownMenuItem>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem>View customer</DropdownMenuItem>
-            <DropdownMenuItem>View payment details</DropdownMenuItem>
-            <DropdownMenuItem
-              onClick={() => {
-                console.log(row.original);
-              }}
-            >
-              Delete customer
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      );
+    { accessorKey: "header", header: "Header" },
+    { accessorKey: "label", header: "Label" },
+    {
+      accessorKey: "description",
+      header: () => <div className="pl-4"> Description</div>,
+      cell: ({ row }) => {
+        return (
+          <div className="px-4 py-3 w-[213px] h-[80px] text-wrap overflow-y-hidden">
+            <p className="">{row.getValue("description")}</p>
+          </div>
+        );
+      },
     },
-  },
-  {
-    id: "expand",
-    cell: ({ row }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => onViewClick(row.original)} // Pass row data to the parent
-        >
-          View
-        </Button>
-      );
+    {
+      accessorKey: "status",
+      header: "Status",
+      cell(props) {
+        return (
+          <div>
+            {props.row.getValue("status") ? (
+              <div className="text-statusActive p-2 w-20 rounded-lg text-center border-2 border-statusActive bg-bgStatusActive">
+                active
+              </div>
+            ) : (
+              <div className="text-primaryText p-2 w-20 rounded-lg text-center border-2 border-primaryText bg-bgStatusUnactive">
+                Unactive
+              </div>
+            )}
+          </div>
+        );
+      },
     },
-  },
-];
+    {
+      id: "view",
+      cell: ({ row }) => {
+        return (
+          <Button
+            variant="ghost"
+            onClick={() => onViewClick(row.original)} // Pass row data to the parent
+          >
+            View
+          </Button>
+        );
+      },
+    },
+    {
+      id: "edit",
+      cell: ({ row }) => {
+        return (
+          <Button variant="ghost" onClick={() => {}}>
+            Edit
+          </Button>
+        );
+      },
+    },
+  ];
+};

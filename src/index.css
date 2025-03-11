@@ -133,4 +133,7 @@
   --color-hover: rgba(153, 153, 153, 0.2);
   --color-active: rgba(237, 28, 36, 0.2);
   --color-disable: rgba(245, 245, 245, 1);
+ --color-bgStatusActive:#d3f3df;
+ --color-statusActive:#16a34a;
+ --color-bgStatusUnactive:#fbd2d3;
 }
