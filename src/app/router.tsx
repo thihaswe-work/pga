@@ -53,7 +53,13 @@ export const createAppRouter = (queryClient: QueryClient) =>
         },
         {
           path: paths.app.home.path,
-          lazy: () => import("./routes/app/home").then(convert(queryClient)),
+          lazy: () =>
+            import("./routes/app/home/home").then(convert(queryClient)),
+        },
+        {
+          path: paths.app.homeEdit.path,
+          lazy: () =>
+            import("./routes/app/home/homeEdit").then(convert(queryClient)),
         },
         {
           path: paths.app.aboutus.path,
@@ -61,7 +67,8 @@ export const createAppRouter = (queryClient: QueryClient) =>
         },
         {
           path: paths.app.banner.path,
-          lazy: () => import("./routes/app/banner").then(convert(queryClient)),
+          lazy: () =>
+            import("./routes/app/banner/banner").then(convert(queryClient)),
         },
         {
           path: paths.app.feedback.path,
@@ -76,7 +83,9 @@ export const createAppRouter = (queryClient: QueryClient) =>
         {
           path: paths.app.categories.path,
           lazy: () =>
-            import("./routes/app/categories").then(convert(queryClient)),
+            import("./routes/app/categories/categories").then(
+              convert(queryClient)
+            ),
         },
         {
           path: paths.app.blogs.path,

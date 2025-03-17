@@ -19,6 +19,8 @@ import {
 
 import { SideBar } from "../navigation";
 
+import useAuth from "@/store/store";
+
 const Progress = () => {
   const { state, location } = useNavigation();
 
@@ -60,7 +62,9 @@ const Progress = () => {
 };
 
 export function DashboardLayout({ children }: { children: React.ReactNode }) {
+  const { removeToken } = useAuth();
   const navigate = useNavigate();
+
   // const logout = useLogout({
   //   onSuccess: () => navigate(paths.auth.login.getHref(location.pathname)),
   // });
@@ -111,14 +115,17 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
               <DropdownMenuSeparator />
               <DropdownMenuItem
                 className={cn("block px-4 py-2 text-sm text-gray-700 w-full")}
-                // onClick={() => logout.mutate({})}
+                onClick={() => {
+                  removeToken();
+                  navigate("/auth/login");
+                }}
               >
                 Sign Out
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         </header>
-        <main className="grid flex-1 items-start gap-4 p-4 lg:py-0 sm:px-6 sm:py-0 md:gap-8 bg-secondBackground min-h-[calc(100vh-86px)] ">
+        <main className="grid flex-1 items-start gap-4 p-4 lg:py-0 sm:px-6 sm:py-0 md:gap-8 bg-secondaryBackground min-h-[calc(100vh-86px)] ">
           {children}
         </main>
       </div>

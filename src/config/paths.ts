@@ -38,6 +38,13 @@ export const paths = {
         return "/app/home";
       },
     },
+    homeEdit: {
+      path: "home/:section/edit",
+      getHref: (section: string) => {
+        return `/app/home/${section}/edit`;
+      },
+    },
+
     aboutus: {
       // name: "About Us",
       path: "about-us",

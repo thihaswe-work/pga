@@ -152,30 +152,35 @@ export const SideBar = () => {
         }
 
         // It's a standard navigation item
-        return (
-          <NavLink
-            key={item.name}
-            to={item.to}
-            end={item.name !== "Discussions"}
-            className={({ isActive }) =>
-              cn(
-                "",
-                " hover:bg-hover hover:text-secondaryText",
-                "group flex flex-1 w-full items-center rounded-md p-2 text-base font-medium",
-                isActive && "bg-active text-primaryText"
-              )
-            }
-          >
-            <item.icon
-              className={cn(
-                // "text-gray-400 group-hover:text-gray-300",
-                "mr-4 size-6 shrink-0"
-              )}
-              aria-hidden="true"
-            />
-            {item.name}
-          </NavLink>
-        );
+        else {
+          // const isActiveLink = (path: string) => {
+          //   return location.pathname.includes(path); // Check if current path includes 'home'
+          // };
+          return (
+            <NavLink
+              key={item.name}
+              to={item.to}
+              end={item.name === "Dashboard"}
+              className={({ isActive }) =>
+                cn(
+                  "",
+                  " hover:bg-hover hover:text-secondaryText",
+                  "group flex flex-1 w-full items-center rounded-md p-2 text-base font-medium",
+                  isActive && "bg-active text-primaryText"
+                )
+              }
+            >
+              <item.icon
+                className={cn(
+                  // "text-gray-400 group-hover:text-gray-300",
+                  "mr-4 size-6 shrink-0"
+                )}
+                aria-hidden="true"
+              />
+              {item.name}
+            </NavLink>
+          );
+        }
       })}
     </nav>
   );

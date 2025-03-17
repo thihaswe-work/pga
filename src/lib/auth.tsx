@@ -1,9 +1,10 @@
-import { useLocation } from "react-router";
+import { Navigate, useLocation } from "react-router";
+import useAuth from "@/store/store";
+
 // import { configureAuth } from "react-query-auth";
 // import { z } from "zod";
 
 // import { paths } from "@/config/paths";
-import useAuth from "@/store/store";
 // import { AuthResponse, User } from "@/types/api";
 
 // import { api } from "./api-client";
@@ -76,15 +77,23 @@ import useAuth from "@/store/store";
 // export const { useUser, useLogin, useLogout, useRegister, AuthLoader } =
 //   configureAuth(authConfig);
 
+export const logout = () => {
+  localStorage.removeItem("auth-storage");
+};
+
 export const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
   const location = useLocation();
-  const user = useAuth();
+  const { token } = useAuth();
 
-  // if (!user.data) {
-  //   return (
-  //     <Navigate to={paths.auth.login.getHref(location.pathname)} replace />
-  //   );
-  // }
+  if (!token) {
+    return (
+      <Navigate
+        to={`/auth/login?redirect=${encodeURIComponent(location.pathname)}`} // Redirect to login with the original path as a query parameter
+        replace
+      />
+    );
+  }
 
-  return children;
+  // If the user is authenticated, return the children (protected content)
+  return <>{children}</>;
 };

@@ -8,7 +8,7 @@ async function getData(): Promise<Home[]> {
   return [
     {
       id: 1,
-      sectionType: "featured",
+      sectionType: "Section 1",
       image: "/office.svg",
       header: "300+",
       label: "Get Started",
@@ -20,7 +20,7 @@ async function getData(): Promise<Home[]> {
     },
     {
       id: 2,
-      sectionType: "announcement",
+      sectionType: "Section 2",
       image: "/office.svg",
 
       header: "300+",
@@ -34,11 +34,24 @@ async function getData(): Promise<Home[]> {
     },
     {
       id: 3,
-      sectionType: "news",
+      sectionType: "Section 3",
       image: "/office.svg",
       header: "300+",
 
       label: "News Flash",
+      description:
+        "Stay updated with the latest breaking news and trending topics.",
+      status: true,
+      createdAt: "2024-03-09T14:45:00Z",
+      updatedAt: "2024-03-11T10:15:00Z",
+    },
+    {
+      id: 4,
+      sectionType: "Section 4",
+      image: "/office.svg",
+      header: "500+",
+
+      label: "News stack",
       description:
         "Stay updated with the latest breaking news and trending topics.",
       status: true,
@@ -53,7 +66,7 @@ export default function HomePage() {
 
   const [data, setData] = useState<Home[]>([]);
   const [loading, setLoading] = useState(true);
-  const [selectedPayment, setSelectedPayment] = useState<Home | null>(null);
+  const [selectedDetail, setSelectedDetail] = useState<Home | null>(null);
   const [dialogOpen, setDialogOpen] = useState(false);
 
   useEffect(() => {
@@ -66,8 +79,8 @@ export default function HomePage() {
     fetchData();
     // }, 3000);
   }, []);
-  const handleViewClick = (payment: Home) => {
-    setSelectedPayment(payment);
+  const handleViewClick = (homeDetail: Home) => {
+    setSelectedDetail(homeDetail);
     setDialogOpen(true);
   };
   if (loading) {
@@ -82,7 +95,7 @@ export default function HomePage() {
       <div className="">
         <HomeDataTable columns={getColumns(handleViewClick)} data={data} />
         <HomeDialog
-          payment={selectedPayment}
+          homeDetail={selectedDetail}
           open={dialogOpen}
           setOpen={setDialogOpen}
         />

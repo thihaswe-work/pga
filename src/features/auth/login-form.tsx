@@ -3,7 +3,6 @@ import { useForm } from "react-hook-form";
 import { useState } from "react";
 import { FaRegEye, FaRegEyeSlash } from "react-icons/fa";
 import { z } from "zod";
-
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -14,6 +13,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import useAuth from "@/store/store";
 import { Checkbox } from "@/components/ui/checkbox";
 
 const formSchema = z.object({
@@ -39,10 +39,44 @@ const LoginForm = () => {
     },
   });
 
-  // Handle form submission
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values);
-  }
+  const onSubmit = async (values: z.infer<typeof formSchema>) => {
+    try {
+      const response = await fetch(
+        "http://192.168.50.122:9000/api/auth/login",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            email: values.email,
+            password: values.password,
+            rememberMe: values.rememberMe,
+          }),
+        }
+      );
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        console.error("Error:", errorData);
+        alert("Login failed. Please try again.");
+        return;
+      }
+
+      const data = await response.json();
+
+      // Store user and token in Zustand
+      const { setToken } = useAuth.getState();
+
+      // Assuming API returns a `user` object
+      setToken(data.access_token); // Assuming API returns a `token`
+
+      // Redirect or perform other post-login actions
+    } catch (error) {
+      console.error("Error during login:", error);
+      alert("An error occurred while logging in.");
+    }
+  };
 
   return (
     <div className="px-11">

@@ -1,15 +1,16 @@
 import { Dialog, DialogContent, DialogHeader } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { Home } from "./columns";
+
 import { Pencil } from "lucide-react";
+import { Banner } from "./columns";
 
 interface Prop {
-  homeDetail: Home | null;
+  homeDetail: Banner | null;
   open: boolean;
   setOpen: (open: boolean) => void;
 }
 
-export function HomeDialog({ homeDetail, open, setOpen }: Prop) {
+export function BannerDialog({ homeDetail, open, setOpen }: Prop) {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogContent className="max-w-lg rounded-xl p-6">
@@ -27,15 +28,6 @@ export function HomeDialog({ homeDetail, open, setOpen }: Prop) {
             <span className="font-medium flex-2">{homeDetail?.id}</span>
           </div>
 
-          {/* Section */}
-          <div className="flex justify-between items-center">
-            <span className="text-secondaryText flex-1">Section</span>
-            <span className="mx-5">:</span>
-            <span className="font-semibold flex-2">
-              {homeDetail?.sectionType}
-            </span>
-          </div>
-
           {/* Image */}
           {homeDetail?.image && (
             <div className="flex justify-between items-center">
@@ -48,27 +40,6 @@ export function HomeDialog({ homeDetail, open, setOpen }: Prop) {
               />
             </div>
           )}
-
-          {/* Header */}
-          <div className="flex justify-between items-center">
-            <span className="text-secondaryText flex-1">Header</span>
-            <span className="mx-5">:</span>
-            <span className="font-semibold flex-2">{homeDetail?.header}</span>
-          </div>
-
-          {/* Label */}
-          <div className="flex justify-between items-center">
-            <span className="text-secondaryText flex-1">Label</span>
-            <span className="mx-5">:</span>
-            <span className="flex-2">{homeDetail?.label}</span>
-          </div>
-
-          {/* Description */}
-          <div className="flex justify-between ">
-            <span className="text-secondaryText flex-1">Description</span>
-            <span className="mx-5">:</span>
-            <p className=" flex-2">{homeDetail?.description}</p>
-          </div>
 
           {/* Status */}
           <div className="flex justify-between items-center">

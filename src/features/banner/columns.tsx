@@ -5,30 +5,23 @@ import { NavLink } from "react-router";
 
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
-export type Home = {
+export type Banner = {
   id: number;
-  sectionType: string;
   image: string;
-  header: string;
-  label: string;
-  description: string;
   status: boolean;
   createdAt: string;
   updatedAt: string;
 };
 
 export const getColumns = (
-  onViewClick: (payment: Home) => void
-): ColumnDef<Home>[] => {
+  onViewClick: (payment: Banner) => void
+): ColumnDef<Banner>[] => {
   return [
     {
       accessorKey: "id",
       header: "ID",
     },
-    {
-      accessorKey: "sectionType",
-      header: "Section",
-    },
+
     {
       accessorKey: "image",
       header: () => <div className="text-left">Image</div>,
@@ -46,19 +39,7 @@ export const getColumns = (
         );
       },
     },
-    { accessorKey: "header", header: "Header" },
-    { accessorKey: "label", header: "Label" },
-    {
-      accessorKey: "description",
-      header: () => <div className="pl-4"> Description</div>,
-      cell: ({ row }) => {
-        return (
-          <div className="px-4 py-3 w-[213px] h-[80px] text-wrap overflow-y-hidden">
-            <p className="">{row.getValue("description")}</p>
-          </div>
-        );
-      },
-    },
+
     {
       accessorKey: "status",
       header: "Status",
@@ -94,14 +75,26 @@ export const getColumns = (
     {
       id: "edit",
       cell: ({ row }) => {
-        const section = row.original.sectionType; // Assuming section name exists in the row data
+        const id = row.original.id; // Assuming id name exists in the row data
 
         return (
-          <NavLink to={`/app/home/${section}/edit`}>
+          <NavLink to={`/app/home/${id}/edit`}>
             <Button variant="ghost" className={"cursor-pointer"}>
               Edit
             </Button>
           </NavLink>
+        );
+      },
+    },
+    {
+      id: "delete",
+      cell: ({ row }) => {
+        const id = row.original.id; // Assuming id name exists in the row data
+
+        return (
+          <Button variant="ghost" className={"cursor-pointer"}>
+            Delete
+          </Button>
         );
       },
     },

@@ -2,27 +2,32 @@ import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
 
 interface AuthStore {
-  user: any | undefined;
-  token: string | undefined;
-  setUser: (_user: any | undefined) => void;
-  setToken: (_token: string) => void;
+  user: any | null; // Use null instead of undefined
+  token: string | null; // Specify that token is a string
+  setUser: (user: any | null) => void;
+  setToken: (token: string | null) => void;
 }
 
-const useAuth = create(
-  persist<AuthStore>(
+const useAuth = create<AuthStore, [["zustand/persist", unknown]]>(
+  persist(
     (set) => ({
-      user: undefined,
-      token: undefined,
+      user: null,
+      token: null,
       setUser: (user) => {
-        set({ user: user });
+        set({ user });
       },
       setToken: (token) => {
-        set({ token: token });
+        set({ token });
+      },
+      removeToken: () => {
+        set({ token: null });
       },
     }),
     {
       name: "auth-storage",
-      storage: createJSONStorage(() => localStorage),
+      storage: createJSONStorage(() =>
+        typeof window !== "undefined" ? localStorage : sessionStorage
+      ),
     }
   )
 );
