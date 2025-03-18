@@ -96,7 +96,10 @@ export const getColumns = (
 
         return (
           <NavLink to={`/app/banner/${id}/edit`}>
-            <Button variant="ghost" className={"cursor-pointer text-edit"}>
+            <Button
+              variant="ghost"
+              className={" text-edit hover:text-edit active:text-edit"}
+            >
               <FiEdit /> <span> Edit</span>
             </Button>
           </NavLink>
@@ -111,9 +114,7 @@ export const getColumns = (
         return (
           <Button
             variant="ghost"
-            className={
-              "cursor-pointer text-delete hover:text-delete active:text-delete"
-            }
+            className={" text-delete hover:text-delete active:text-delete"}
           >
             <RiDeleteBin6Line />
             <span>Delete</span>

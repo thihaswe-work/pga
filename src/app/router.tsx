@@ -76,6 +76,13 @@ export const createAppRouter = (queryClient: QueryClient) =>
             import("./routes/app/banner/bannerEdit").then(convert(queryClient)),
         },
         {
+          path: paths.app.bannerCreate.path,
+          lazy: () =>
+            import("./routes/app/banner/bannerCreate").then(
+              convert(queryClient)
+            ),
+        },
+        {
           path: paths.app.feedback.path,
           lazy: () =>
             import("./routes/app/feedback").then(convert(queryClient)),
@@ -89,6 +96,20 @@ export const createAppRouter = (queryClient: QueryClient) =>
           path: paths.app.categories.path,
           lazy: () =>
             import("./routes/app/categories/categories").then(
+              convert(queryClient)
+            ),
+        },
+        {
+          path: paths.app.categoriesEdit.path,
+          lazy: () =>
+            import("./routes/app/categories/categoriesEdit").then(
+              convert(queryClient)
+            ),
+        },
+        {
+          path: paths.app.categoriesCreate.path,
+          lazy: () =>
+            import("./routes/app/categories/categoriesCreate").then(
               convert(queryClient)
             ),
         },

@@ -1,4 +1,4 @@
-import { ContentLayout } from "@/components/layouts/content-layout";
+import { ContentLayout } from "@/components/layouts/index";
 import { useHomes } from "@/features/home/api/get-homes";
 
 import { getColumns, Home } from "@/features/home/components/columns";
@@ -93,14 +93,7 @@ export default function HomePage() {
   const [selectedDetail, setSelectedDetail] = useState<Home | null>(null);
   const [dialogOpen, setDialogOpen] = useState(false);
 
-  const {
-    data: homeData,
-    error,
-    isLoading,
-    isError,
-  } = useHomes({
-    queryConfig: { retry: false },
-  }); // You can pass custom query config here
+  const { data: homeData, error, isLoading, isError } = useHomes({}); // You can pass custom query config here
 
   useEffect(() => {
     async function fetchData() {
@@ -112,6 +105,7 @@ export default function HomePage() {
     fetchData();
     // }, 3000);
   }, []);
+
   const handleViewClick = (homeDetail: Home) => {
     setSelectedDetail(homeDetail);
     setDialogOpen(true);
@@ -124,7 +118,7 @@ export default function HomePage() {
     );
   }
   return (
-    <ContentLayout title="home">
+    <ContentLayout title="Home Page">
       <div className="">
         <HomeDataTable columns={getColumns(handleViewClick)} data={data} />
         <HomeDialog

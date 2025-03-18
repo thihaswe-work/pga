@@ -61,16 +61,30 @@ export const paths = {
     },
     blogs: {
       // name: "Blog",
-      path: "blogs",
+      path: "blog/blogs",
       getHref: () => {
-        return "/app/blogs";
+        return "/app/blog/blogs";
       },
     },
     categories: {
       // name: "Blog",
-      path: "categories",
+      path: "blog/categories",
       getHref: () => {
-        return "/app/categories";
+        return "/app/blog/categories";
+      },
+    },
+    categoriesEdit: {
+      // name: "Blog",
+      path: "blog/categories/:id/edit",
+      getHref: (id: string | number) => {
+        return `/app/blog/categories/${id}/edit`;
+      },
+    },
+    categoriesCreate: {
+      // name: "Blog",
+      path: "blog/categories/create",
+      getHref: () => {
+        return "/app/blog/categories/create";
       },
     },
     banner: {
@@ -84,6 +98,12 @@ export const paths = {
       path: "banner/:id/edit",
       getHref: (id: string | number) => {
         return `/app/banner/${id}/edit`;
+      },
+    },
+    bannerCreate: {
+      path: "banner/create",
+      getHref: () => {
+        return `/app/banner/create`;
       },
     },
 

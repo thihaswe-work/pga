@@ -2,6 +2,8 @@ import { Dialog, DialogContent, DialogHeader } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Home } from "./columns";
 import { Pencil } from "lucide-react";
+import { useNavigate } from "react-router";
+import { paths } from "@/config/paths";
 
 interface Prop {
   homeDetail: Home | null;
@@ -10,6 +12,7 @@ interface Prop {
 }
 
 export function HomeDialog({ homeDetail, open, setOpen }: Prop) {
+  const navigate = useNavigate();
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogContent className="max-w-lg rounded-xl p-6">
@@ -82,7 +85,13 @@ export function HomeDialog({ homeDetail, open, setOpen }: Prop) {
 
         {/* Buttons */}
         <div className="flex flex-col gap-3 mt-4">
-          <Button className="bg-green-600 hover:bg-green-700 text-white flex items-center justify-center gap-2">
+          <Button
+            className="bg-green-600 hover:bg-green-700 text-white flex items-center justify-center gap-2"
+            onClick={() => {
+              if (homeDetail)
+                navigate(paths.app.homeEdit.getHref(homeDetail.sectionType));
+            }}
+          >
             <Pencil className="w-4 h-4" /> Edit
           </Button>
           <Button variant="ghost" onClick={() => setOpen(false)}>

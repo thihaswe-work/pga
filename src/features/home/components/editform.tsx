@@ -1,14 +1,17 @@
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { Switch } from "@/components/ui/switch";
-import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Switch } from "@/components/ui/switch";
+import { Textarea } from "@/components/ui/textarea";
+import { paths } from "@/config/paths";
 import { useCallback, useEffect, useState } from "react";
+import { useNavigate } from "react-router";
 import { useHome } from "../api/get-home";
 
 export default function EditForm() {
   const homeId = String(14);
+  const navigate = useNavigate();
 
   const [image, setImage] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
@@ -55,8 +58,6 @@ export default function EditForm() {
       setImagePreview(data.thumbnail || null);
     }
   }, [data]);
-
-  console.log(imagePreview);
 
   return (
     <div className="flex w-full gap-8">
@@ -158,7 +159,7 @@ export default function EditForm() {
                 <img
                   src={imagePreview!}
                   alt="Preview"
-                  className="w-[368px] h-[86px] rounded-md object-cover"
+                  className="w-[368px] h-[86px] rounded-md object-cover mx-auto"
                 />
               </div>
             )}
@@ -184,7 +185,14 @@ export default function EditForm() {
           <Button variant="default" className="bg-green-600 hover:bg-green-700">
             Save changes
           </Button>
-          <Button variant="outline">Cancel</Button>
+          <Button
+            variant="outline"
+            onClick={() => {
+              navigate(paths.app.home.getHref());
+            }}
+          >
+            Cancel
+          </Button>
         </div>
       </div>
     </div>

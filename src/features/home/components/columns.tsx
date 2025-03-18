@@ -85,7 +85,7 @@ export const getColumns = (
         return (
           <Button
             variant="ghost"
-            className="cursor-pointer"
+            className=""
             onClick={() => onViewClick(row.original)} // Pass row data to the parent
           >
             <TbEye className="text-secondaryText" />
@@ -102,9 +102,7 @@ export const getColumns = (
         return (
           <NavLink to={`/app/home/${section}/edit`}>
             <Button
-              className={
-                "cursor-pointer text-edit hover:text-edit active:text-edit"
-              }
+              className={" text-edit hover:text-edit active:text-edit"}
               variant="ghost"
             >
               <FiEdit /> <span> Edit</span>
