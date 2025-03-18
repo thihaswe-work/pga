@@ -4,15 +4,17 @@ import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
+import { useHome } from "../api/get-home";
 
 export default function EditForm() {
+  const homeId = String(14);
+
   const [image, setImage] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [dragging, setDragging] = useState(false);
   const [isActive, setIsActive] = useState(true);
-
-  console.log(imagePreview);
+  const { data } = useHome({ homeId });
   const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files?.length) {
       const file = event.target.files[0];
@@ -46,6 +48,16 @@ export default function EditForm() {
       setImagePreview(URL.createObjectURL(file));
     }
   }, []);
+
+  useEffect(() => {
+    if (data) {
+      setIsActive(data.availabilityStatus === "In Stock");
+      setImagePreview(data.thumbnail || null);
+    }
+  }, [data]);
+
+  console.log(imagePreview);
+
   return (
     <div className="flex w-full gap-8">
       <div className="max-w-[628px] space-y-6 w-full p-6 bg-background rounded-md">
@@ -54,7 +66,11 @@ export default function EditForm() {
           <Label className="font-medium">
             Header<span className="text-primaryText">*</span>
           </Label>
-          <Input placeholder="300+" className="mt-1" />
+          <Input
+            placeholder="300+"
+            className="mt-1"
+            defaultValue={data?.title}
+          />
           <p className="text-sm text-muted-foreground">
             Minimum 60, Maximum 100
           </p>
@@ -120,8 +136,8 @@ export default function EditForm() {
             </div>
 
             {/* File Preview with Image */}
-            {image && (
-              <div className="mt-4 flex flex-col items-center gap-4 bg-black text-white p-2 rounded-md pb-10">
+            {imagePreview && (
+              <div className="mt-4 flex flex-col gap-4 bg-black text-white p-2 rounded-md pb-10">
                 <div>
                   <Button
                     size="sm"
@@ -132,10 +148,13 @@ export default function EditForm() {
                   >
                     X
                   </Button>
-                  <span className="text-sm">
-                    {image.name} ({(image.size / 1024).toFixed(1)} KB)
-                  </span>
+                  {image && (
+                    <span className="text-sm">
+                      {image.name} ({(image.size / 1024).toFixed(1)} KB)
+                    </span>
+                  )}
                 </div>
+
                 <img
                   src={imagePreview!}
                   alt="Preview"

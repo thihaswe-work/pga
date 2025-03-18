@@ -4,34 +4,24 @@ import { api } from "@/lib/api-client";
 import { Discussion, Meta } from "@/types/api";
 import { QueryConfig } from "@/lib/react-query";
 
-export const getHomes = (
-  page = 1
-): Promise<{
-  data: Discussion[];
-  meta: Meta;
-}> => {
-  return api.get(`/products`, {
-    params: {
-      page,
-    },
-  });
+export const getHomes = () => {
+  return api.get(`/products`);
 };
 
-export const getHomesQueryOptions = ({ page }: { page?: number } = {}) => {
+export const getHomesQueryOptions = () => {
   return queryOptions({
-    queryKey: page ? ["homes", { page }] : ["homes"],
-    queryFn: () => getHomes(page),
+    queryKey: ["homes"],
+    queryFn: () => getHomes(),
   });
 };
 
-type UseDiscussionsOptions = {
-  page?: number;
+type UseHomesOptions = {
   queryConfig?: QueryConfig<typeof getHomesQueryOptions>;
 };
 
-export const useHomes = ({ queryConfig, page }: UseDiscussionsOptions) => {
+export const useHomes = ({ queryConfig }: UseHomesOptions) => {
   return useQuery({
-    ...getHomesQueryOptions({ page }),
+    ...getHomesQueryOptions(),
     ...queryConfig,
   });
 };

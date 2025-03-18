@@ -1,7 +1,7 @@
 import { ContentLayout } from "@/components/layouts/content-layout";
-import { Banner, getColumns } from "@/features/banner/columns";
-import { BannerDataTable } from "@/features/banner/data-table";
-import { BannerDialog } from "@/features/banner/dialog";
+import { Banner, getColumns } from "@/features/banner/components/columns";
+import { BannerDataTable } from "@/features/banner/components/data-table";
+import { BannerDialog } from "@/features/banner/components/dialog";
 import { useEffect, useState } from "react";
 async function getData(): Promise<Banner[]> {
   return [

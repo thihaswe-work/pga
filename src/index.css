@@ -134,5 +134,7 @@
  --color-bgStatusActive:#d3f3df;
  --color-statusActive:#16a34a;
  --color-bgStatusUnactive:#fbd2d3;
- --color-switchCheck :#16a34a
+ --color-switchCheck :#16a34a;
+ --color-delete:#ff4444;
+ --color-edit:#D97706;
 }

@@ -80,6 +80,13 @@ export const paths = {
         return "/app/banner";
       },
     },
+    bannerEdit: {
+      path: "banner/:id/edit",
+      getHref: (id: string | number) => {
+        return `/app/banner/${id}/edit`;
+      },
+    },
+
     feedback: {
       // name: "Banner",
       path: "feedback",

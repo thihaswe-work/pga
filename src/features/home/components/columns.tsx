@@ -1,8 +1,9 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { ColumnDef } from "@tanstack/react-table";
 import { Button } from "@/components/ui/button";
+import { ColumnDef } from "@tanstack/react-table";
+import { FiEdit } from "react-icons/fi";
+import { TbEye } from "react-icons/tb";
 import { NavLink } from "react-router";
-
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
 export type Home = {
@@ -84,9 +85,11 @@ export const getColumns = (
         return (
           <Button
             variant="ghost"
+            className="cursor-pointer"
             onClick={() => onViewClick(row.original)} // Pass row data to the parent
           >
-            View
+            <TbEye className="text-secondaryText" />
+            <span className=""> View</span>
           </Button>
         );
       },
@@ -98,8 +101,13 @@ export const getColumns = (
 
         return (
           <NavLink to={`/app/home/${section}/edit`}>
-            <Button variant="ghost" className={"cursor-pointer"}>
-              Edit
+            <Button
+              className={
+                "cursor-pointer text-edit hover:text-edit active:text-edit"
+              }
+              variant="ghost"
+            >
+              <FiEdit /> <span> Edit</span>
             </Button>
           </NavLink>
         );

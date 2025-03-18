@@ -2,7 +2,9 @@
 import { ColumnDef } from "@tanstack/react-table";
 import { Button } from "@/components/ui/button";
 import { NavLink } from "react-router";
-
+import { FiEdit } from "react-icons/fi";
+import { TbEye } from "react-icons/tb";
+import { RiDeleteBin6Line } from "react-icons/ri";
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
 export type Banner = {
@@ -42,7 +44,20 @@ export const getColumns = (
 
     {
       accessorKey: "status",
-      header: "Status",
+      header: ({ table }) => {
+        // Get all rows
+        const totalCount = 2;
+        // Count rows with a specific status (e.g., "Completed" or truthy value)
+        const matchedCount = table
+          .getPrePaginationRowModel()
+          .rows.filter((row) => row.getValue("status")).length; // Adjust condition as needed
+
+        return (
+          <div className="text-left">
+            Status ({matchedCount}/{totalCount})
+          </div>
+        );
+      },
       cell(props) {
         return (
           <div>
@@ -64,10 +79,12 @@ export const getColumns = (
       cell: ({ row }) => {
         return (
           <Button
+            className="flex items-center"
             variant="ghost"
             onClick={() => onViewClick(row.original)} // Pass row data to the parent
           >
-            View
+            <TbEye className="text-secondaryText" />
+            <span className=""> View</span>
           </Button>
         );
       },
@@ -78,9 +95,9 @@ export const getColumns = (
         const id = row.original.id; // Assuming id name exists in the row data
 
         return (
-          <NavLink to={`/app/home/${id}/edit`}>
-            <Button variant="ghost" className={"cursor-pointer"}>
-              Edit
+          <NavLink to={`/app/banner/${id}/edit`}>
+            <Button variant="ghost" className={"cursor-pointer text-edit"}>
+              <FiEdit /> <span> Edit</span>
             </Button>
           </NavLink>
         );
@@ -92,8 +109,14 @@ export const getColumns = (
         const id = row.original.id; // Assuming id name exists in the row data
 
         return (
-          <Button variant="ghost" className={"cursor-pointer"}>
-            Delete
+          <Button
+            variant="ghost"
+            className={
+              "cursor-pointer text-delete hover:text-delete active:text-delete"
+            }
+          >
+            <RiDeleteBin6Line />
+            <span>Delete</span>
           </Button>
         );
       },

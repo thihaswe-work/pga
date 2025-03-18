@@ -8,10 +8,10 @@ import useAuth from "@/store/store";
 
 const LandingRoute = () => {
   const navigate = useNavigate();
-  const { user } = useAuth();
+  const { token } = useAuth();
 
   const handleStart = () => {
-    if (user) {
+    if (token) {
       navigate(paths.app.dashboard.getHref());
     } else {
       navigate(paths.auth.login.getHref());
