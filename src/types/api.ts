@@ -77,3 +77,14 @@ export type BlogCategory = {
   createdAt: string;
   updatedAt: string;
 };
+
+export type Blog = {
+  id: number;
+  image: string;
+  title: string;
+  categoryId: number;
+  description: string;
+  status: boolean;
+  createdAt: string;
+  updatedAt: string;
+};

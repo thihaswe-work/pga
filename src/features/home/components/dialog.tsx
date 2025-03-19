@@ -99,7 +99,7 @@ export function HomeDialog({ homeDetail, open, setOpen }: Prop) {
         {/* Buttons */}
         <div className="flex flex-col gap-3 mt-4">
           <Button
-            className="bg-primaryText hover:bg-red-700 text-white flex items-center justify-center gap-2"
+            className="bg-primaryText hover:bg-red-500 text-white flex items-center justify-center gap-2"
             onClick={() => {
               if (homeDetail)
                 navigate(paths.app.home.edit.getHref(homeDetail.sectionType));

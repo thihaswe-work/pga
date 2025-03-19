@@ -81,6 +81,20 @@ export const paths = {
             return "/app/blog/blogs";
           },
         },
+        create: {
+          // name: "Blog",
+          path: "blog/blogs/create",
+          getHref: () => {
+            return "/app/blog/blogs/create";
+          },
+        },
+        edit: {
+          // name: "Blog",
+          path: "blog/blogs/edit",
+          getHref: () => {
+            return "/app/blog/blogs/edit";
+          },
+        },
       },
       categories: {
         root: {

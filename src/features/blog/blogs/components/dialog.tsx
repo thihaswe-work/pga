@@ -1,24 +1,24 @@
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
 
-import { Banner } from "./columns";
-import { RiDeleteBin6Line } from "react-icons/ri";
-import { FiEdit } from "react-icons/fi";
-import { useNavigate } from "react-router";
 import { paths } from "@/config/paths";
+import { Blog } from "@/types/api";
+import { Pencil } from "lucide-react";
+import { RiDeleteBin6Line } from "react-icons/ri";
+import { useNavigate } from "react-router";
 
 interface Prop {
-  bannerDetail: Banner | null;
+  blogDetail: Blog | null;
   open: boolean;
   setOpen: (open: boolean) => void;
 }
 
-export function BannerDialog({ bannerDetail, open, setOpen }: Prop) {
+export function BlogDialog({ blogDetail, open, setOpen }: Prop) {
   const navigate = useNavigate();
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -34,16 +34,16 @@ export function BannerDialog({ bannerDetail, open, setOpen }: Prop) {
           <div className="flex justify-between items-center">
             <span className="text-secondaryText flex-1">ID</span>
             <span className="mx-5">:</span>
-            <span className="font-medium flex-2">{bannerDetail?.id}</span>
+            <span className="font-medium flex-2">{blogDetail?.id}</span>
           </div>
 
           {/* Image */}
-          {bannerDetail?.image && (
+          {blogDetail?.image && (
             <div className="flex justify-between items-center">
               <span className="text-secondaryText flex-1">Image</span>
               <span className="mx-5">:</span>
               <img
-                src={bannerDetail.image}
+                src={blogDetail?.image}
                 alt="Preview"
                 className="w-32 h-16 rounded-md object-cover flex-2"
               />
@@ -64,11 +64,11 @@ export function BannerDialog({ bannerDetail, open, setOpen }: Prop) {
         <div className="flex flex-col gap-3 mt-4">
           <Button
             className="bg-primaryText hover:bg-red-500 text-white flex items-center justify-center gap-2"
-            onClick={() =>
-              navigate(paths.app.banner.edit.getHref(bannerDetail?.id))
-            }
+            onClick={() => {
+              navigate(paths.app.blog.blogs.edit.getHref(blogDetail?.id));
+            }}
           >
-            <FiEdit className="w-4 h-4" /> Edit
+            <Pencil className="w-4 h-4" /> Edit
           </Button>
           <Button variant="ghost" onClick={() => setOpen(false)}>
             Cancel
@@ -79,7 +79,7 @@ export function BannerDialog({ bannerDetail, open, setOpen }: Prop) {
   );
 }
 
-export function DeleteDialog({ open, setOpen, bannerDetail }: Prop) {
+export function DeleteDialog({ open, setOpen, blogDetail }: Prop) {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogContent
@@ -96,9 +96,10 @@ export function DeleteDialog({ open, setOpen, bannerDetail }: Prop) {
             Are You Sure To Delete It?
           </h3>
           <Button
-            className="bg-primaryText hover:bg- text-white flex items-center justify-center gap-2"
-            onClick={() => console.log(bannerDetail)}
+            className="bg-primaryText hover:bg-red-500 text-white flex items-center justify-center gap-2"
+            onClick={() => console.log(blogDetail?.id)}
           >
+            <Pencil className="w-4 h-4" />
             Delete
           </Button>
           <Button variant="ghost" onClick={() => setOpen(false)}>

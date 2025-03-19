@@ -67,7 +67,7 @@ export function BlogCategoryDialog({
         {/* Buttons */}
         <div className="flex flex-col gap-3 mt-4">
           <Button
-            className="bg-green-600 hover:bg-green-700 text-white flex items-center justify-center gap-2"
+            className="bg-primaryText hover:bg-red-500 text-white flex items-center justify-center gap-2"
             onClick={() => {
               navigate(
                 paths.app.blog.categories.edit.getHref(blogCategoryDetail?.id)
@@ -102,7 +102,7 @@ export function DeleteDialog({ open, setOpen, blogCategoryDetail }: Prop) {
             Are You Sure To Delete It?
           </h3>
           <Button
-            className="bg-primaryText hover:bg-red-700 text-white flex items-center justify-center gap-2"
+            className="bg-primaryText hover:bg-red-500 text-white flex items-center justify-center gap-2"
             onClick={() => console.log(blogCategoryDetail?.id)}
           >
             <Pencil className="w-4 h-4" />
