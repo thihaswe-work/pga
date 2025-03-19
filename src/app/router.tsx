@@ -49,89 +49,144 @@ export const createAppRouter = (queryClient: QueryClient) =>
         {
           path: paths.app.dashboard.path,
           lazy: () =>
-            import("./routes/app/dashboard").then(convert(queryClient)),
+            import("./routes/app/dashboard/dashboard").then(
+              convert(queryClient)
+            ),
         },
         {
-          path: paths.app.home.path,
+          path: paths.app.jobAppliedForm.path,
+          lazy: () =>
+            import("./routes/app/job-applied-forms/index").then(
+              convert(queryClient)
+            ),
+        },
+        {
+          path: paths.app.contactMessages.path,
+          lazy: () =>
+            import("./routes/app/contact-messages/index").then(
+              convert(queryClient)
+            ),
+        },
+        {
+          path: paths.app.home.root.path,
           lazy: () =>
             import("./routes/app/home/home").then(convert(queryClient)),
         },
         {
-          path: paths.app.homeEdit.path,
+          path: paths.app.home.edit.path,
           lazy: () =>
-            import("./routes/app/home/homeEdit").then(convert(queryClient)),
+            import("./routes/app/home/edit").then(convert(queryClient)),
         },
         {
           path: paths.app.aboutus.path,
-          lazy: () => import("./routes/app/aboutus").then(convert(queryClient)),
+          lazy: () =>
+            import("./routes/app/aboutus/aboutus").then(convert(queryClient)),
         },
         {
-          path: paths.app.banner.path,
+          path: paths.app.banner.root.path,
           lazy: () =>
             import("./routes/app/banner/banner").then(convert(queryClient)),
         },
         {
-          path: paths.app.bannerEdit.path,
+          path: paths.app.banner.edit.path,
           lazy: () =>
-            import("./routes/app/banner/bannerEdit").then(convert(queryClient)),
+            import("./routes/app/banner/edit").then(convert(queryClient)),
         },
         {
-          path: paths.app.bannerCreate.path,
+          path: paths.app.banner.create.path,
           lazy: () =>
-            import("./routes/app/banner/bannerCreate").then(
-              convert(queryClient)
-            ),
+            import("./routes/app/banner/create").then(convert(queryClient)),
         },
         {
           path: paths.app.feedback.path,
           lazy: () =>
-            import("./routes/app/feedback").then(convert(queryClient)),
+            import("./routes/app/feedback/feedback").then(convert(queryClient)),
         },
         {
           path: paths.app.milestone.path,
           lazy: () =>
-            import("./routes/app/milestone").then(convert(queryClient)),
-        },
-        {
-          path: paths.app.categories.path,
-          lazy: () =>
-            import("./routes/app/categories/categories").then(
+            import("./routes/app/milestone/milestone").then(
               convert(queryClient)
             ),
         },
         {
-          path: paths.app.categoriesEdit.path,
+          path: paths.app.blog.categories.root.path,
           lazy: () =>
-            import("./routes/app/categories/categoriesEdit").then(
+            import("./routes/app/blog/categories/categories").then(
               convert(queryClient)
             ),
         },
         {
-          path: paths.app.categoriesCreate.path,
+          path: paths.app.blog.categories.edit.path,
           lazy: () =>
-            import("./routes/app/categories/categoriesCreate").then(
+            import("./routes/app/blog/categories/edit").then(
               convert(queryClient)
             ),
         },
         {
-          path: paths.app.blogs.path,
-          lazy: () => import("./routes/app/blogs").then(convert(queryClient)),
+          path: paths.app.blog.categories.create.path,
+          lazy: () =>
+            import("./routes/app/blog/categories/create").then(
+              convert(queryClient)
+            ),
         },
         {
-          path: paths.app.roles.path,
-          lazy: () => import("./routes/app/roles").then(convert(queryClient)),
+          path: paths.app.blog.blogs.root.path,
+          lazy: () =>
+            import("./routes/app/blog/blogs/blogs").then(convert(queryClient)),
+        },
+        {
+          path: paths.app.career.categories.root.path,
+          lazy: () =>
+            import("./routes/app/career/categories/index").then(
+              convert(queryClient)
+            ),
+        },
+        {
+          path: paths.app.career.relatedFields.root.path,
+          lazy: () =>
+            import("./routes/app/career/relatedFields/index").then(
+              convert(queryClient)
+            ),
+        },
+        {
+          path: paths.app.career.regions.root.path,
+          lazy: () =>
+            import("./routes/app/career/regions/index").then(
+              convert(queryClient)
+            ),
+        },
+        {
+          path: paths.app.career.hiringPost.root.path,
+          lazy: () =>
+            import("./routes/app/career/hiringPost/index").then(
+              convert(queryClient)
+            ),
+        },
+
+        {
+          path: paths.app.feedback.path,
+          lazy: () =>
+            import("./routes/app/feedback/feedback").then(convert(queryClient)),
+        },
+        {
+          path: paths.app.roleAndPermission.path,
+          lazy: () =>
+            import("./routes/app/roleAndPermission/roles").then(
+              convert(queryClient)
+            ),
         },
         {
           path: paths.app.userMaintain.path,
           lazy: () =>
-            import("./routes/app/userMaintain").then(convert(queryClient)),
+            import("./routes/app/userMaintain/userMaintain").then(
+              convert(queryClient)
+            ),
         },
         {
           path: "test",
           lazy: () =>
-            import("./routes/app/testtable/test-page").then(
-              convert(queryClient)
-            ),
+            import("../testtable/test-page").then(convert(queryClient)),
         },
       ],
     },

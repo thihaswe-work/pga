@@ -1,9 +1,10 @@
 import { ContentLayout } from "@/components/layouts";
+import CreateForm from "@/features/banner/components/createform";
 
-export default function BannerCreate() {
+export default function CreatePage() {
   return (
     <ContentLayout title="create">
-      <div>HomeCreate</div>
+      <CreateForm />
     </ContentLayout>
   );
 }

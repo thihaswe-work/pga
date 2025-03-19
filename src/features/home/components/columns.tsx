@@ -1,22 +1,13 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { Button } from "@/components/ui/button";
+import { paths } from "@/config/paths";
+import { Home } from "@/types/api";
 import { ColumnDef } from "@tanstack/react-table";
 import { FiEdit } from "react-icons/fi";
 import { TbEye } from "react-icons/tb";
 import { NavLink } from "react-router";
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
-export type Home = {
-  id: number;
-  sectionType: string;
-  image: string;
-  header: string;
-  label: string;
-  description: string;
-  status: boolean;
-  createdAt: string;
-  updatedAt: string;
-};
 
 export const getColumns = (
   onViewClick: (payment: Home) => void
@@ -72,7 +63,7 @@ export const getColumns = (
               </div>
             ) : (
               <div className="text-primaryText p-2 w-20 rounded-lg text-center border-2 border-primaryText bg-bgStatusUnactive">
-                Unactive
+                Inactive
               </div>
             )}
           </div>
@@ -100,7 +91,7 @@ export const getColumns = (
         const section = row.original.sectionType; // Assuming section name exists in the row data
 
         return (
-          <NavLink to={`/app/home/${section}/edit`}>
+          <NavLink to={paths.app.home.edit.getHref(section)}>
             <Button
               className={" text-edit hover:text-edit active:text-edit"}
               variant="ghost"

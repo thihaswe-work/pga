@@ -3,6 +3,8 @@ import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { useCallback, useState } from "react";
+import { useNavigate } from "react-router";
+import { paths } from "@/config/paths";
 interface Prop {
   id: number;
 }
@@ -11,6 +13,7 @@ export default function EditForm({ id }: Prop) {
   const [image, setImage] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [dragging, setDragging] = useState(false);
+  const navigate = useNavigate();
 
   const data = [
     {
@@ -176,10 +179,17 @@ export default function EditForm({ id }: Prop) {
 
         {/* Buttons */}
         <div className="flex gap-2">
-          <Button variant="default" className="bg-green-600 hover:bg-green-700">
+          <Button variant="default" className="bg-primaryText hover:bg-red-500">
             Save changes
           </Button>
-          <Button variant="outline">Cancel</Button>
+          <Button
+            variant="outline"
+            onClick={() => {
+              navigate(paths.app.banner.root.getHref());
+            }}
+          >
+            Cancel
+          </Button>
         </div>
       </div>
     </div>

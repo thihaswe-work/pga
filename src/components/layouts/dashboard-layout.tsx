@@ -17,9 +17,11 @@ import {
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
 
-import { SideBar } from "../navigation";
+import { SideBar } from "../navigation/index";
 
 import useAuth from "@/store/store";
+import { toast } from "sonner";
+import { IoMdCheckmark } from "react-icons/io";
 
 const Progress = () => {
   const { state, location } = useNavigation();
@@ -71,10 +73,10 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
 
   return (
     <div className="flex min-h-screen w-full flex-col bg-background">
-      <aside className="fixed inset-y-0 left-0 z-10 hidden w-60 flex-col border-r sm:flex">
+      <aside className="fixed inset-y-0 left-0 z-10 hidden w-72 flex-col border-r sm:flex">
         <SideBar />
       </aside>
-      <div className="flex flex-col sm:gap-4 sm:py-4 sm:pl-60">
+      <div className="flex flex-col sm:gap-4 sm:py-4 sm:pl-72">
         <header className="sticky top-0 z-30 flex h-20 items-center justify-between gap-4 border-b bg-background px-4 sm:static sm:h-auto sm:justify-end sm:border-0 sm:bg-transparent sm:px-6">
           <Progress />
           <Drawer>
@@ -118,6 +120,14 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
                 onClick={() => {
                   removeToken();
                   navigate("/auth/login");
+                  toast(
+                    <div className="flex items-center gap-2">
+                      <div className="p-3 rounded-full bg-background">
+                        <IoMdCheckmark className="text-primaryText text-xl font-bold" />
+                      </div>
+                      <span>You are now logged Out</span>
+                    </div>
+                  );
                 }}
               >
                 Sign Out

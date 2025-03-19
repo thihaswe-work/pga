@@ -1,24 +1,48 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
-import { Textarea } from "@/components/ui/textarea";
-import { paths } from "@/config/paths";
-import { useCallback, useEffect, useState } from "react";
+import { Label } from "@/components/ui/label";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { useCallback, useState } from "react";
 import { useNavigate } from "react-router";
-import { useHome } from "../api/get-home";
+import { paths } from "@/config/paths";
 
-export default function EditForm() {
-  const homeId = String(14);
-  const navigate = useNavigate();
-
+export default function CreateForm() {
   const [image, setImage] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [dragging, setDragging] = useState(false);
-  const [isActive, setIsActive] = useState(true);
-  const { data } = useHome({ homeId }) as { data: any };
+  const navigate = useNavigate();
+  const data = [
+    {
+      id: 1,
+      status: false,
+      image: "/office.svg",
+      createdAt: "2024-03-11T10:00:00Z",
+      updatedAt: "2024-03-11T12:00:00Z",
+    },
+    {
+      id: 2,
+      image: "/office.svg",
+
+      status: false,
+      createdAt: "2024-03-10T09:30:00Z",
+      updatedAt: "2024-03-11T11:30:00Z",
+    },
+    {
+      id: 3,
+      image: "/office.svg",
+
+      status: true,
+      createdAt: "2024-03-09T14:45:00Z",
+      updatedAt: "2024-03-11T10:15:00Z",
+    },
+    {
+      id: 4,
+      image: "/office.svg",
+      status: true,
+      createdAt: "2024-03-09T14:45:00Z",
+      updatedAt: "2024-03-11T10:15:00Z",
+    },
+  ];
 
   const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files?.length) {
@@ -27,6 +51,16 @@ export default function EditForm() {
       setImagePreview(URL.createObjectURL(file)); // Create image preview URL
     }
   };
+  // Find the current banner from `data`
+
+  // Count how many banners are active
+  const activeCount = data.filter((banner) => banner.status).length;
+
+  // State for switch, initialized with current banner status
+  const [isActive, setIsActive] = useState(false);
+
+  // Disable switch if there are already 2 active banners and current is inactive
+  const isSwitchDisabled = activeCount >= 2;
 
   // Drag and Drop Handlers
   const handleDragEnter = useCallback((event: React.DragEvent) => {
@@ -53,63 +87,9 @@ export default function EditForm() {
       setImagePreview(URL.createObjectURL(file));
     }
   }, []);
-
-  useEffect(() => {
-    if (data) {
-      setIsActive(data?.availabilityStatus === "In Stock");
-      setImagePreview(data?.thumbnail || null);
-    }
-  }, [data]);
-
   return (
     <div className="flex w-full gap-8">
       <div className="max-w-[628px] space-y-6 w-full p-6 bg-background rounded-md">
-        {/* Header */}
-        <div className="space-y-2">
-          <Label className="font-medium">
-            Header<span className="text-primaryText">*</span>
-          </Label>
-          <Input
-            placeholder="300+"
-            className="mt-1"
-            defaultValue={data?.title}
-          />
-          <p className="text-sm text-muted-foreground">
-            Minimum 60, Maximum 100
-          </p>
-        </div>
-
-        {/* Label */}
-        <div className="space-y-2">
-          <Label className="font-medium">
-            Label<span className="text-primaryText">*</span>
-          </Label>
-          <Input
-            placeholder="IN HOUSE STAFFS"
-            className="mt-1"
-            defaultValue={data?.title}
-          />
-          <p className="text-sm text-muted-foreground">
-            Minimum 60, Maximum 100
-          </p>
-        </div>
-
-        {/* Description */}
-        <div className="space-y-2">
-          <Label className="font-medium">
-            Description<span className="text-primaryText">*</span>
-          </Label>
-          <Textarea
-            defaultValue={data?.description}
-            placeholder="Enter description..."
-            className="mt-1"
-            rows={3}
-          />
-          <p className="text-sm text-muted-foreground">
-            Minimum 100, Maximum 250
-          </p>
-        </div>
-
         {/* Image Upload */}
         <Card className=" p-0 bg-secondaryBackground gap-0">
           <CardHeader>
@@ -144,8 +124,8 @@ export default function EditForm() {
             </div>
 
             {/* File Preview with Image */}
-            {imagePreview && (
-              <div className="mt-4 flex flex-col gap-4 bg-black text-white p-2 rounded-md pb-10">
+            {image && (
+              <div className="mt-4 flex flex-col items-center gap-4 bg-black text-white p-2 rounded-md pb-10">
                 <div>
                   <Button
                     size="sm"
@@ -156,49 +136,51 @@ export default function EditForm() {
                   >
                     X
                   </Button>
-                  {image && (
-                    <span className="text-sm">
-                      {image.name} ({(image.size / 1024).toFixed(1)} KB)
-                    </span>
-                  )}
+                  <span className="text-sm">
+                    {image.name} ({(image.size / 1024).toFixed(1)} KB)
+                  </span>
                 </div>
-
                 <img
                   src={imagePreview!}
                   alt="Preview"
-                  className="w-[368px] h-[86px] rounded-md object-cover mx-auto"
+                  className="w-[368px] h-[86px] rounded-md object-cover"
                 />
               </div>
             )}
           </CardContent>
         </Card>
       </div>
-      <div className="w-full max-w-[436px] space-y-6 ">
-        {/* Active Toggle */}
-        <div className="flex  justify-between  border  flex-col rounded-lg bg-background">
+      {/* Status Toggle */}
+      <div className="w-full max-w-[436px] space-y-6">
+        <div className="flex justify-between border flex-col rounded-lg bg-background">
           <Label className="font-medium px-6 py-4">Active</Label>
           <div className="h-[1px] w-full bg-[#e9e9ea]"></div>
-          <div className=" p-6">
+          <div className="p-6">
             <Switch
               checked={isActive}
               onCheckedChange={setIsActive}
-              className={"data-[state=checked]:bg-switchCheck"}
+              disabled={isSwitchDisabled} // Disable switch if needed
+              className={`data-[state=checked]:bg-switchCheck ${
+                isSwitchDisabled ? "opacity-50 cursor-not-allowed" : ""
+              }`}
             />
+            {isSwitchDisabled && (
+              <p className="text-red-500 text-sm mt-2">
+                Only 2 banners can be active at a time.
+              </p>
+            )}
           </div>
         </div>
 
         {/* Buttons */}
-        <div className="flex gap-2 ">
-          <Button
-            variant="default"
-            className="bg-primaryText hover:bg-text-500"
-          >
+        <div className="flex gap-2">
+          <Button variant="default" className="bg-primaryText hover:bg-red-500">
             Save changes
           </Button>
           <Button
             variant="outline"
             onClick={() => {
-              navigate(paths.app.home.root.getHref());
+              navigate(paths.app.banner.root.getHref());
             }}
           >
             Cancel

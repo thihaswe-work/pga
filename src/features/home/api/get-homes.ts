@@ -1,7 +1,7 @@
 import { queryOptions, useQuery } from "@tanstack/react-query";
 
 import { api } from "@/lib/api-client";
-import { Discussion, Meta } from "@/types/api";
+
 import { QueryConfig } from "@/lib/react-query";
 
 export const getHomes = () => {

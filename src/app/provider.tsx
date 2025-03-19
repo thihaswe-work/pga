@@ -1,3 +1,4 @@
+import { Toaster } from "@/components/ui/sonner";
 import { queryConfig } from "@/lib/react-query";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
@@ -14,9 +15,11 @@ const AppProvider = ({ children }: AppProviderProps) => {
       })
   );
 
-  console.log(typeof queryClient);
   return (
-    <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
+    <QueryClientProvider client={queryClient}>
+      {children}
+      <Toaster />
+    </QueryClientProvider>
   );
 };
 

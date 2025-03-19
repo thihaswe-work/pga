@@ -1,9 +1,10 @@
 import { ContentLayout } from "@/components/layouts/index";
 import { useHomes } from "@/features/home/api/get-homes";
 
-import { getColumns, Home } from "@/features/home/components/columns";
+import { getColumns } from "@/features/home/components/columns";
 import { HomeDataTable } from "@/features/home/components/data-table";
 import { HomeDialog } from "@/features/home/components/dialog";
+import { Home } from "@/types/api";
 import { useEffect, useState } from "react";
 
 async function getData(): Promise<Home[]> {
@@ -62,28 +63,6 @@ async function getData(): Promise<Home[]> {
     },
   ];
 }
-
-// async function getData() {
-//   try {
-//     // Make a GET request to the /products endpoint
-//     const response = await fetch("https://dummyjson.com/products");
-
-//     // Check if the response is successful (status code 200-299)
-//     if (!response.ok) {
-//       throw new Error("Network response was not ok");
-//     }
-
-//     // Parse the response as JSON
-//     const data = await response.json();
-//     console.log(data);
-
-//     // Return or use the data
-//     return data;
-//   } catch (error) {
-//     // Handle errors here
-//     console.error("There was a problem with the fetch operation:", error);
-//   }
-// }
 
 export default function HomePage() {
   // Pass handleViewClick as the onViewClick prop to DataTable

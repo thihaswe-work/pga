@@ -2,7 +2,7 @@ import { ContentLayout } from "@/components/layouts/content-layout";
 import EditForm from "@/features/banner/components/editform";
 import { useParams } from "react-router";
 
-export default function BannerEdit() {
+export default function EditPage() {
   const { id } = useParams<{ id: string }>();
 
   return (

@@ -1,52 +1,54 @@
 import { ContentLayout } from "@/components/layouts/content-layout";
 import { Button } from "@/components/ui/button";
 import { paths } from "@/config/paths";
-import { Banner, getColumns } from "@/features/banner/components/columns";
-import { BannerDataTable } from "@/features/banner/components/data-table";
+import { getColumns } from "@/features/blog/categories/components/columns";
+
+import { BlogCategoryDataTable } from "@/features/blog/categories/components/data-table";
 import {
-  BannerDialog,
+  BlogCategoryDialog,
   DeleteDialog,
-} from "@/features/banner/components/dialog";
+} from "@/features/blog/categories/components/dialog";
+import { BlogCategory } from "@/types/api";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
-async function getData(): Promise<Banner[]> {
+async function getData(): Promise<BlogCategory[]> {
   return [
     {
       id: 1,
       status: false,
-      image: "/office.svg",
+      name: "blogcategory",
       createdAt: "2024-03-11T10:00:00Z",
       updatedAt: "2024-03-11T12:00:00Z",
     },
     {
       id: 2,
-      image: "/office.svg",
-
+      name: "blogcategory",
       status: false,
       createdAt: "2024-03-10T09:30:00Z",
       updatedAt: "2024-03-11T11:30:00Z",
     },
     {
       id: 3,
-      image: "/office.svg",
-
+      name: "blogcategory",
       status: true,
       createdAt: "2024-03-09T14:45:00Z",
       updatedAt: "2024-03-11T10:15:00Z",
     },
     {
       id: 4,
-      image: "/office.svg",
+      name: "blogcategory",
       status: true,
       createdAt: "2024-03-09T14:45:00Z",
       updatedAt: "2024-03-11T10:15:00Z",
     },
   ];
 }
-export default function BannerPage() {
-  const [data, setData] = useState<Banner[]>([]);
+export default function CategoryPage() {
+  const [data, setData] = useState<BlogCategory[]>([]);
   const [loading, setLoading] = useState(true);
-  const [selectedDetail, setSelectedDetail] = useState<Banner | null>(null);
+  const [selectedDetail, setSelectedDetail] = useState<BlogCategory | null>(
+    null
+  );
   const [dialogOpen, setDialogOpen] = useState(false);
   const [dialogDelete, setDialogDelete] = useState(false);
   const navigate = useNavigate();
@@ -60,11 +62,11 @@ export default function BannerPage() {
     fetchData();
     // }, 3000);
   }, []);
-  const handleViewClick = (homeDetail: Banner) => {
+  const handleViewClick = (homeDetail: BlogCategory) => {
     setSelectedDetail(homeDetail);
     setDialogOpen(true);
   };
-  const handleViewDelete = (homeDetail: Banner) => {
+  const handleViewDelete = (homeDetail: BlogCategory) => {
     setSelectedDetail(homeDetail);
     setDialogDelete(true);
   };
@@ -79,30 +81,30 @@ export default function BannerPage() {
 
   return (
     <ContentLayout
-      title={"Banner"}
+      title={"Category"}
       create={
         <Button
           className="bg-primaryText hover:bg-red-500 "
           onClick={() => {
-            navigate(paths.app.banner.create.getHref());
+            navigate(paths.app.blog.categories.create.getHref());
           }}
         >
-          Create New Banner
+          Create New Category
         </Button>
       }
     >
       <div className="">
-        <BannerDataTable
+        <BlogCategoryDataTable
           columns={getColumns(handleViewClick, handleViewDelete)}
           data={data}
         />
-        <BannerDialog
-          bannerDetail={selectedDetail}
+        <BlogCategoryDialog
+          blogCategoryDetail={selectedDetail}
           open={dialogOpen}
           setOpen={setDialogOpen}
         />
         <DeleteDialog
-          bannerDetail={selectedDetail}
+          blogCategoryDetail={selectedDetail}
           open={dialogDelete}
           setOpen={setDialogDelete}
         />

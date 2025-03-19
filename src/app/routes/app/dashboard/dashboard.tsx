@@ -1,5 +1,5 @@
 import dashboardbg from "@/assets/dashboard.svg";
-export default function Dashboard() {
+export default function Page() {
   return (
     // <ContentLayout title="Dashboard">
     <div className="flex items-center justify-center w-full h-full min-h-[calc(100vh-86px)]">

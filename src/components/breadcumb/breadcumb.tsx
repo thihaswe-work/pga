@@ -11,45 +11,28 @@ import { Link, useLocation } from "react-router";
 
 export function BreadcrumbWithCustomSeparator() {
   const location = useLocation();
-
   const pathnames = decodeURI(location.pathname).split("/");
-  const modifiedPaths = pathnames.slice(2); // Use `slice` instead of `splice`
+  const modifiedPaths = pathnames.slice(2);
 
   return (
     <Breadcrumb>
       <BreadcrumbList>
         <BreadcrumbItem>
           <BreadcrumbLink asChild>
-            <Link to="/app">Content & Image</Link>
+            <Link to="/app">
+              {location.pathname.includes("role-and-permission") ||
+              location.pathname.includes("user-maintain")
+                ? "Maintenance"
+                : "Content & Image"}
+            </Link>
           </BreadcrumbLink>
         </BreadcrumbItem>
 
         {modifiedPaths.map((item, index) => {
-          const lastIndex = modifiedPaths.length - 1;
           const isLast = index === modifiedPaths.length - 1;
           const isEditPage = item === "edit";
 
-          const isSpecial =
-            modifiedPaths[0] === "blog" || modifiedPaths[0] === "career";
-          const linkPath = isSpecial
-            ? `/app/${modifiedPaths[0]}/${
-                item === modifiedPaths[0]
-                  ? modifiedPaths[index + 1]
-                  : modifiedPaths[lastIndex] === "edit" &&
-                    item === modifiedPaths[lastIndex - 1]
-                  ? modifiedPaths[1] + "/" + item + "/" + "edit"
-                  : item
-              }`
-            : `/app/${
-                modifiedPaths[modifiedPaths.length - 1] !== "create" &&
-                item === modifiedPaths[modifiedPaths.length - 2]
-                  ? modifiedPaths[0] +
-                    "/" +
-                    item +
-                    "/" +
-                    modifiedPaths[modifiedPaths.length - 1]
-                  : item
-              }`;
+          const linkPath = buildLinkPath(modifiedPaths, item, index);
 
           return (
             <React.Fragment key={index}>
@@ -57,11 +40,11 @@ export function BreadcrumbWithCustomSeparator() {
               <BreadcrumbItem>
                 {isEditPage || isLast ? (
                   <BreadcrumbPage className="cursor-pointer">
-                    {item.charAt(0).toUpperCase() + item.slice(1).toLowerCase()}
+                    {formatBreadcrumbText(item)}
                   </BreadcrumbPage>
                 ) : (
                   <BreadcrumbLink asChild>
-                    <Link to={linkPath}>{item}</Link>
+                    <Link to={linkPath}>{formatBreadcrumbText(item)}</Link>
                   </BreadcrumbLink>
                 )}
               </BreadcrumbItem>
@@ -72,3 +55,34 @@ export function BreadcrumbWithCustomSeparator() {
     </Breadcrumb>
   );
 }
+
+const buildLinkPath = (
+  modifiedPaths: string[],
+  item: string,
+  index: number
+) => {
+  const lastIndex = modifiedPaths.length - 1;
+  const isSpecial =
+    modifiedPaths[0] === "blog" || modifiedPaths[0] === "career";
+
+  if (isSpecial) {
+    return `/app/${modifiedPaths[0]}/${
+      item === modifiedPaths[0]
+        ? modifiedPaths[index + 1]
+        : modifiedPaths[lastIndex] === "edit" &&
+          item === modifiedPaths[lastIndex - 1]
+        ? modifiedPaths[1] + "/" + item + "/" + "edit"
+        : item
+    }`;
+  }
+
+  return `/app/${
+    modifiedPaths[lastIndex] !== "create" &&
+    item === modifiedPaths[lastIndex - 1]
+      ? modifiedPaths[0] + "/" + item + "/" + modifiedPaths[lastIndex]
+      : item
+  }`;
+};
+
+const formatBreadcrumbText = (item: string) =>
+  item.charAt(0).toUpperCase() + item.slice(1).toLowerCase();

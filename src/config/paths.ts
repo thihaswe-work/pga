@@ -31,20 +31,33 @@ export const paths = {
         return "/app";
       },
     },
-    home: {
-      // name: "Home Page",
-      path: "home",
+    jobAppliedForm: {
+      path: "job-applied-form",
       getHref: () => {
-        return "/app/home";
+        return "/app/job-applied-form";
       },
     },
-    homeEdit: {
-      path: "home/:section/edit",
-      getHref: (section: string) => {
-        return `/app/home/${section}/edit`;
+    contactMessages: {
+      path: "contact-messages",
+      getHref: () => {
+        return "/app/contact-messages";
       },
     },
-
+    home: {
+      root: {
+        // name: "Home Page",
+        path: "home",
+        getHref: () => {
+          return "/app/home";
+        },
+      },
+      edit: {
+        path: "home/:section/edit",
+        getHref: (section: string) => {
+          return `/app/home/${section}/edit`;
+        },
+      },
+    },
     aboutus: {
       // name: "About Us",
       path: "about-us",
@@ -59,54 +72,111 @@ export const paths = {
         return "/app/milestone";
       },
     },
-    blogs: {
-      // name: "Blog",
-      path: "blog/blogs",
-      getHref: () => {
-        return "/app/blog/blogs";
+    blog: {
+      blogs: {
+        root: {
+          // name: "Blog",
+          path: "blog/blogs",
+          getHref: () => {
+            return "/app/blog/blogs";
+          },
+        },
       },
-    },
-    categories: {
-      // name: "Blog",
-      path: "blog/categories",
-      getHref: () => {
-        return "/app/blog/categories";
-      },
-    },
-    categoriesEdit: {
-      // name: "Blog",
-      path: "blog/categories/:id/edit",
-      getHref: (id: string | number) => {
-        return `/app/blog/categories/${id}/edit`;
-      },
-    },
-    categoriesCreate: {
-      // name: "Blog",
-      path: "blog/categories/create",
-      getHref: () => {
-        return "/app/blog/categories/create";
+      categories: {
+        root: {
+          // name: "Blog",
+          path: "blog/categories",
+          getHref: () => {
+            return "/app/blog/categories";
+          },
+        },
+        edit: {
+          // name: "Blog",
+          path: "blog/categories/:id/edit",
+          getHref: (id: string | number) => {
+            return `/app/blog/categories/${id}/edit`;
+          },
+        },
+        create: {
+          // name: "Blog",
+          path: "blog/categories/create",
+          getHref: () => {
+            return "/app/blog/categories/create";
+          },
+        },
       },
     },
     banner: {
-      // name: "Banner",
-      path: "banner",
-      getHref: () => {
-        return "/app/banner";
+      root: {
+        // name: "Banner",
+        path: "banner",
+        getHref: () => {
+          return "/app/banner";
+        },
+      },
+      edit: {
+        path: "banner/:id/edit",
+        getHref: (id: string | number) => {
+          return `/app/banner/${id}/edit`;
+        },
+      },
+      create: {
+        path: "banner/create",
+        getHref: () => {
+          return `/app/banner/create`;
+        },
       },
     },
-    bannerEdit: {
-      path: "banner/:id/edit",
-      getHref: (id: string | number) => {
-        return `/app/banner/${id}/edit`;
+    career: {
+      categories: {
+        root: {
+          // name: "Blog",
+          path: "career/categories",
+          getHref: () => {
+            return "/app/career/categories";
+          },
+        },
+        edit: {
+          // name: "career",
+          path: "career/categories/:id/edit",
+          getHref: (id: string | number) => {
+            return `/app/career/categories/${id}/edit`;
+          },
+        },
+        create: {
+          // name: "career",
+          path: "career/categories/create",
+          getHref: () => {
+            return "/app/career/categories/create";
+          },
+        },
+      },
+      relatedFields: {
+        root: {
+          // name: "Blog",
+          path: "career/related-fields",
+          getHref: () => {
+            return "/app/career/related-fields";
+          },
+        },
+      },
+      regions: {
+        root: {
+          path: "career/regions",
+          getHref: () => {
+            return "/app/career/regions";
+          },
+        },
+      },
+      hiringPost: {
+        root: {
+          path: "career/hiring-post",
+          getHref: () => {
+            return "/app/career/hiring-post";
+          },
+        },
       },
     },
-    bannerCreate: {
-      path: "banner/create",
-      getHref: () => {
-        return `/app/banner/create`;
-      },
-    },
-
     feedback: {
       // name: "Banner",
       path: "feedback",
@@ -114,18 +184,18 @@ export const paths = {
         return "/app/feedback";
       },
     },
-    roles: {
+    roleAndPermission: {
       // name: "Banner",
-      path: "roles",
+      path: "role-and-permission",
       getHref: () => {
-        return "/app/roles";
+        return "/app/role-and-permission";
       },
     },
     userMaintain: {
       // name: "Banner",
-      path: "feedback",
+      path: "user-maintain",
       getHref: () => {
-        return "/app/user-maintian";
+        return "/app/user-maintain";
       },
     },
   },

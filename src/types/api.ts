@@ -48,3 +48,32 @@ export type Comment = Entity<{
   discussionId: string;
   author: User;
 }>;
+
+// types
+export type Home = {
+  id: number;
+  sectionType: string;
+  image: string;
+  header: string;
+  label: string;
+  description: string;
+  status: boolean;
+  createdAt: string;
+  updatedAt: string;
+};
+
+export type Banner = {
+  id: number;
+  image: string;
+  status: boolean;
+  createdAt: string;
+  updatedAt: string;
+};
+export type BlogCategory = {
+  id: number;
+  name: string;
+
+  status: boolean;
+  createdAt: string;
+  updatedAt: string;
+};

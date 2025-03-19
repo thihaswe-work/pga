@@ -5,21 +5,13 @@ import { NavLink } from "react-router";
 import { FiEdit } from "react-icons/fi";
 import { TbEye } from "react-icons/tb";
 import { RiDeleteBin6Line } from "react-icons/ri";
+import { BlogCategory } from "@/types/api";
 import { paths } from "@/config/paths";
-// This type is used to define the shape of our data.
-// You can use a Zod schema here if you want.
-export type Banner = {
-  id: number;
-  image: string;
-  status: boolean;
-  createdAt: string;
-  updatedAt: string;
-};
 
 export const getColumns = (
-  onViewClick: (detail: Banner) => void,
-  onViewDelete: (detail: Banner) => void
-): ColumnDef<Banner>[] => {
+  onViewClick: (detail: BlogCategory) => void,
+  onViewDelete: (detail: BlogCategory) => void
+): ColumnDef<BlogCategory>[] => {
   return [
     {
       accessorKey: "id",
@@ -27,38 +19,14 @@ export const getColumns = (
     },
 
     {
-      accessorKey: "image",
-      header: () => <div className="text-left">Image</div>,
-      cell: ({ row }) => {
-        const image = row.getValue("image") as string;
-
-        return (
-          <div className="px-4 py-3 w-[213px]">
-            <img
-              className="w-[180px] h-[43px] object-cover"
-              src={image}
-              alt="image"
-            />
-          </div>
-        );
-      },
+      accessorKey: "name",
+      header: () => <div className="text-left">Name</div>,
     },
 
     {
       accessorKey: "status",
       header: ({ table }) => {
-        // Get all rows
-        const totalCount = 2;
-        // Count rows with a specific status (e.g., "Completed" or truthy value)
-        const matchedCount = table
-          .getPrePaginationRowModel()
-          .rows.filter((row) => row.getValue("status")).length; // Adjust condition as needed
-
-        return (
-          <div className="text-left">
-            Status ({matchedCount}/{totalCount})
-          </div>
-        );
+        return <div className="text-left">Status</div>;
       },
       cell(props) {
         return (
@@ -97,7 +65,7 @@ export const getColumns = (
         const id = row.original.id; // Assuming id name exists in the row data
 
         return (
-          <NavLink to={`${paths.app.banner.edit.getHref(id)}`}>
+          <NavLink to={paths.app.blog.categories.edit.getHref(id)}>
             <Button
               variant="ghost"
               className={" text-edit hover:text-edit active:text-edit"}

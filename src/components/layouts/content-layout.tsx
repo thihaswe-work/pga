@@ -6,9 +6,14 @@ import { BreadcrumbWithCustomSeparator } from "../breadcumb/index";
 type ContentLayoutProps = {
   children: React.ReactNode;
   title: string;
+  create?: React.ReactElement;
 };
 
-export const ContentLayout = ({ children, title }: ContentLayoutProps) => {
+export const ContentLayout = ({
+  children,
+  title,
+  create,
+}: ContentLayoutProps) => {
   return (
     <>
       {/* <Head title={title} /> */}
@@ -17,8 +22,10 @@ export const ContentLayout = ({ children, title }: ContentLayoutProps) => {
           <div className="text-secondaryText text-base mb-3">
             <BreadcrumbWithCustomSeparator />
           </div>
-
-          <h1 className="text-2xl font-semibold text-gray-900">{title}</h1>
+          <div className="flex justify-between">
+            <h1 className="text-2xl font-semibold text-gray-900">{title}</h1>
+            {create && create}
+          </div>
         </div>
         <div className="mx-auto  px-4 py-6 sm:px-6 md:px-8 overflow-x-auto ">
           {children}

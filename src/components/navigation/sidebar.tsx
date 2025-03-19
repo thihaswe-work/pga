@@ -19,7 +19,7 @@ type SubSideNavigationItem = {
     {
       name: string;
       to: string;
-      icon: (props: React.SVGProps<SVGSVGElement>) => JSX.Element | ReactNode;
+      // icon: (props: React.SVGProps<SVGSVGElement>) => JSX.Element | ReactNode;
     }[]
   ];
 };
@@ -53,10 +53,20 @@ export const SideBar = () => {
 
   const navigation: NavigationItem[] = [
     { name: "Dashboard", to: paths.app.dashboard.getHref(), icon: Home },
+    {
+      name: "Job Applied Forms",
+      to: paths.app.jobAppliedForm.getHref(),
+      icon: Home,
+    },
+    {
+      name: "Contact Messages",
+      to: paths.app.contactMessages.getHref(),
+      icon: Home,
+    },
 
     { title: "Content & Images" }, // Added at the second place
 
-    { name: "Home Page", to: paths.app.home.getHref(), icon: Folder },
+    { name: "Home Page", to: paths.app.home.root.getHref(), icon: Folder },
     { name: "About Us", to: paths.app.aboutus.getHref(), icon: Folder },
     { name: "Miles Stone", to: paths.app.milestone.getHref(), icon: Folder },
 
@@ -65,22 +75,66 @@ export const SideBar = () => {
       icon: Folder,
       subRoute: [
         [
-          { name: "Blogs", to: paths.app.blogs.getHref(), icon: Folder },
+          {
+            name: "Blogs",
+            to: paths.app.blog.blogs.root.getHref(),
+            // icon: Folder
+          },
           {
             name: "Categories",
-            to: paths.app.categories.getHref(),
-            icon: Folder,
+            to: paths.app.blog.categories.root.getHref(),
+            // icon: Folder,
           },
         ],
       ],
     },
-    { name: "Banner", to: paths.app.banner.getHref(), icon: Folder },
+    { name: "Banner", to: paths.app.banner.root.getHref(), icon: Folder },
+    {
+      name: "Career",
+      icon: Folder,
+      subRoute: [
+        [
+          {
+            name: "Categories",
+            to: paths.app.career.categories.root.getHref(),
+            // icon: Folder,
+          },
+          {
+            name: "Related Fields",
+            to: paths.app.career.relatedFields.root.getHref(),
+            // icon: Folder,
+          },
+          {
+            name: "Regions",
+            to: paths.app.career.regions.root.getHref(),
+            // icon: Folder,
+          },
+          {
+            name: "Hiring Post",
+            to: paths.app.career.hiringPost.root.getHref(),
+            // icon: Folder,
+          },
+        ],
+      ],
+    },
+    { name: "FeedBack", to: paths.app.feedback.getHref(), icon: Folder },
 
     { title: "Maintenance" }, // Added at the end
+    {
+      name: "Role & Permission",
+      to: paths.app.roleAndPermission.getHref(),
+      icon: Folder,
+    },
+
+    {
+      name: "User Maintain",
+      to: paths.app.userMaintain.getHref(),
+      icon: Folder,
+    },
   ];
 
   return (
-    <nav className="grid gap-6 text-lg font-medium px-6">
+    <nav className="grid gap-6 text-lg font-medium px-6 overflow-y-auto pb-10">
       <div className="flex h-16 shrink-0 items-center px-4">
         <Logo />
       </div>
@@ -108,9 +162,9 @@ export const SideBar = () => {
                 </div>
                 {/* Arrow Icon - Changes Based on Open State */}
                 {openMenus[item.name] ? (
-                  <ChevronUp className="w-4 h-4" />
+                  <ChevronUp className="w-4 h-4 text-primaryText" />
                 ) : (
-                  <ChevronDown className="w-4 h-4" />
+                  <ChevronDown className="w-4 h-4 text-primaryText" />
                 )}
               </div>
 
@@ -133,16 +187,16 @@ export const SideBar = () => {
                     className={({ isActive }) =>
                       cn(
                         " hover:bg-hover hover:text-secondaryText",
-                        "group flex flex-1 w-full items-center rounded-md p-2 text-base font-medium",
-                        isActive && "bg-active text-primaryText",
+                        "group flex flex-1 w-full items-center rounded-md p-2 text-base font-medium ",
+                        isActive && "bg-primaryText text-background",
                         "first:mt-6"
                       )
                     }
                   >
-                    <subItem.icon
+                    {/* <subItem.icon
                       className="mr-4 size-6 shrink-0"
                       aria-hidden="true"
-                    />
+                    /> */}
                     {subItem.name}
                   </NavLink>
                 ))}
@@ -166,7 +220,7 @@ export const SideBar = () => {
                   "",
                   " hover:bg-hover hover:text-secondaryText",
                   "group flex flex-1 w-full items-center rounded-md p-2 text-base font-medium",
-                  isActive && "bg-active text-primaryText"
+                  isActive && "bg-primaryText text-background"
                 )
               }
             >

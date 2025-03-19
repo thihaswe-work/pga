@@ -1,6 +1,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { useState } from "react";
+import { IoMdCheckmark } from "react-icons/io";
 import { FaRegEye, FaRegEyeSlash } from "react-icons/fa";
 import { z } from "zod";
 import { Button } from "@/components/ui/button";
@@ -15,6 +16,7 @@ import {
 import { Input } from "@/components/ui/input";
 import useAuth from "@/store/store";
 import { Checkbox } from "@/components/ui/checkbox";
+import { toast } from "sonner";
 
 const formSchema = z.object({
   email: z.string().email({
@@ -70,6 +72,15 @@ const LoginForm = () => {
 
       // Assuming API returns a `user` object
       setToken(data.access_token); // Assuming API returns a `token`
+
+      toast(
+        <div className="flex items-center gap-2">
+          <div className="p-3 rounded-full bg-background">
+            <IoMdCheckmark className="text-primaryText text-xl font-bold" />
+          </div>
+          <span>You are now logged in</span>
+        </div>
+      );
 
       // Redirect or perform other post-login actions
     } catch (error) {
