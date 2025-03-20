@@ -1,32 +1,175 @@
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
+import { Textarea } from "@/components/ui/textarea";
 import { paths } from "@/config/paths";
-import { useState } from "react";
+import { Blog, BlogCategory } from "@/types/api";
+import { useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 interface Prop {
-  id: number;
+  data: Blog;
+  categories: BlogCategory;
 }
 
-export default function EditForm({ id }: Prop) {
+export default function EditForm({ data }: Prop) {
   const navigate = useNavigate();
   const [isActive, setIsActive] = useState(false);
+  const [image, setImage] = useState<File | null>(null);
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const [dragging, setDragging] = useState(false);
+
+  const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (event.target.files?.length) {
+      const file = event.target.files[0];
+      setImage(file);
+      setImagePreview(URL.createObjectURL(file)); // Create image preview URL
+    }
+  };
+
+  // Drag and Drop Handlers
+  const handleDragEnter = useCallback((event: React.DragEvent) => {
+    event.preventDefault();
+    setDragging(true);
+  }, []);
+
+  const handleDragOver = useCallback((event: React.DragEvent) => {
+    event.preventDefault();
+    setDragging(true);
+  }, []);
+
+  const handleDragLeave = useCallback(() => {
+    setDragging(false);
+  }, []);
+
+  const handleDrop = useCallback((event: React.DragEvent) => {
+    event.preventDefault();
+    setDragging(false);
+
+    if (event.dataTransfer.files.length) {
+      const file = event.dataTransfer.files[0];
+      setImage(file);
+      setImagePreview(URL.createObjectURL(file));
+    }
+  }, []);
+
+  useEffect(() => {
+    if (data) {
+      setIsActive(data?.status);
+      setImagePreview(data?.image || null);
+    }
+  }, [data]);
 
   return (
     <div className="flex w-full gap-8">
       <div className="max-w-[628px] space-y-6 w-full p-6 bg-background rounded-md">
-        <Label htmlFor="category" className="font-semibold">
-          Categories Name <span className="text-red-500">*</span>
-        </Label>
-        <Card className="border border-gray-300 rounded-md">
-          <CardContent className="p-2 px-4">
-            <Input
-              id="category"
-              defaultValue="Information Technology"
-              className="border-none focus:ring-0 bg-secondaryBackground"
-            />
+        {/* Header */}
+        <div className="space-y-2">
+          <Label className="font-medium">
+            Header<span className="text-primaryText">*</span>
+          </Label>
+          <Input
+            placeholder="300+"
+            className="mt-1"
+            defaultValue={data?.title}
+          />
+          <p className="text-sm text-muted-foreground">
+            Minimum 60, Maximum 100
+          </p>
+        </div>
+
+        {/* Label */}
+        <div className="space-y-2">
+          <Label className="font-medium">
+            Label<span className="text-primaryText">*</span>
+          </Label>
+          <Input
+            placeholder="IN HOUSE STAFFS"
+            className="mt-1"
+            defaultValue={data?.title}
+          />
+          <p className="text-sm text-muted-foreground">
+            Minimum 60, Maximum 100
+          </p>
+        </div>
+
+        {/* Description */}
+        <div className="space-y-2">
+          <Label className="font-medium">
+            Description<span className="text-primaryText">*</span>
+          </Label>
+          <Textarea
+            defaultValue={data?.description}
+            placeholder="Enter description..."
+            className="mt-1"
+            rows={3}
+          />
+          <p className="text-sm text-muted-foreground">
+            Minimum 100, Maximum 250
+          </p>
+        </div>
+
+        {/* Image Upload */}
+        <Card className=" p-0 bg-secondaryBackground gap-0">
+          <CardHeader>
+            <Label className="font-medium w-full p-6 text-lg ">Image</Label>
+          </CardHeader>
+          <CardContent className=" bg-background p-6">
+            {/* Drag & Drop Box */}
+            <div
+              className={` border-2 ${
+                dragging ? "border-blue-500 bg-blue-50" : "border-gray-300"
+              } border-dashed rounded-lg p-6 text-center transition-all bg-secondaryBackground`}
+              onDragEnter={handleDragEnter}
+              onDragOver={handleDragOver}
+              onDragLeave={handleDragLeave}
+              onDrop={handleDrop}
+            >
+              <input
+                type="file"
+                className="hidden"
+                id="fileUpload"
+                onChange={handleImageUpload}
+              />
+              <label
+                htmlFor="fileUpload"
+                className="cursor-pointer text-secondaryText hover:underline"
+              >
+                {dragging
+                  ? "Drop your file here"
+                  : "Drag & Drop your files or "}
+                <span className="text-red-500">Browse</span>
+              </label>
+            </div>
+
+            {/* File Preview with Image */}
+            {imagePreview && (
+              <div className="mt-4 flex flex-col gap-4 bg-black text-white p-2 rounded-md pb-10">
+                <div>
+                  <Button
+                    size="sm"
+                    onClick={() => {
+                      setImage(null);
+                      setImagePreview(null);
+                    }}
+                  >
+                    X
+                  </Button>
+                  {image && (
+                    <span className="text-sm">
+                      {image.name} ({(image.size / 1024).toFixed(1)} KB)
+                    </span>
+                  )}
+                </div>
+
+                <img
+                  src={imagePreview!}
+                  alt="Preview"
+                  className="w-[368px] h-[86px] rounded-md object-cover mx-auto"
+                />
+              </div>
+            )}
           </CardContent>
         </Card>
       </div>

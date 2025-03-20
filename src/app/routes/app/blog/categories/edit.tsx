@@ -4,7 +4,7 @@ import EditForm from "@/features/blog/categories/components/editform";
 export default function EditPage() {
   return (
     <ContentLayout title="category Edit">
-      <EditForm id={18} />
+      <EditForm data={""} />
     </ContentLayout>
   );
 }

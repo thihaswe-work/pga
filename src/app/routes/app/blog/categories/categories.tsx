@@ -1,4 +1,5 @@
 import { ContentLayout } from "@/components/layouts/content-layout";
+import { DataTable } from "@/components/table/data-table";
 import { Button } from "@/components/ui/button";
 import { paths } from "@/config/paths";
 import { getColumns } from "@/features/blog/categories/components/columns";
@@ -43,6 +44,7 @@ async function getData(): Promise<BlogCategory[]> {
     },
   ];
 }
+
 export default function CategoryPage() {
   const [data, setData] = useState<BlogCategory[]>([]);
   const [loading, setLoading] = useState(true);
@@ -62,12 +64,12 @@ export default function CategoryPage() {
     fetchData();
     // }, 3000);
   }, []);
-  const handleViewClick = (homeDetail: BlogCategory) => {
-    setSelectedDetail(homeDetail);
+  const handleViewClick = (detail: BlogCategory) => {
+    setSelectedDetail(detail);
     setDialogOpen(true);
   };
-  const handleViewDelete = (homeDetail: BlogCategory) => {
-    setSelectedDetail(homeDetail);
+  const handleViewDelete = (detail: BlogCategory) => {
+    setSelectedDetail(detail);
     setDialogDelete(true);
   };
 
@@ -94,7 +96,7 @@ export default function CategoryPage() {
       }
     >
       <div className="">
-        <BlogCategoryDataTable
+        <DataTable
           columns={getColumns(handleViewClick, handleViewDelete)}
           data={data}
         />

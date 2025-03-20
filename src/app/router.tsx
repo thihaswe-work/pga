@@ -143,7 +143,7 @@ export const createAppRouter = (queryClient: QueryClient) =>
         {
           path: paths.app.blog.blogs.edit.path,
           lazy: () =>
-            import("./routes/app/blog/blogs/create").then(convert(queryClient)),
+            import("./routes/app/blog/blogs/edit").then(convert(queryClient)),
         },
         {
           path: paths.app.career.categories.root.path,

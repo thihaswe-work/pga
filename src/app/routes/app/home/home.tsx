@@ -1,4 +1,5 @@
 import { ContentLayout } from "@/components/layouts/index";
+import { DataTable } from "@/components/table/data-table";
 import { useHomes } from "@/features/home/api/get-homes";
 
 import { getColumns } from "@/features/home/components/columns";
@@ -99,7 +100,7 @@ export default function HomePage() {
   return (
     <ContentLayout title="Home Page">
       <div className="">
-        <HomeDataTable columns={getColumns(handleViewClick)} data={data} />
+        <DataTable columns={getColumns(handleViewClick)} data={data} />
         <HomeDialog
           homeDetail={selectedDetail}
           open={dialogOpen}

@@ -1,9 +1,24 @@
+import logo from "@/assets/logo.svg";
 import { paths } from "@/config/paths";
 import { cn } from "@/lib/utils";
-import { ChevronDown, ChevronUp, Folder, Home } from "lucide-react";
+import {
+  BookOpenText,
+  ChevronDown,
+  ChevronUp,
+  GitFork,
+  Home,
+  LayoutGrid,
+  Mail,
+  MessageCircleMore,
+  Trophy,
+  WholeWordIcon,
+} from "lucide-react";
 import { JSX, ReactNode, useState } from "react";
+import { FiUserPlus } from "react-icons/fi";
+import { HiOutlineUserGroup } from "react-icons/hi2";
+import { LiaPenNibSolid } from "react-icons/lia";
+import { PiScrewdriverBold } from "react-icons/pi";
 import { NavLink } from "react-router";
-import logo from "@/assets/logo.svg";
 import { Link } from "../ui/link/link";
 
 type SideNavigationItem = {
@@ -52,27 +67,35 @@ export const SideBar = () => {
   };
 
   const navigation: NavigationItem[] = [
-    { name: "Dashboard", to: paths.app.dashboard.getHref(), icon: Home },
+    {
+      name: "Dashboard",
+      to: paths.app.dashboard.getHref(),
+      icon: LayoutGrid,
+    },
     {
       name: "Job Applied Forms",
       to: paths.app.jobAppliedForm.getHref(),
-      icon: Home,
+      icon: GitFork,
     },
     {
       name: "Contact Messages",
       to: paths.app.contactMessages.getHref(),
-      icon: Home,
+      icon: Mail,
     },
 
     { title: "Content & Images" }, // Added at the second place
 
-    { name: "Home Page", to: paths.app.home.root.getHref(), icon: Folder },
-    { name: "About Us", to: paths.app.aboutus.getHref(), icon: Folder },
-    { name: "Miles Stone", to: paths.app.milestone.getHref(), icon: Folder },
+    { name: "Home Page", to: paths.app.home.root.getHref(), icon: Home },
+    {
+      name: "About Us",
+      to: paths.app.aboutus.getHref(),
+      icon: HiOutlineUserGroup,
+    },
+    { name: "Miles Stone", to: paths.app.milestone.getHref(), icon: Trophy },
 
     {
       name: "Blog",
-      icon: Folder,
+      icon: BookOpenText,
       subRoute: [
         [
           {
@@ -88,10 +111,14 @@ export const SideBar = () => {
         ],
       ],
     },
-    { name: "Banner", to: paths.app.banner.root.getHref(), icon: Folder },
+    {
+      name: "Banner",
+      to: paths.app.banner.root.getHref(),
+      icon: WholeWordIcon,
+    },
     {
       name: "Career",
-      icon: Folder,
+      icon: LiaPenNibSolid,
       subRoute: [
         [
           {
@@ -117,19 +144,23 @@ export const SideBar = () => {
         ],
       ],
     },
-    { name: "FeedBack", to: paths.app.feedback.getHref(), icon: Folder },
+    {
+      name: "FeedBack",
+      to: paths.app.feedback.getHref(),
+      icon: MessageCircleMore,
+    },
 
     { title: "Maintenance" }, // Added at the end
     {
       name: "Role & Permission",
       to: paths.app.roleAndPermission.getHref(),
-      icon: Folder,
+      icon: PiScrewdriverBold,
     },
 
     {
       name: "User Maintain",
       to: paths.app.userMaintain.getHref(),
-      icon: Folder,
+      icon: FiUserPlus,
     },
   ];
 

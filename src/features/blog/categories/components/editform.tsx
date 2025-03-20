@@ -7,10 +7,10 @@ import { paths } from "@/config/paths";
 import { useState } from "react";
 import { useNavigate } from "react-router";
 interface Prop {
-  id: number;
+  data: any;
 }
 
-export default function EditForm({ id }: Prop) {
+export default function EditForm({ data }: Prop) {
   const navigate = useNavigate();
   const [isActive, setIsActive] = useState(false);
 

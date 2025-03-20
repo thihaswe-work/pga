@@ -1,4 +1,5 @@
 import { ContentLayout } from "@/components/layouts/content-layout";
+import { DataTable } from "@/components/table/data-table";
 import { Button } from "@/components/ui/button";
 import { paths } from "@/config/paths";
 import { Banner, getColumns } from "@/features/banner/components/columns";
@@ -92,7 +93,7 @@ export default function BannerPage() {
       }
     >
       <div className="">
-        <BannerDataTable
+        <DataTable
           columns={getColumns(handleViewClick, handleViewDelete)}
           data={data}
         />

@@ -8,17 +8,16 @@ import { Textarea } from "@/components/ui/textarea";
 import { paths } from "@/config/paths";
 import { useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router";
-import { useHome } from "../api/get-home";
-
-export default function EditForm() {
-  const homeId = String(14);
+interface Prop {
+  data: any;
+}
+export default function EditForm({ data }: Prop) {
   const navigate = useNavigate();
 
   const [image, setImage] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [dragging, setDragging] = useState(false);
   const [isActive, setIsActive] = useState(true);
-  const { data } = useHome({ homeId }) as { data: any };
 
   const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files?.length) {

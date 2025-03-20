@@ -138,3 +138,7 @@
  --color-delete:#ff4444;
  --color-edit:#D97706;
 }
+/* styles.css or Dialog.module.css */
+.customdialog {
+  width: 70vw !important; /* Ensure width takes priority */
+}

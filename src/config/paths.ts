@@ -90,9 +90,9 @@ export const paths = {
         },
         edit: {
           // name: "Blog",
-          path: "blog/blogs/edit",
-          getHref: () => {
-            return "/app/blog/blogs/edit";
+          path: `blog/blogs/:id/edit`,
+          getHref: (id: number | string) => {
+            return `/app/blog/blogs/${id}/edit`;
           },
         },
       },
