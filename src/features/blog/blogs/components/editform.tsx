@@ -250,6 +250,7 @@ export function TiptapEditor() {
 
             {/* Toolbar */}
             <div className="flex gap-2 border-b pb-2 mb-2">
+              {/* Bold */}
               <Button
                 type="button"
                 onClick={() => editor?.chain().focus().toggleBold().run()}
@@ -261,6 +262,8 @@ export function TiptapEditor() {
               >
                 <b>B</b>
               </Button>
+
+              {/* Italic */}
               <Button
                 type="button"
                 onClick={() => editor?.chain().focus().toggleItalic().run()}
@@ -272,9 +275,16 @@ export function TiptapEditor() {
               >
                 <i>I</i>
               </Button>
+
+              {/* Bullet List */}
               <Button
                 type="button"
-                onClick={() => editor?.chain().focus().toggleBulletList().run()}
+                onClick={() => {
+                  if (editor?.isActive("orderedList")) {
+                    editor.chain().focus().toggleOrderedList().run(); // Remove ordered list first
+                  }
+                  editor?.chain().focus().toggleBulletList().run(); // Then toggle bullet list
+                }}
                 className={`p-1 hover:bg-transparent ${
                   editor?.isActive("bulletList")
                     ? "bg-transparent text-foreground"
@@ -283,11 +293,16 @@ export function TiptapEditor() {
               >
                 <FaListUl />
               </Button>
+
+              {/* Ordered List */}
               <Button
                 type="button"
-                onClick={() =>
-                  editor?.chain().focus().toggleOrderedList().run()
-                }
+                onClick={() => {
+                  if (editor?.isActive("bulletList")) {
+                    editor.chain().focus().toggleBulletList().run(); // Remove bullet list first
+                  }
+                  editor?.chain().focus().toggleOrderedList().run(); // Then toggle ordered list
+                }}
                 className={`p-1 hover:bg-transparent ${
                   editor?.isActive("orderedList")
                     ? "bg-transparent text-foreground"
