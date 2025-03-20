@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -8,9 +7,11 @@ import { Textarea } from "@/components/ui/textarea";
 import { paths } from "@/config/paths";
 import { useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router";
+import { useForm, Controller } from "react-hook-form";
 interface Prop {
   data: any;
 }
+
 export default function EditForm({ data }: Prop) {
   const navigate = useNavigate();
 
@@ -18,6 +19,15 @@ export default function EditForm({ data }: Prop) {
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [dragging, setDragging] = useState(false);
   const [isActive, setIsActive] = useState(true);
+
+  const { control, handleSubmit, setValue, formState } = useForm({
+    defaultValues: {
+      title: data?.title || "",
+      label: data?.label || "",
+      description: data?.description || "",
+      availabilityStatus: data?.availabilityStatus === "In Stock" || false,
+    },
+  });
 
   const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files?.length) {
@@ -60,6 +70,13 @@ export default function EditForm({ data }: Prop) {
     }
   }, [data]);
 
+  const onSubmit = (data: any) => {
+    if (image) {
+      console.log(image);
+    }
+    console.log("Form Submitted with:", data, imagePreview);
+  };
+
   return (
     <div className="flex w-full gap-8">
       <div className="max-w-[628px] space-y-6 w-full p-6 bg-background rounded-md">
@@ -68,10 +85,12 @@ export default function EditForm({ data }: Prop) {
           <Label className="font-medium">
             Header<span className="text-primaryText">*</span>
           </Label>
-          <Input
-            placeholder="300+"
-            className="mt-1"
-            defaultValue={data?.title}
+          <Controller
+            name="title"
+            control={control}
+            render={({ field }) => (
+              <Input {...field} placeholder="300+" className="mt-1" />
+            )}
           />
           <p className="text-sm text-muted-foreground">
             Minimum 60, Maximum 100
@@ -83,10 +102,16 @@ export default function EditForm({ data }: Prop) {
           <Label className="font-medium">
             Label<span className="text-primaryText">*</span>
           </Label>
-          <Input
-            placeholder="IN HOUSE STAFFS"
-            className="mt-1"
-            defaultValue={data?.title}
+          <Controller
+            name="label"
+            control={control}
+            render={({ field }) => (
+              <Input
+                {...field}
+                placeholder="IN HOUSE STAFFS"
+                className="mt-1"
+              />
+            )}
           />
           <p className="text-sm text-muted-foreground">
             Minimum 60, Maximum 100
@@ -98,11 +123,17 @@ export default function EditForm({ data }: Prop) {
           <Label className="font-medium">
             Description<span className="text-primaryText">*</span>
           </Label>
-          <Textarea
-            defaultValue={data?.description}
-            placeholder="Enter description..."
-            className="mt-1"
-            rows={3}
+          <Controller
+            name="description"
+            control={control}
+            render={({ field }) => (
+              <Textarea
+                {...field}
+                placeholder="Enter description..."
+                className="mt-1"
+                rows={3}
+              />
+            )}
           />
           <p className="text-sm text-muted-foreground">
             Minimum 100, Maximum 250
@@ -117,7 +148,7 @@ export default function EditForm({ data }: Prop) {
           <CardContent className=" bg-background p-6">
             {/* Drag & Drop Box */}
             <div
-              className={` border-2 ${
+              className={`border-2 ${
                 dragging ? "border-blue-500 bg-blue-50" : "border-gray-300"
               } border-dashed rounded-lg p-6 text-center transition-all bg-secondaryBackground`}
               onDragEnter={handleDragEnter}
@@ -174,14 +205,21 @@ export default function EditForm({ data }: Prop) {
       </div>
       <div className="w-full max-w-[436px] space-y-6 ">
         {/* Active Toggle */}
-        <div className="flex  justify-between  border  flex-col rounded-lg bg-background">
+        <div className="flex justify-between border flex-col rounded-lg bg-background">
           <Label className="font-medium px-6 py-4">Active</Label>
           <div className="h-[1px] w-full bg-[#e9e9ea]"></div>
-          <div className=" p-6">
-            <Switch
-              checked={isActive}
-              onCheckedChange={setIsActive}
-              className={"data-[state=checked]:bg-switchCheck"}
+          <div className="p-6">
+            <Controller
+              name="availabilityStatus"
+              control={control}
+              render={({ field }) => (
+                <Switch
+                  {...field}
+                  checked={field.value}
+                  onCheckedChange={field.onChange}
+                  className={"data-[state=checked]:bg-switchCheck"}
+                />
+              )}
             />
           </div>
         </div>
@@ -191,6 +229,7 @@ export default function EditForm({ data }: Prop) {
           <Button
             variant="default"
             className="bg-primaryText hover:bg-text-500"
+            onClick={handleSubmit(onSubmit)}
           >
             Save changes
           </Button>

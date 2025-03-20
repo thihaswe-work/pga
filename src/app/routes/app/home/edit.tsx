@@ -1,4 +1,5 @@
 import { ContentLayout } from "@/components/layouts/content-layout";
+import Loading from "@/components/loading/loading";
 import { useHome } from "@/features/home/api/get-home";
 import EditForm from "@/features/home/components/editform";
 
@@ -10,6 +11,8 @@ export default function EditPage() {
   const title = pathname.split("/")[3];
   const homeId = String(14);
   const { data } = useHome({ homeId }) as { data: any };
+  if (!data) return <Loading />;
+
   return (
     <ContentLayout title={`Editing ${title}`}>
       <EditForm data={data} />
