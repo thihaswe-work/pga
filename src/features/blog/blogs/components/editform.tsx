@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -95,7 +96,10 @@ export default function EditForm({ data, categories }: Prop) {
             control={control}
             render={({ field }) => (
               <div className="w-full">
-                <Select value={field.value} onValueChange={field.onChange}>
+                <Select
+                  value={field.value as string}
+                  onValueChange={field.onChange}
+                >
                   <SelectTrigger className="w-full">
                     <span>
                       {categories.find(
