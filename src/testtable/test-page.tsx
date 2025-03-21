@@ -1,9 +1,7 @@
-import { ContentLayout } from "@/components/layouts/content-layout";
-import { getColumns } from "@/features/home/components/columns";
-
-import { useCallback, useEffect, useState } from "react";
-import { Payment } from "./columns";
-import { DataTable } from "./data-table-global";
+import { ContentLayout } from "@/components/layouts";
+import { useEffect, useState } from "react";
+import { getColumns, Payment } from "./columns";
+import { DataTable } from "./data-table";
 import { PaymentDialog } from "./dialog";
 
 async function getData(): Promise<Payment[]> {
@@ -321,46 +319,11 @@ export default function TestPage() {
   const [selectedPayment, setSelectedPayment] = useState<Payment | null>(null);
   const [dialogOpen, setDialogOpen] = useState(false);
 
-  const [dragging, setDragging] = useState(false);
-
-  // Drag and Drop Handlers
-  const handleDragEnter = useCallback((event: React.DragEvent) => {
-    event.preventDefault();
-    setDragging(true);
-    console.log("enter");
-  }, []);
-
-  const handleDragOver = useCallback((event: React.DragEvent) => {
-    event.preventDefault();
-    setDragging(true);
-    console.log("over");
-  }, []);
-
-  const handleDragLeave = useCallback(() => {
-    setDragging(false);
-    console.log("leave");
-  }, []);
-
-  const handleDrop = useCallback((event: React.DragEvent) => {
-    event.preventDefault();
-    setDragging(false);
-    console.log("drop");
-
-    if (event.dataTransfer.files.length) {
-      const file = event.dataTransfer.files[0];
-      console.log(event);
-    }
-  }, []);
-
   useEffect(() => {
-    async function fetchData() {
-      const result = await getData();
-      setData(result);
+    getData().then((resolve) => {
+      setData(resolve);
       setLoading(false);
-    }
-    // setTimeout(() => {
-    fetchData();
-    // }, 3000);
+    });
   }, []);
   const handleViewClick = (payment: Payment) => {
     setSelectedPayment(payment);
@@ -374,30 +337,7 @@ export default function TestPage() {
     );
   }
   return (
-    <ContentLayout title="home">
-      <div
-        className={` border-2 ${
-          dragging ? "border-blue-500 bg-blue-50" : "border-gray-300"
-        } border-dashed rounded-lg p-6 text-center transition-all bg-red-500`}
-        onDragEnter={handleDragEnter}
-        onDragOver={handleDragOver}
-        onDragLeave={handleDragLeave}
-        onDrop={handleDrop}
-      >
-        <input
-          type="file"
-          className="hidden"
-          id="fileUpload"
-          onChange={() => console.log("onchange")}
-        />
-        <label
-          htmlFor="fileUpload"
-          className="cursor-pointer text-secondaryText hover:underline"
-        >
-          {dragging ? "Drop your file here" : "Drag & Drop your files or "}
-          <span className="text-red-500">Browse</span>
-        </label>
-      </div>
+    <ContentLayout title="Test">
       <div className="">
         <DataTable columns={getColumns(handleViewClick)} data={data} />
         <PaymentDialog

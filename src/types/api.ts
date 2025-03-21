@@ -72,7 +72,6 @@ export type Banner = {
 export type BlogCategory = {
   id: number;
   name: string;
-
   status: boolean;
   createdAt: string;
   updatedAt: string;
@@ -87,4 +86,66 @@ export type Blog = {
   status: boolean;
   createdAt: string;
   updatedAt: string;
+};
+
+export type CareerCategory = {
+  id: number;
+  name: string;
+  image: string;
+  status: boolean;
+  createdAt: string;
+  updatedAt: string;
+};
+
+export type RelatedField = {
+  id: number;
+  name: string;
+  status: boolean;
+  createdAt: string;
+  updatedAt: string;
+};
+
+export type Region = {
+  id: number;
+  name: string;
+  image: string;
+  status: boolean;
+  createdAt: string;
+  updatedAt: string;
+};
+export type HiringPost = {
+  id: number;
+  jobId: string;
+  position: string;
+  description: string;
+  jobClose: string;
+  requirement: string;
+  responsibility: string;
+  benefit: string;
+  categoryId: number;
+  jobTypeId: number;
+  locationId: number;
+  regionId: number;
+  relatedFieldId: number;
+  status: boolean;
+  createdAt: string;
+  updatedAt: string;
+  category: CareerCategory;
+  jobType: {
+    id: number;
+    name: string;
+    image: string;
+    status: boolean;
+    createdAt: string;
+    updateAt: string;
+  };
+  location: {
+    id: number;
+    name: string;
+    status: boolean;
+    createdAt: string;
+    updatedAt: string;
+  };
+  region: Region;
+  relatedField: RelatedField;
 };

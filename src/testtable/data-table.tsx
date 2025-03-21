@@ -30,6 +30,8 @@ import {
   DropdownMenuContent,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { DataTablePagination } from "./data-table-pagination";
+import { DataTableViewOptions } from "./data-table-view";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -40,27 +42,29 @@ export function DataTable<TData, TValue>({
   columns,
   data,
 }: DataTableProps<TData, TValue>) {
-  const [sorting, setSorting] = React.useState<SortingState>([]);
+  const [sorting, setSorting] = React.useState<SortingState>([]); //email sort
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
-  );
+  ); //email search
   const [columnVisibility, setColumnVisibility] =
-    React.useState<VisibilityState>({});
-
+    React.useState<VisibilityState>({}); //column visibility
+  const [rowSelection, setRowSelection] = React.useState({}); //row selection
   const table = useReactTable({
     data,
     columns,
     getCoreRowModel: getCoreRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
-    onSortingChange: setSorting,
+    getPaginationRowModel: getPaginationRowModel(), //pagination
+    onSortingChange: setSorting, //email sort
     getSortedRowModel: getSortedRowModel(),
-    onColumnFiltersChange: setColumnFilters,
-    getFilteredRowModel: getFilteredRowModel(),
-    onColumnVisibilityChange: setColumnVisibility,
+    onColumnFiltersChange: setColumnFilters, // email search
+    getFilteredRowModel: getFilteredRowModel(), // email search
+    onColumnVisibilityChange: setColumnVisibility, //column visibility
+    onRowSelectionChange: setRowSelection, //row selection
     state: {
-      sorting,
-      columnFilters,
-      columnVisibility,
+      sorting, //email sort
+      columnFilters, // email search
+      columnVisibility, //column visibility
+      rowSelection, //row selection
     },
   });
 
@@ -100,6 +104,8 @@ export function DataTable<TData, TValue>({
             })}
         </DropdownMenuContent>
       </DropdownMenu>
+      {/* column view */}
+      <DataTableViewOptions table={table} />
       <div className="rounded-md border">
         <Table>
           <TableHeader>
@@ -150,24 +156,32 @@ export function DataTable<TData, TValue>({
           </TableBody>
         </Table>
       </div>
-      <div className="flex items-center justify-end space-x-2 py-4">
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() => table.previousPage()}
-          disabled={!table.getCanPreviousPage()}
-        >
-          Previous
-        </Button>
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() => table.nextPage()}
-          disabled={!table.getCanNextPage()}
-        >
-          Next
-        </Button>
+      <div className="flex flex-col">
+        <div className="flex items-center  justify-end space-x-2 py-4">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => table.previousPage()}
+            disabled={!table.getCanPreviousPage()}
+          >
+            Previous
+          </Button>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => table.nextPage()}
+            disabled={!table.getCanNextPage()}
+          >
+            Next
+          </Button>
+        </div>
+        {/*pagination number*/}
+        <DataTablePagination table={table} />
       </div>
+      {/* <div className="flex-1 text-sm text-muted-foreground">
+        {table.getFilteredSelectedRowModel().rows.length} of{" "}
+        {table.getFilteredRowModel().rows.length} row(s) selected.
+      </div> */}
     </div>
   );
 }

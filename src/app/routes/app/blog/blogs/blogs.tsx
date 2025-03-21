@@ -4,7 +4,6 @@ import { DataTable } from "@/components/table/data-table";
 import { Button } from "@/components/ui/button";
 import { paths } from "@/config/paths";
 import { getColumns } from "@/features/blog/blogs/components/columns";
-import { BlogDataTable } from "@/features/blog/blogs/components/data-table";
 import {
   BlogDialog,
   DeleteDialog,
@@ -76,7 +75,6 @@ const categories: BlogCategory[] = [
 export default function Blogs() {
   const navigate = useNavigate();
   const [data, setData] = useState<Blog[]>([]);
-  const [loading, setLoading] = useState(true);
   const [selectedDetail, setSelectedDetail] = useState<Blog | null>(null);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [dialogDelete, setDialogDelete] = useState(false);
@@ -84,11 +82,9 @@ export default function Blogs() {
     async function fetchData() {
       const result = await getData();
       setData(result);
-      setLoading(false);
     }
-    // setTimeout(() => {
+
     fetchData();
-    // }, 3000);
   }, []);
   const handleViewClick = (detail: Blog) => {
     setSelectedDetail(detail);
@@ -99,13 +95,6 @@ export default function Blogs() {
     setDialogDelete(true);
   };
 
-  if (loading) {
-    return (
-      <div className="text-center py-10 h-full flex items-center justify-center">
-        Loading...
-      </div>
-    );
-  }
   return (
     <ContentLayout
       title={"Blogs"}
@@ -122,8 +111,10 @@ export default function Blogs() {
     >
       <div className="">
         <DataTable
+          search="title"
           columns={getColumns(handleViewClick, handleViewDelete, categories)}
           data={data}
+          pagination={true}
         />
         <BlogDialog
           categories={categories}

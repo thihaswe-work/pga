@@ -1,5 +1,3 @@
-"use client";
-
 import {
   ColumnDef,
   ColumnFiltersState,
@@ -23,15 +21,21 @@ import {
 } from "@/components/ui/table";
 
 import React from "react";
+import { Input } from "../ui/input";
+import { DataTablePagination } from "./pagination";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
+  search?: string;
+  pagination: boolean;
 }
 
 export function DataTable<TData, TValue>({
   columns,
   data,
+  search,
+  pagination,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
@@ -60,6 +64,21 @@ export function DataTable<TData, TValue>({
   return (
     <div>
       <div className="rounded-md border bg-background ">
+        {search && (
+          <div className="p-3 flex justify-end border-b w-full">
+            <Input
+              placeholder={`Filter ${search}... `}
+              value={
+                (table.getColumn(search)?.getFilterValue() as string) ?? ""
+              }
+              onChange={(event) =>
+                table.getColumn(search)?.setFilterValue(event.target.value)
+              }
+              className="max-w-sm"
+            />
+          </div>
+        )}
+
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
@@ -109,6 +128,11 @@ export function DataTable<TData, TValue>({
           </TableBody>
         </Table>
       </div>
+      {pagination && (
+        <div className="flex justify-end p-5">
+          <DataTablePagination table={table} />
+        </div>
+      )}
     </div>
   );
 }

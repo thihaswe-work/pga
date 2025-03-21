@@ -6,44 +6,27 @@ import { Switch } from "@/components/ui/switch";
 import { Textarea } from "@/components/ui/textarea";
 import { paths } from "@/config/paths";
 import { Blog, BlogCategory } from "@/types/api";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import { FaListUl } from "react-icons/fa6";
 import { FaListOl } from "react-icons/fa";
 interface Prop {
   data: Blog;
-  categories: BlogCategory[];
+  categories: BlogCategory;
 }
 
-export default function EditForm({ data, categories }: Prop) {
+export default function EditForm({ data }: Prop) {
   const navigate = useNavigate();
+  const [isActive, setIsActive] = useState(false);
+  const [image, setImage] = useState<File | null>(null);
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [dragging, setDragging] = useState(false);
-  const [imagePreview, setImagePreview] = useState<string | null>(
-    data?.image || null
-  );
 
-  const { control, handleSubmit, setValue } = useForm({
-    defaultValues: {
-      category: data.categoryId || "",
-      title: data.title || "",
-      description: data.description || "",
-      status: data?.status || false,
-      image: null,
-      imagePreview: data.image || null,
-    },
-  });
-
-  // Handle File Selection
-  const handleImageUpload = (
-    event: React.ChangeEvent<HTMLInputElement>,
-    onChange: (file: File | null) => void
-  ) => {
+  const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files?.length) {
       const file = event.target.files[0];
-      console.log(file);
-      onChange(file); // Update form state
-      setImagePreview(URL.createObjectURL(file)); // Show preview
-      setValue("imagePreview", URL.createObjectURL(file));
+      setImage(file);
+      setImagePreview(URL.createObjectURL(file)); // Create image preview URL
     }
   };
 
@@ -62,199 +45,162 @@ export default function EditForm({ data, categories }: Prop) {
     setDragging(false);
   }, []);
 
-  const handleDrop = useCallback(
-    (event: React.DragEvent, onChange: (file: File | null) => void) => {
-      event.preventDefault();
-      setDragging(false);
+  const handleDrop = useCallback((event: React.DragEvent) => {
+    event.preventDefault();
+    setDragging(false);
 
-      if (event.dataTransfer.files.length) {
-        const file = event.dataTransfer.files[0];
-        onChange(file);
-        setImagePreview(URL.createObjectURL(file));
-        setValue("imagePreview", URL.createObjectURL(file));
-      }
-    },
-    []
-  );
+    if (event.dataTransfer.files.length) {
+      const file = event.dataTransfer.files[0];
+      setImage(file);
+      setImagePreview(URL.createObjectURL(file));
+    }
+  }, []);
 
-  // Form Submission
-  const onSubmit = (formData: any) => {
-    console.log("Form Data:", formData);
-  };
+  useEffect(() => {
+    if (data) {
+      setIsActive(data?.status);
+      setImagePreview(data?.image || null);
+    }
+  }, [data]);
 
   return (
     <div className="flex w-full gap-8">
       <div className="max-w-[628px] space-y-6 w-full p-6 bg-background rounded-md">
-        {/* Category Select */}
-        <div className="space-y-2 ">
-          <Label className="font-medium">
-            Category<span className="text-primaryText">*</span>
-          </Label>
-          <Controller
-            name="category"
-            control={control}
-            render={({ field }) => (
-              <div className="w-full">
-                <Select value={field.value} onValueChange={field.onChange}>
-                  <SelectTrigger className="w-full">
-                    <span>
-                      {categories.find(
-                        (category) => category.id === Number(field.value)
-                      )?.name || "Select a category"}
-                    </span>
-                  </SelectTrigger>
-                  <SelectContent className="w-full">
-                    {categories.map((category) => (
-                      <SelectItem
-                        key={category.id}
-                        value={String(category.id)}
-                        className="w-full"
-                      >
-                        {category.name}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-            )}
-          />
-        </div>
-
         {/* Header */}
         <div className="space-y-2">
           <Label className="font-medium">
-            Title<span className="text-primaryText">*</span>
+            Header<span className="text-primaryText">*</span>
           </Label>
-          <Controller
-            name="title"
-            control={control}
-            render={({ field }) => (
-              <Input {...field} placeholder="300+" className="mt-1" />
-            )}
+          <Input
+            placeholder="300+"
+            className="mt-1"
+            defaultValue={data?.title}
           />
+          <p className="text-sm text-muted-foreground">
+            Minimum 60, Maximum 100
+          </p>
         </div>
+
+        {/* Label */}
+        <div className="space-y-2">
+          <Label className="font-medium">
+            Label<span className="text-primaryText">*</span>
+          </Label>
+          <Input
+            placeholder="IN HOUSE STAFFS"
+            className="mt-1"
+            defaultValue={data?.title}
+          />
+          <p className="text-sm text-muted-foreground">
+            Minimum 60, Maximum 100
+          </p>
+        </div>
+
         {/* Description */}
         <div className="space-y-2">
           <Label className="font-medium">
             Description<span className="text-primaryText">*</span>
           </Label>
-          <Controller
-            name="description"
-            control={control}
-            render={({ field }) => (
-              <Textarea
-                {...field}
-                placeholder="Enter description..."
-                className="mt-1"
-                rows={3}
-              />
-            )}
+          <Textarea
+            defaultValue={data?.description}
+            placeholder="Enter description..."
+            className="mt-1"
+            rows={3}
           />
+          <p className="text-sm text-muted-foreground">
+            Minimum 100, Maximum 250
+          </p>
         </div>
-        {/* Image Upload */}
-        <Card className="p-0 bg-secondaryBackground gap-0">
-          <CardHeader>
-            <Label className="font-medium w-full p-6 text-lg">Image</Label>
-          </CardHeader>
-          <CardContent className="bg-background p-6">
-            <Controller
-              name="image"
-              control={control}
-              render={({ field: { onChange } }) => (
-                <>
-                  {/* Drag & Drop Box */}
-                  <div
-                    className={`border-2 ${
-                      dragging
-                        ? "border-blue-500 bg-blue-50"
-                        : "border-gray-300"
-                    } 
-                    border-dashed rounded-lg p-6 text-center transition-all bg-secondaryBackground`}
-                    onDragEnter={handleDragEnter}
-                    onDragOver={handleDragOver}
-                    onDragLeave={handleDragLeave}
-                    onDrop={(event) => handleDrop(event, onChange)}
-                  >
-                    <input
-                      type="file"
-                      className="hidden"
-                      id="fileUpload"
-                      accept="image/*"
-                      onChange={(event) => handleImageUpload(event, onChange)}
-                    />
-                    <label
-                      htmlFor="fileUpload"
-                      className="cursor-pointer text-secondaryText hover:underline"
-                    >
-                      {dragging
-                        ? "Drop your file here"
-                        : "Drag & Drop your files or "}
-                      <span className="text-red-500">Browse</span>
-                    </label>
-                  </div>
 
-                  {/* Image Preview */}
-                  {imagePreview && (
-                    <div className="mt-4 flex flex-col gap-4 bg-black text-white p-2 rounded-md pb-10">
-                      <div>
-                        <Button
-                          size="sm"
-                          onClick={() => {
-                            onChange(null);
-                            setImagePreview(null);
-                            setValue("imagePreview", null);
-                          }}
-                        >
-                          X
-                        </Button>
-                      </div>
-                      <img
-                        src={imagePreview}
-                        alt="Preview"
-                        className="w-[368px] h-[86px] rounded-md object-cover mx-auto"
-                      />
-                    </div>
+        {/* Image Upload */}
+        <Card className=" p-0 bg-secondaryBackground gap-0">
+          <CardHeader>
+            <Label className="font-medium w-full p-6 text-lg ">Image</Label>
+          </CardHeader>
+          <CardContent className=" bg-background p-6">
+            {/* Drag & Drop Box */}
+            <div
+              className={` border-2 ${
+                dragging ? "border-blue-500 bg-blue-50" : "border-gray-300"
+              } border-dashed rounded-lg p-6 text-center transition-all bg-secondaryBackground`}
+              onDragEnter={handleDragEnter}
+              onDragOver={handleDragOver}
+              onDragLeave={handleDragLeave}
+              onDrop={handleDrop}
+            >
+              <input
+                type="file"
+                className="hidden"
+                id="fileUpload"
+                onChange={handleImageUpload}
+              />
+              <label
+                htmlFor="fileUpload"
+                className="cursor-pointer text-secondaryText hover:underline"
+              >
+                {dragging
+                  ? "Drop your file here"
+                  : "Drag & Drop your files or "}
+                <span className="text-red-500">Browse</span>
+              </label>
+            </div>
+
+            {/* File Preview with Image */}
+            {imagePreview && (
+              <div className="mt-4 flex flex-col gap-4 bg-black text-white p-2 rounded-md pb-10">
+                <div>
+                  <Button
+                    size="sm"
+                    onClick={() => {
+                      setImage(null);
+                      setImagePreview(null);
+                    }}
+                  >
+                    X
+                  </Button>
+                  {image && (
+                    <span className="text-sm">
+                      {image.name} ({(image.size / 1024).toFixed(1)} KB)
+                    </span>
                   )}
-                </>
-              )}
-            />
+                </div>
+
+                <img
+                  src={imagePreview!}
+                  alt="Preview"
+                  className="w-[368px] h-[86px] rounded-md object-cover mx-auto"
+                />
+              </div>
+            )}
           </CardContent>
         </Card>
-      </div>
 
-      {/* Right Section */}
+        <TiptapEditor />
+      </div>
+      {/* Status Toggle */}
       <div className="w-full max-w-[436px] space-y-6">
-        {/* Active Toggle */}
         <div className="flex justify-between border flex-col rounded-lg bg-background">
           <Label className="font-medium px-6 py-4">Active</Label>
           <div className="h-[1px] w-full bg-[#e9e9ea]"></div>
           <div className="p-6">
-            <Controller
-              name="status"
-              control={control}
-              render={({ field }) => (
-                <Switch
-                  checked={field.value}
-                  onCheckedChange={field.onChange} // This ensures it works with boolean values
-                  className={"data-[state=checked]:bg-switchCheck"}
-                />
-              )}
+            <Switch
+              checked={isActive}
+              onCheckedChange={setIsActive}
+              className={`data-[state=checked]:bg-switchCheck`}
             />
           </div>
         </div>
 
         {/* Buttons */}
         <div className="flex gap-2">
-          <Button
-            variant="default"
-            className="bg-primaryText hover:bg-text-500"
-            onClick={handleSubmit(onSubmit)}
-          >
+          <Button variant="default" className="bg-primaryText hover:bg-red-500">
             Save changes
           </Button>
           <Button
             variant="outline"
-            onClick={() => navigate(paths.app.blog.blogs.root.getHref())}
+            onClick={() => {
+              navigate(paths.app.blog.blogs.root.getHref());
+            }}
           >
             Cancel
           </Button>
@@ -272,12 +218,6 @@ import OrderedList from "@tiptap/extension-ordered-list";
 import ListItem from "@tiptap/extension-list-item";
 import { useForm, Controller } from "react-hook-form";
 import { useEditor, EditorContent } from "@tiptap/react";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-} from "@/components/ui/select";
 
 export function TiptapEditor() {
   const { control, handleSubmit, setValue, getValues, formState } = useForm({

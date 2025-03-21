@@ -1,13 +1,18 @@
 import { ContentLayout } from "@/components/layouts/content-layout";
 import EditForm from "@/features/banner/components/editform";
-import { useParams } from "react-router";
 
 export default function EditPage() {
-  const { id } = useParams<{ id: string }>();
-
   return (
     <ContentLayout title={`Editing Banner`}>
-      <EditForm id={Number(id)} />
+      <EditForm
+        data={{
+          id: 4,
+          image: "/office.svg",
+          status: false,
+          createdAt: "2024-03-09T14:45:00Z",
+          updatedAt: "2024-03-11T10:15:00Z",
+        }}
+      />
     </ContentLayout>
   );
 }

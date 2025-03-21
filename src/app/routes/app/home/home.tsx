@@ -1,10 +1,8 @@
 import { ContentLayout } from "@/components/layouts/index";
 import { DataTable } from "@/components/table/data-table";
-import { useHomes } from "@/features/home/api/get-homes";
-
+import { OpenDialog } from "@/components/table/dialog";
+import { paths } from "@/config/paths";
 import { getColumns } from "@/features/home/components/columns";
-import { HomeDataTable } from "@/features/home/components/data-table";
-import { HomeDialog } from "@/features/home/components/dialog";
 import { Home } from "@/types/api";
 import { useEffect, useState } from "react";
 
@@ -64,48 +62,42 @@ async function getData(): Promise<Home[]> {
     },
   ];
 }
-
 export default function HomePage() {
-  // Pass handleViewClick as the onViewClick prop to DataTable
-
   const [data, setData] = useState<Home[]>([]);
-  const [loading, setLoading] = useState(true);
   const [selectedDetail, setSelectedDetail] = useState<Home | null>(null);
   const [dialogOpen, setDialogOpen] = useState(false);
-
-  const { data: homeData, error, isLoading, isError } = useHomes({}); // You can pass custom query config here
 
   useEffect(() => {
     async function fetchData() {
       const result = await getData();
       setData(result);
-      setLoading(false);
     }
-    // setTimeout(() => {
     fetchData();
-    // }, 3000);
   }, []);
 
-  const handleViewClick = (homeDetail: Home) => {
-    setSelectedDetail(homeDetail);
+  const handleViewClick = (detail: Home) => {
+    setSelectedDetail(detail);
     setDialogOpen(true);
   };
-  if (loading) {
-    return (
-      <div className="text-center py-10 h-full flex items-center justify-center">
-        Loading...
-      </div>
-    );
-  }
+
   return (
     <ContentLayout title="Home Page">
       <div className="">
-        <DataTable columns={getColumns(handleViewClick)} data={data} />
-        <HomeDialog
-          homeDetail={selectedDetail}
-          open={dialogOpen}
-          setOpen={setDialogOpen}
+        <DataTable
+          columns={getColumns(handleViewClick)}
+          data={data}
+          pagination={false}
         />
+        {/* Pass the required props to OpenDialog */}
+        {selectedDetail && (
+          <OpenDialog<Home> // Pass Home as the type argument for T
+            detail={selectedDetail} // Detail of type Home
+            open={dialogOpen} // Dialog open state
+            setOpen={setDialogOpen} // Function to toggle dialog state
+            uploadedDate={selectedDetail?.createdAt} // Optional uploaded date
+            navlink={paths.app.home.edit.getHref(selectedDetail?.sectionType)} // Navigation link function
+          />
+        )}
       </div>
     </ContentLayout>
   );

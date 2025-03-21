@@ -20,7 +20,7 @@ interface Prop {
   categories: BlogCategory[];
 }
 
-export function BlogDialog({ blogDetail, open, setOpen, categories }: Prop) {
+export function OpenDialog({ blogDetail, open, setOpen, categories }: Prop) {
   const navigate = useNavigate();
   const category = categories.find(
     (item) => item.id === blogDetail?.categoryId
@@ -76,12 +76,8 @@ export function BlogDialog({ blogDetail, open, setOpen, categories }: Prop) {
           <div className="flex justify-between items-center">
             <span className="text-gray-500 flex-1">Status</span>
             <span className="mx-5">:</span>
-            <span
-              className={`font-medium flex-2 ${
-                blogDetail?.status ? "text-statusActive" : "text-primaryText"
-              }`}
-            >
-              {blogDetail?.status ? "Active" : "Inactive"}
+            <span className={`font-medium flex-2 text-statusActive`}>
+              Active
             </span>
           </div>
 

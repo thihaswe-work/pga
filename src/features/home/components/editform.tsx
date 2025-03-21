@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -5,35 +6,44 @@ import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { Textarea } from "@/components/ui/textarea";
 import { paths } from "@/config/paths";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 import { useNavigate } from "react-router";
 import { useForm, Controller } from "react-hook-form";
+import { Home } from "@/types/api";
+
 interface Prop {
-  data: any;
+  data: Home;
 }
 
 export default function EditForm({ data }: Prop) {
   const navigate = useNavigate();
-
-  const [image, setImage] = useState<File | null>(null);
-  const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [dragging, setDragging] = useState(false);
-  const [isActive, setIsActive] = useState(true);
+  const [imagePreview, setImagePreview] = useState<string | null>(
+    data?.image || null
+  );
 
-  const { control, handleSubmit, setValue, formState } = useForm({
+  const { control, handleSubmit, setValue } = useForm({
     defaultValues: {
-      title: data?.title || "",
-      label: data?.label || "",
-      description: data?.description || "",
-      availabilityStatus: data?.availabilityStatus === "In Stock" || false,
+      title: data.header || "",
+      label: data.label || "",
+      description: data.description || "",
+      status: data?.status || false,
+      image: null,
+      imagePreview: data.image || null,
     },
   });
 
-  const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+  // Handle File Selection
+  const handleImageUpload = (
+    event: React.ChangeEvent<HTMLInputElement>,
+    onChange: (file: File | null) => void
+  ) => {
     if (event.target.files?.length) {
       const file = event.target.files[0];
-      setImage(file);
-      setImagePreview(URL.createObjectURL(file)); // Create image preview URL
+      console.log(file);
+      onChange(file); // Update form state
+      setImagePreview(URL.createObjectURL(file)); // Show preview
+      setValue("imagePreview", URL.createObjectURL(file));
     }
   };
 
@@ -52,29 +62,24 @@ export default function EditForm({ data }: Prop) {
     setDragging(false);
   }, []);
 
-  const handleDrop = useCallback((event: React.DragEvent) => {
-    event.preventDefault();
-    setDragging(false);
+  const handleDrop = useCallback(
+    (event: React.DragEvent, onChange: (file: File | null) => void) => {
+      event.preventDefault();
+      setDragging(false);
 
-    if (event.dataTransfer.files.length) {
-      const file = event.dataTransfer.files[0];
-      setImage(file);
-      setImagePreview(URL.createObjectURL(file));
-    }
-  }, []);
+      if (event.dataTransfer.files.length) {
+        const file = event.dataTransfer.files[0];
+        onChange(file);
+        setImagePreview(URL.createObjectURL(file));
+        setValue("imagePreview", URL.createObjectURL(file));
+      }
+    },
+    []
+  );
 
-  useEffect(() => {
-    if (data) {
-      setIsActive(data?.availabilityStatus === "In Stock");
-      setImagePreview(data?.thumbnail || null);
-    }
-  }, [data]);
-
-  const onSubmit = (data: any) => {
-    if (image) {
-      console.log(image);
-    }
-    console.log("Form Submitted with:", data, imagePreview);
+  // Form Submission
+  const onSubmit = (formData: any) => {
+    console.log("Form Data:", formData);
   };
 
   return (
@@ -92,9 +97,6 @@ export default function EditForm({ data }: Prop) {
               <Input {...field} placeholder="300+" className="mt-1" />
             )}
           />
-          <p className="text-sm text-muted-foreground">
-            Minimum 60, Maximum 100
-          </p>
         </div>
 
         {/* Label */}
@@ -113,9 +115,6 @@ export default function EditForm({ data }: Prop) {
               />
             )}
           />
-          <p className="text-sm text-muted-foreground">
-            Minimum 60, Maximum 100
-          </p>
         </div>
 
         {/* Description */}
@@ -135,88 +134,93 @@ export default function EditForm({ data }: Prop) {
               />
             )}
           />
-          <p className="text-sm text-muted-foreground">
-            Minimum 100, Maximum 250
-          </p>
         </div>
 
         {/* Image Upload */}
-        <Card className=" p-0 bg-secondaryBackground gap-0">
+        <Card className="p-0 bg-secondaryBackground gap-0">
           <CardHeader>
-            <Label className="font-medium w-full p-6 text-lg ">Image</Label>
+            <Label className="font-medium w-full p-6 text-lg">Image</Label>
           </CardHeader>
-          <CardContent className=" bg-background p-6">
-            {/* Drag & Drop Box */}
-            <div
-              className={`border-2 ${
-                dragging ? "border-blue-500 bg-blue-50" : "border-gray-300"
-              } border-dashed rounded-lg p-6 text-center transition-all bg-secondaryBackground`}
-              onDragEnter={handleDragEnter}
-              onDragOver={handleDragOver}
-              onDragLeave={handleDragLeave}
-              onDrop={handleDrop}
-            >
-              <input
-                type="file"
-                className="hidden"
-                id="fileUpload"
-                onChange={handleImageUpload}
-              />
-              <label
-                htmlFor="fileUpload"
-                className="cursor-pointer text-secondaryText hover:underline"
-              >
-                {dragging
-                  ? "Drop your file here"
-                  : "Drag & Drop your files or "}
-                <span className="text-red-500">Browse</span>
-              </label>
-            </div>
-
-            {/* File Preview with Image */}
-            {imagePreview && (
-              <div className="mt-4 flex flex-col gap-4 bg-black text-white p-2 rounded-md pb-10">
-                <div>
-                  <Button
-                    size="sm"
-                    onClick={() => {
-                      setImage(null);
-                      setImagePreview(null);
-                    }}
+          <CardContent className="bg-background p-6">
+            <Controller
+              name="image"
+              control={control}
+              render={({ field: { onChange } }) => (
+                <>
+                  {/* Drag & Drop Box */}
+                  <div
+                    className={`border-2 ${
+                      dragging
+                        ? "border-blue-500 bg-blue-50"
+                        : "border-gray-300"
+                    } 
+                    border-dashed rounded-lg p-6 text-center transition-all bg-secondaryBackground`}
+                    onDragEnter={handleDragEnter}
+                    onDragOver={handleDragOver}
+                    onDragLeave={handleDragLeave}
+                    onDrop={(event) => handleDrop(event, onChange)}
                   >
-                    X
-                  </Button>
-                  {image && (
-                    <span className="text-sm">
-                      {image.name} ({(image.size / 1024).toFixed(1)} KB)
-                    </span>
-                  )}
-                </div>
+                    <input
+                      type="file"
+                      className="hidden"
+                      id="fileUpload"
+                      accept="image/*"
+                      onChange={(event) => handleImageUpload(event, onChange)}
+                    />
+                    <label
+                      htmlFor="fileUpload"
+                      className="cursor-pointer text-secondaryText hover:underline"
+                    >
+                      {dragging
+                        ? "Drop your file here"
+                        : "Drag & Drop your files or "}
+                      <span className="text-red-500">Browse</span>
+                    </label>
+                  </div>
 
-                <img
-                  src={imagePreview!}
-                  alt="Preview"
-                  className="w-[368px] h-[86px] rounded-md object-cover mx-auto"
-                />
-              </div>
-            )}
+                  {/* Image Preview */}
+                  {imagePreview && (
+                    <div className="mt-4 flex flex-col gap-4 bg-black text-white p-2 rounded-md pb-10">
+                      <div>
+                        <Button
+                          size="sm"
+                          onClick={() => {
+                            onChange(null);
+                            setImagePreview(null);
+                            setValue("imagePreview", null);
+                          }}
+                        >
+                          X
+                        </Button>
+                      </div>
+                      <img
+                        src={imagePreview}
+                        alt="Preview"
+                        className="w-[368px] h-[86px] rounded-md object-cover mx-auto"
+                      />
+                    </div>
+                  )}
+                </>
+              )}
+            />
           </CardContent>
         </Card>
       </div>
-      <div className="w-full max-w-[436px] space-y-6 ">
+
+      {/* Right Section */}
+      <div className="w-full max-w-[436px] space-y-6">
         {/* Active Toggle */}
         <div className="flex justify-between border flex-col rounded-lg bg-background">
           <Label className="font-medium px-6 py-4">Active</Label>
           <div className="h-[1px] w-full bg-[#e9e9ea]"></div>
           <div className="p-6">
             <Controller
-              name="availabilityStatus"
+              name="status"
               control={control}
               render={({ field }) => (
                 <Switch
-                  {...field}
                   checked={field.value}
-                  onCheckedChange={field.onChange}
+                  onCheckedChange={field.onChange} // This ensures it works with boolean values
                   className={"data-[state=checked]:bg-switchCheck"}
                 />
               )}
@@ -225,7 +229,7 @@ export default function EditForm({ data }: Prop) {
         </div>
 
         {/* Buttons */}
-        <div className="flex gap-2 ">
+        <div className="flex gap-2">
           <Button
             variant="default"
             className="bg-primaryText hover:bg-text-500"
@@ -235,9 +239,7 @@ export default function EditForm({ data }: Prop) {
           </Button>
           <Button
             variant="outline"
-            onClick={() => {
-              navigate(paths.app.home.root.getHref());
-            }}
+            onClick={() => navigate(paths.app.home.root.getHref())}
           >
             Cancel
           </Button>

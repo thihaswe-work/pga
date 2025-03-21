@@ -14,17 +14,15 @@ import { useNavigate } from "react-router";
 import "@/index.css";
 
 interface Prop {
-  blogDetail: Blog | null;
+  detail: Blog | null;
   open: boolean;
   setOpen: (open: boolean) => void;
   categories: BlogCategory[];
 }
 
-export function BlogDialog({ blogDetail, open, setOpen, categories }: Prop) {
+export function OpenDialog({ detail, open, setOpen, categories }: Prop) {
   const navigate = useNavigate();
-  const category = categories.find(
-    (item) => item.id === blogDetail?.categoryId
-  );
+  const category = categories.find((item) => item.id === detail?.categoryId);
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogContent
@@ -38,7 +36,7 @@ export function BlogDialog({ blogDetail, open, setOpen, categories }: Prop) {
           <div className="flex justify-between">
             <span className="text-gray-500 flex-1">ID</span>
             <span className="mx-5">:</span>
-            <span className="font-medium flex-2">{blogDetail?.id}</span>
+            <span className="font-medium flex-2">{detail?.id}</span>
           </div>
           {/* Categories */}
           <div className="flex justify-between">
@@ -52,21 +50,21 @@ export function BlogDialog({ blogDetail, open, setOpen, categories }: Prop) {
           <div className="flex justify-between">
             <span className="text-gray-500 flex-1">Title</span>
             <span className="mx-5">:</span>
-            <span className="font-medium flex-2">{blogDetail?.title}</span>
+            <span className="font-medium flex-2">{detail?.title}</span>
           </div>
           {/* Description */}
           <div className="flex">
             <span className="text-gray-500 flex-1">Description</span>
             <span className="mx-5">:</span>
-            <p className=" text-justify flex-2">{blogDetail?.description}</p>
+            <p className=" text-justify flex-2">{detail?.description}</p>
           </div>
           {/* Image */}
-          {blogDetail?.image && (
+          {detail?.image && (
             <div className="flex justify-between items-center">
               <span className="text-secondaryText flex-1">Image</span>
               <span className="mx-5">:</span>
               <img
-                src={blogDetail.image}
+                src={detail.image}
                 alt="Preview"
                 className="w-32 h-16 rounded-md object-cover flex-2"
               />
@@ -76,12 +74,8 @@ export function BlogDialog({ blogDetail, open, setOpen, categories }: Prop) {
           <div className="flex justify-between items-center">
             <span className="text-gray-500 flex-1">Status</span>
             <span className="mx-5">:</span>
-            <span
-              className={`font-medium flex-2 ${
-                blogDetail?.status ? "text-statusActive" : "text-primaryText"
-              }`}
-            >
-              {blogDetail?.status ? "Active" : "Inactive"}
+            <span className={`font-medium flex-2 text-statusActive`}>
+              Active
             </span>
           </div>
 
@@ -90,7 +84,7 @@ export function BlogDialog({ blogDetail, open, setOpen, categories }: Prop) {
             <span className="text-gray-500 flex-1">Uploaded Date</span>
             <span className="mx-5">:</span>
             <span className="font-medium flex-2">
-              {formatDate(blogDetail?.createdAt as string)}
+              {formatDate(detail?.createdAt as string)}
             </span>
           </div>
         </div>
@@ -98,7 +92,7 @@ export function BlogDialog({ blogDetail, open, setOpen, categories }: Prop) {
         <div className="flex flex-col gap-3 mt-4">
           <Button
             className="bg-red-500 hover:bg-red-600 text-white flex items-center justify-center gap-2"
-            onClick={() => navigate(`/edit/${blogDetail?.id}`)}
+            onClick={() => navigate(`/edit/${detail?.id}`)}
           >
             <Pencil className="w-4 h-4" /> Edit
           </Button>
@@ -111,7 +105,7 @@ export function BlogDialog({ blogDetail, open, setOpen, categories }: Prop) {
   );
 }
 
-export function DeleteDialog({ open, setOpen, blogDetail }: Prop) {
+export function DeleteDialog({ open, setOpen, detail }: Prop) {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogContent
@@ -129,7 +123,7 @@ export function DeleteDialog({ open, setOpen, blogDetail }: Prop) {
           </h3>
           <Button
             className="bg-primaryText hover:bg-red-500 text-white flex items-center justify-center gap-2"
-            onClick={() => console.log(blogDetail?.id)}
+            onClick={() => console.log(detail?.id)}
           >
             <Pencil className="w-4 h-4" />
             Delete

@@ -1,13 +1,10 @@
 import { ContentLayout } from "@/components/layouts/content-layout";
 import { DataTable } from "@/components/table/data-table";
+import { DeleteDialog, OpenDialog } from "@/components/table/dialog";
 import { Button } from "@/components/ui/button";
 import { paths } from "@/config/paths";
 import { Banner, getColumns } from "@/features/banner/components/columns";
-import { BannerDataTable } from "@/features/banner/components/data-table";
-import {
-  BannerDialog,
-  DeleteDialog,
-} from "@/features/banner/components/dialog";
+
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 async function getData(): Promise<Banner[]> {
@@ -46,7 +43,6 @@ async function getData(): Promise<Banner[]> {
 }
 export default function BannerPage() {
   const [data, setData] = useState<Banner[]>([]);
-  const [loading, setLoading] = useState(true);
   const [selectedDetail, setSelectedDetail] = useState<Banner | null>(null);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [dialogDelete, setDialogDelete] = useState(false);
@@ -55,28 +51,19 @@ export default function BannerPage() {
     async function fetchData() {
       const result = await getData();
       setData(result);
-      setLoading(false);
     }
     // setTimeout(() => {
     fetchData();
     // }, 3000);
   }, []);
-  const handleViewClick = (homeDetail: Banner) => {
-    setSelectedDetail(homeDetail);
+  const handleViewClick = (detail: Banner) => {
+    setSelectedDetail(detail);
     setDialogOpen(true);
   };
-  const handleViewDelete = (homeDetail: Banner) => {
-    setSelectedDetail(homeDetail);
+  const handleViewDelete = (detail: Banner) => {
+    setSelectedDetail(detail);
     setDialogDelete(true);
   };
-
-  if (loading) {
-    return (
-      <div className="text-center py-10 h-full flex items-center justify-center">
-        Loading...
-      </div>
-    );
-  }
 
   return (
     <ContentLayout
@@ -96,17 +83,23 @@ export default function BannerPage() {
         <DataTable
           columns={getColumns(handleViewClick, handleViewDelete)}
           data={data}
+          pagination={false}
         />
-        <BannerDialog
-          bannerDetail={selectedDetail}
-          open={dialogOpen}
-          setOpen={setDialogOpen}
-        />
-        <DeleteDialog
-          bannerDetail={selectedDetail}
-          open={dialogDelete}
-          setOpen={setDialogDelete}
-        />
+        {selectedDetail && (
+          <>
+            <OpenDialog
+              detail={selectedDetail}
+              open={dialogOpen}
+              setOpen={setDialogOpen}
+              navlink={paths.app.banner.edit.getHref(selectedDetail.id)}
+            />
+            <DeleteDialog
+              detail={selectedDetail}
+              open={dialogDelete}
+              setOpen={setDialogDelete}
+            />
+          </>
+        )}
       </div>
     </ContentLayout>
   );

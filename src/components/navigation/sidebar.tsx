@@ -219,7 +219,8 @@ export const SideBar = () => {
                       cn(
                         " hover:bg-hover hover:text-secondaryText",
                         "group flex flex-1 w-full items-center rounded-md p-2 text-base font-medium ",
-                        isActive && "bg-primaryText text-background",
+                        isActive &&
+                          "bg-primaryText text-background hover:bg-primaryText hover:text-background",
                         "first:mt-6"
                       )
                     }
@@ -251,7 +252,8 @@ export const SideBar = () => {
                   "",
                   " hover:bg-hover hover:text-secondaryText",
                   "group flex flex-1 w-full items-center rounded-md p-2 text-base font-medium",
-                  isActive && "bg-primaryText text-background"
+                  isActive &&
+                    "bg-primaryText text-background  hover:bg-primaryText hover:text-background"
                 )
               }
             >
