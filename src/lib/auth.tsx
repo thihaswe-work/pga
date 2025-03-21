@@ -85,14 +85,14 @@ export const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
   const location = useLocation();
   const { token } = useAuth();
 
-  if (!token) {
-    return (
-      <Navigate
-        to={`/auth/login?redirect=${encodeURIComponent(location.pathname)}`} // Redirect to login with the original path as a query parameter
-        replace
-      />
-    );
-  }
+  // if (!token) {
+  //   return (
+  //     <Navigate
+  //       to={`/auth/login?redirect=${encodeURIComponent(location.pathname)}`} // Redirect to login with the original path as a query parameter
+  //       replace
+  //     />
+  //   );
+  // }
 
   // If the user is authenticated, return the children (protected content)
   return <>{children}</>;
