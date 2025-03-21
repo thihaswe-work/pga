@@ -214,7 +214,7 @@ export const SideBar = () => {
                   <NavLink
                     key={subItem.name}
                     to={subItem.to}
-                    // end={subItem.name == "Discussions"}
+                    end={subItem.name === "Dashboard"}
                     className={({ isActive }) =>
                       cn(
                         " hover:bg-hover hover:text-secondaryText",
@@ -246,7 +246,7 @@ export const SideBar = () => {
             <NavLink
               key={item.name}
               to={item.to}
-              // end={item.name === "Dashboard"}
+              end={item.name === "Dashboard"}
               className={({ isActive }) =>
                 cn(
                   "",
