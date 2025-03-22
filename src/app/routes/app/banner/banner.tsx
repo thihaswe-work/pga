@@ -1,61 +1,38 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 import { ContentLayout } from "@/components/layouts/content-layout";
+import Loading from "@/components/loading/loading";
 import { DataTable } from "@/components/table/data-table";
 import { DeleteDialog, OpenDialog } from "@/components/table/dialog";
 import { Button } from "@/components/ui/button";
 import { paths } from "@/config/paths";
+import { useDeleteBanner } from "@/features/banner/api/delete-banner";
+import { useBanners } from "@/features/banner/api/get-banners";
 import { Banner, getColumns } from "@/features/banner/components/columns";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router";
-async function getData(): Promise<Banner[]> {
-  return [
-    {
-      id: 1,
-      status: false,
-      image: "/office.svg",
-      createdAt: "2024-03-11T10:00:00Z",
-      updatedAt: "2024-03-11T12:00:00Z",
-    },
-    {
-      id: 2,
-      image: "/office.svg",
+import { toast } from "sonner";
 
-      status: false,
-      createdAt: "2024-03-10T09:30:00Z",
-      updatedAt: "2024-03-11T11:30:00Z",
-    },
-    {
-      id: 3,
-      image: "/office.svg",
-
-      status: true,
-      createdAt: "2024-03-09T14:45:00Z",
-      updatedAt: "2024-03-11T10:15:00Z",
-    },
-    {
-      id: 4,
-      image: "/office.svg",
-      status: true,
-      createdAt: "2024-03-09T14:45:00Z",
-      updatedAt: "2024-03-11T10:15:00Z",
-    },
-  ];
-}
 export default function BannerPage() {
-  const [data, setData] = useState<Banner[]>([]);
   const [selectedDetail, setSelectedDetail] = useState<Banner | null>(null);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [dialogDelete, setDialogDelete] = useState(false);
   const navigate = useNavigate();
-  useEffect(() => {
-    async function fetchData() {
-      const result = await getData();
-      setData(result);
-    }
-    // setTimeout(() => {
-    fetchData();
-    // }, 3000);
-  }, []);
+
+  const { data: banner, isLoading, isError } = useBanners({});
+
+  const deleteBannerMutation = useDeleteBanner({
+    mutationConfig: {
+      onSuccess: () => {
+        navigate(paths.app.banner.root.getHref());
+        setDialogDelete(false);
+        toast("Banner Deleted");
+      },
+    },
+  });
+  if (isLoading) return <Loading />;
+  if (isError) return <p className="text-red-500">Failed to fetch banners.</p>;
+  if (!banner) return <p>no banners found</p>;
   const handleViewClick = (detail: Banner) => {
     setSelectedDetail(detail);
     setDialogOpen(true);
@@ -82,7 +59,7 @@ export default function BannerPage() {
       <div className="">
         <DataTable
           columns={getColumns(handleViewClick, handleViewDelete)}
-          data={data}
+          data={banner?.data}
           pagination={false}
         />
         {selectedDetail && (
@@ -97,6 +74,9 @@ export default function BannerPage() {
               detail={selectedDetail}
               open={dialogDelete}
               setOpen={setDialogDelete}
+              deleteFunc={() => {
+                deleteBannerMutation.mutate({ bannerId: selectedDetail.id });
+              }}
             />
           </>
         )}

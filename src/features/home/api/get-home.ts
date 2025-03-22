@@ -3,30 +3,31 @@ import { useQuery, queryOptions } from "@tanstack/react-query";
 
 import { api } from "@/lib/api-client";
 import { QueryConfig } from "@/lib/react-query";
+import { Home } from "@/types/api";
 
 export const getHome = ({
-  homeId,
+  homeSection,
 }: {
-  homeId: string;
-}): Promise<{ data: any }> => {
-  return api.get(`/products/${homeId}`);
+  homeSection: string;
+}): Promise<{ data: Home }> => {
+  return api.get(`/homepage/${homeSection}`);
 };
 
-export const getHomeQueryOptions = (homeId: string) => {
+export const getHomeQueryOptions = (homeSection: string) => {
   return queryOptions({
-    queryKey: ["homes", homeId],
-    queryFn: () => getHome({ homeId }),
+    queryKey: ["homes", homeSection],
+    queryFn: () => getHome({ homeSection }),
   });
 };
 
 type UseHomeOptions = {
-  homeId: string;
+  homeSection: string;
   queryConfig?: QueryConfig<typeof getHomeQueryOptions>;
 };
 
-export const useHome = ({ homeId, queryConfig }: UseHomeOptions) => {
+export const useHome = ({ homeSection, queryConfig }: UseHomeOptions) => {
   return useQuery({
-    ...getHomeQueryOptions(homeId),
+    ...getHomeQueryOptions(homeSection),
     ...queryConfig,
   });
 };

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -7,6 +8,7 @@ import { paths } from "@/config/paths";
 import { BlogCategory } from "@/types/api";
 import { Controller, useForm } from "react-hook-form";
 import { useNavigate } from "react-router";
+import { useUpdateBlogCategory } from "../api/update-blogCategory";
 interface Prop {
   data: BlogCategory;
 }
@@ -20,8 +22,27 @@ export default function EditForm({ data }: Prop) {
       name: data?.name || "",
     },
   });
+  const updateBlogCategoryMutation = useUpdateBlogCategory({
+    mutationConfig: {
+      onSuccess: () => {
+        console.log("Update successful!");
+        navigate(paths.app.blog.categories.root.getHref()); // Navigate after success
+      },
+      onError: (error) => {
+        console.error("Update failed:", error);
+      },
+    },
+  });
+  // Form Submission
   const onSubmit = (formData: any) => {
-    console.log("Form Data:", formData);
+    console.log("Submitting Form Data:", formData);
+    updateBlogCategoryMutation.mutate({
+      data: {
+        status: formData.status,
+        name: formData.name,
+      },
+      id: data.id, // Ensure this value is correct
+    });
   };
   return (
     <div className="flex w-full gap-8">

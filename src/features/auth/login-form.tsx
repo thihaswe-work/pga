@@ -17,6 +17,7 @@ import { Input } from "@/components/ui/input";
 import useAuth from "@/store/store";
 import { Checkbox } from "@/components/ui/checkbox";
 import { toast } from "sonner";
+import { env } from "@/config/env";
 
 const formSchema = z.object({
   email: z.string().email({
@@ -43,20 +44,17 @@ const LoginForm = () => {
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-      const response = await fetch(
-        "http://192.168.50.122:9000/api/auth/login",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            email: values.email,
-            password: values.password,
-            rememberMe: values.rememberMe,
-          }),
-        }
-      );
+      const response = await fetch(`${env.API_URL}/auth/login`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email: values.email,
+          password: values.password,
+          rememberMe: values.rememberMe,
+        }),
+      });
 
       if (!response.ok) {
         const errorData = await response.json();

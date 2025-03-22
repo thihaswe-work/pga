@@ -10,6 +10,7 @@ import { useCallback, useState } from "react";
 import { useNavigate } from "react-router";
 import { useForm, Controller } from "react-hook-form";
 import { Home } from "@/types/api";
+import { useUpdateHome } from "../api/update-home";
 
 interface Prop {
   data: Home;
@@ -22,14 +23,14 @@ export default function EditForm({ data }: Prop) {
     data?.image || null
   );
 
-  const { control, handleSubmit, setValue } = useForm({
+  const { control, handleSubmit } = useForm({
     defaultValues: {
-      title: data.header || "",
+      header: data.header || "",
       label: data.label || "",
+      sectionType: data.sectionType || "",
       description: data.description || "",
       status: data?.status || false,
-      image: null,
-      imagePreview: data.image || null,
+      image: data.image || null,
     },
   });
 
@@ -40,10 +41,8 @@ export default function EditForm({ data }: Prop) {
   ) => {
     if (event.target.files?.length) {
       const file = event.target.files[0];
-      console.log(file);
-      onChange(file); // Update form state
-      setImagePreview(URL.createObjectURL(file)); // Show preview
-      setValue("imagePreview", URL.createObjectURL(file));
+      onChange(file);
+      setImagePreview(URL.createObjectURL(file));
     }
   };
 
@@ -71,15 +70,36 @@ export default function EditForm({ data }: Prop) {
         const file = event.dataTransfer.files[0];
         onChange(file);
         setImagePreview(URL.createObjectURL(file));
-        setValue("imagePreview", URL.createObjectURL(file));
       }
     },
     []
   );
+  const updateHomeMutation = useUpdateHome({
+    mutationConfig: {
+      onSuccess: () => {
+        console.log("Update successful!");
+        navigate(paths.app.home.root.getHref()); // Navigate after success
+      },
+      onError: (error) => {
+        console.error("Update failed:", error);
+      },
+    },
+  });
 
-  // Form Submission
+  // Form Submission with Mutation
   const onSubmit = (formData: any) => {
-    console.log("Form Data:", formData);
+    console.log("Submitting Form Data:", formData);
+    updateHomeMutation.mutate({
+      data: {
+        header: formData.header,
+        label: formData.label,
+        sectionType: formData.sectionType,
+        description: formData.description,
+        status: formData.status,
+        image: formData.image,
+      },
+      homeSection: data.sectionType, // Ensure this value is correct
+    });
   };
 
   return (
@@ -91,7 +111,7 @@ export default function EditForm({ data }: Prop) {
             Header<span className="text-primaryText">*</span>
           </Label>
           <Controller
-            name="title"
+            name="header"
             control={control}
             render={({ field }) => (
               <Input {...field} placeholder="300+" className="mt-1" />
@@ -187,7 +207,6 @@ export default function EditForm({ data }: Prop) {
                           onClick={() => {
                             onChange(null);
                             setImagePreview(null);
-                            setValue("imagePreview", null);
                           }}
                         >
                           X

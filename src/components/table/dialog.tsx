@@ -121,9 +121,15 @@ interface DeleteProp<T> {
   open: boolean;
   setOpen: (para: boolean) => void;
   detail: T;
+  deleteFunc: (para?: any) => void;
 }
 
-export function DeleteDialog<T>({ open, setOpen, detail }: DeleteProp<T>) {
+export function DeleteDialog<T>({
+  open,
+  setOpen,
+  detail,
+  deleteFunc,
+}: DeleteProp<T>) {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogContent
@@ -141,7 +147,7 @@ export function DeleteDialog<T>({ open, setOpen, detail }: DeleteProp<T>) {
           </h3>
           <Button
             className="bg-primaryText hover:bg-red-500 text-white flex items-center justify-center gap-2"
-            onClick={() => console.log(detail?.id)}
+            onClick={() => deleteFunc()}
           >
             <Pencil className="w-4 h-4" />
             Delete

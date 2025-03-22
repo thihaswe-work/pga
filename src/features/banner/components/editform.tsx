@@ -8,6 +8,7 @@ import { Banner } from "@/types/api";
 import { useCallback, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { useNavigate } from "react-router";
+import { useUpdateBanner } from "../api/update-banner";
 
 interface Prop {
   data: Banner;
@@ -19,11 +20,10 @@ export default function EditForm({ data }: Prop) {
   const [imagePreview, setImagePreview] = useState<string | null>(
     data?.image || null
   );
-  const { control, handleSubmit, setValue } = useForm({
+  const { control, handleSubmit } = useForm({
     defaultValues: {
       status: data.status || false,
-      image: null,
-      imagePreview: data.image || null,
+      image: data.image || null,
     },
   });
 
@@ -34,10 +34,8 @@ export default function EditForm({ data }: Prop) {
   ) => {
     if (event.target.files?.length) {
       const file = event.target.files[0];
-      console.log(file);
       onChange(file); // Update form state
       setImagePreview(URL.createObjectURL(file)); // Show preview
-      setValue("imagePreview", URL.createObjectURL(file));
     }
   };
 
@@ -65,15 +63,31 @@ export default function EditForm({ data }: Prop) {
         const file = event.dataTransfer.files[0];
         onChange(file);
         setImagePreview(URL.createObjectURL(file));
-        setValue("imagePreview", URL.createObjectURL(file));
       }
     },
     []
   );
-
+  const updateBannerMutation = useUpdateBanner({
+    mutationConfig: {
+      onSuccess: () => {
+        console.log("Update successful!");
+        navigate(paths.app.banner.root.getHref()); // Navigate after success
+      },
+      onError: (error) => {
+        console.error("Update failed:", error);
+      },
+    },
+  });
   // Form Submission
   const onSubmit = (formData: any) => {
-    console.log("Form Data:", formData);
+    console.log("Submitting Form Data:", formData);
+    updateBannerMutation.mutate({
+      data: {
+        status: formData.status,
+        image: formData.image,
+      },
+      id: data.id, // Ensure this value is correct
+    });
   };
 
   return (
@@ -129,7 +143,6 @@ export default function EditForm({ data }: Prop) {
                           size="sm"
                           onClick={() => {
                             onChange(null);
-                            setValue("imagePreview", null);
                             setImagePreview(null);
                           }}
                         >

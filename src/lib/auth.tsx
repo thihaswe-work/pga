@@ -1,4 +1,4 @@
-import { Navigate, useLocation } from "react-router";
+import { useLocation } from "react-router";
 import useAuth from "@/store/store";
 
 // import { configureAuth } from "react-query-auth";

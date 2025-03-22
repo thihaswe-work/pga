@@ -1,15 +1,28 @@
 import Axios, { InternalAxiosRequestConfig } from "axios";
 
-import { useNotifications } from "@/components/ui/notifications";
 import { env } from "@/config/env";
 import { paths } from "@/config/paths";
 
 function authRequestInterceptor(config: InternalAxiosRequestConfig) {
+  // Set default Accept header
   if (config.headers) {
     config.headers.Accept = "application/json";
   }
 
+  // Set withCredentials to true, which includes cookies and credentials with the request
   // config.withCredentials = true;
+
+  // Retrieve token from localStorage or sessionStorage
+  const storedState = localStorage.getItem("auth-storage"); // Or sessionStorage
+
+  const authState = storedState ? JSON.parse(storedState) : null;
+  const token = authState?.state?.token;
+
+  // If a token exists, add it to the Authorization header
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+
   return config;
 }
 
@@ -23,7 +36,8 @@ api.interceptors.response.use(
     return response.data;
   },
   (error) => {
-    // const message = error.response?.data?.message || error.message;
+    const message = error.response?.data?.message || error.message;
+    console.warn(message);
     // useNotifications.getState().addNotification({
     //   type: "error",
     //   title: "Error",

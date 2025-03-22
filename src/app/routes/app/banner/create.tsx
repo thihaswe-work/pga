@@ -3,7 +3,7 @@ import CreateForm from "@/features/banner/components/createform";
 
 export default function CreatePage() {
   return (
-    <ContentLayout title="create">
+    <ContentLayout title="Create Banner">
       <CreateForm />
     </ContentLayout>
   );

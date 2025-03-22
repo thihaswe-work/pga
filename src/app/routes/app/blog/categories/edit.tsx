@@ -1,18 +1,18 @@
 import { ContentLayout } from "@/components/layouts";
+import Loading from "@/components/loading/loading";
+import { useBlogCategory } from "@/features/blog/categories/api/get-blogCategory";
 import EditForm from "@/features/blog/categories/components/editform";
+import { BlogCategory } from "@/types/api";
+import { useParams } from "react-router";
 
 export default function EditPage() {
+  const { id } = useParams();
+  const Id = Number(id) as number;
+  const { data, isLoading } = useBlogCategory({ id: Id });
+  if (isLoading) return <Loading />;
   return (
     <ContentLayout title="category Edit">
-      <EditForm
-        data={{
-          id: 1,
-          name: "tech",
-          status: false,
-          createdAt: "2024-03-11T10:00:00Z",
-          updatedAt: "2024-03-11T12:00:00Z",
-        }}
-      />
+      <EditForm data={data?.data as BlogCategory} />
     </ContentLayout>
   );
 }

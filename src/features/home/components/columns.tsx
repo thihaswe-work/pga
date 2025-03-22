@@ -45,7 +45,7 @@ export const getColumns = (
       header: () => <div className="pl-4"> Description</div>,
       cell: ({ row }) => {
         return (
-          <div className="px-4 py-3 w-[213px] h-[80px] text-wrap overflow-y-hidden">
+          <div className="px-4 py-3 w-[213px] h-[70px] text-wrap overflow-y-hidden">
             <p className="">{row.getValue("description")}</p>
           </div>
         );
