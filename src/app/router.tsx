@@ -103,11 +103,26 @@ export const createAppRouter = (queryClient: QueryClient) =>
             import("./routes/app/feedback/feedback").then(convert(queryClient)),
         },
         {
-          path: paths.app.milestone.path,
+          path: paths.app.milestone.root.path,
           lazy: () =>
             import("./routes/app/milestone/milestone").then(
               convert(queryClient)
             ),
+        },
+        {
+          path: paths.app.milestone.create.path,
+          lazy: () =>
+            import("./routes/app/milestone/create").then(convert(queryClient)),
+        },
+        {
+          path: paths.app.milestone.edit.path,
+          lazy: () =>
+            import("./routes/app/milestone/edit").then(convert(queryClient)),
+        },
+        {
+          path: paths.app.feedback.path,
+          lazy: () =>
+            import("./routes/app/feedback/feedback").then(convert(queryClient)),
         },
         {
           path: paths.app.blog.categories.root.path,

@@ -67,9 +67,23 @@ export const paths = {
     },
     milestone: {
       // name: "Miles Stone",
-      path: "milestone",
-      getHref: () => {
-        return "/app/milestone";
+      root: {
+        path: "milestone",
+        getHref: () => {
+          return "/app/milestone";
+        },
+      },
+      create: {
+        path: "milestone/create",
+        getHref: () => {
+          return "/app/milestone/create";
+        },
+      },
+      edit: {
+        path: `milestone/:id/edit`,
+        getHref: (id: number | string) => {
+          return `/app/milestone/${id}/edit`;
+        },
       },
     },
     blog: {

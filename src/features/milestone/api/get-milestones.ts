@@ -4,24 +4,24 @@ import { api } from "@/lib/api-client";
 
 import { QueryConfig } from "@/lib/react-query";
 
-export const getBanners = () => {
-  return api.get(`/banner`);
+export const getMilestones = () => {
+  return api.get(`/milestones`);
 };
 
-export const getBannersQueryOptions = () => {
+export const getMilestonesQueryOptions = () => {
   return queryOptions({
-    queryKey: ["banners"],
-    queryFn: () => getBanners(),
+    queryKey: ["Milestones"],
+    queryFn: () => getMilestones(),
   });
 };
 
-type UseBannersOptions = {
-  queryConfig?: QueryConfig<typeof getBannersQueryOptions>;
+type UseMilestonesOptions = {
+  queryConfig?: QueryConfig<typeof getMilestonesQueryOptions>;
 };
 
-export const useBanners = ({ queryConfig }: UseBannersOptions) => {
+export const useMilestones = ({ queryConfig }: UseMilestonesOptions) => {
   return useQuery({
-    ...getBannersQueryOptions(),
+    ...getMilestonesQueryOptions(),
     staleTime: 0, // Ensures data is always considered "stale" and refetched
     refetchOnMount: true, // Refetches when the component mounts
     refetchOnWindowFocus: false,

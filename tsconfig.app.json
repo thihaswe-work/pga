@@ -27,5 +27,9 @@
       "@/*": ["./src/*"]
     }
   },
-  "include": ["src", "src/features/banner/api/.ts"]
+  "include": [
+    "src",
+    "src/features/banner/api/.ts",
+    "src/features/blog/blogs/api/get-blog.ts"
+  ]
 }

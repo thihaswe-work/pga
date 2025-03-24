@@ -8,29 +8,28 @@ import { Textarea } from "@/components/ui/textarea";
 import { paths } from "@/config/paths";
 import { Blog, BlogCategory } from "@/types/api";
 import { useCallback, useState } from "react";
-import { useNavigate } from "react-router";
-import { FaListUl } from "react-icons/fa6";
 import { FaListOl } from "react-icons/fa";
+import { FaListUl } from "react-icons/fa6";
+import { useNavigate } from "react-router";
 interface Prop {
   data: Blog;
-  categories: BlogCategory[];
 }
 
-export default function EditForm({ data, categories }: Prop) {
+export default function EditForm({ data }: Prop) {
   const navigate = useNavigate();
   const [dragging, setDragging] = useState(false);
   const [imagePreview, setImagePreview] = useState<string | null>(
     data?.image || null
   );
+  const { data: categories } = useBlogCategories({});
 
-  const { control, handleSubmit, setValue } = useForm({
+  const { control, handleSubmit } = useForm({
     defaultValues: {
-      category: data.categoryId || "",
+      category: data.blogCategoryId || "",
       title: data.title || "",
       description: data.description || "",
       status: data?.status || false,
-      image: null,
-      imagePreview: data.image || null,
+      image: data.image || null,
     },
   });
 
@@ -44,7 +43,6 @@ export default function EditForm({ data, categories }: Prop) {
       console.log(file);
       onChange(file); // Update form state
       setImagePreview(URL.createObjectURL(file)); // Show preview
-      setValue("imagePreview", URL.createObjectURL(file));
     }
   };
 
@@ -72,15 +70,35 @@ export default function EditForm({ data, categories }: Prop) {
         const file = event.dataTransfer.files[0];
         onChange(file);
         setImagePreview(URL.createObjectURL(file));
-        setValue("imagePreview", URL.createObjectURL(file));
       }
     },
     []
   );
+  const updateBlogMutation = useUpdateBlog({
+    mutationConfig: {
+      onSuccess: () => {
+        console.log("Update successful!");
+        navigate(paths.app.blog.blogs.root.getHref()); // Navigate after success
+      },
+      onError: (error) => {
+        console.error("Update failed:", error);
+      },
+    },
+  });
 
   // Form Submission
   const onSubmit = (formData: any) => {
     console.log("Form Data:", formData);
+    updateBlogMutation.mutate({
+      data: {
+        status: formData.status,
+        image: formData.image,
+        title: formData.title,
+        description: formData.description,
+        blogCategoryId: formData.category,
+      },
+      id: data.id, // Ensure this value is correct
+    });
   };
 
   return (
@@ -102,13 +120,14 @@ export default function EditForm({ data, categories }: Prop) {
                 >
                   <SelectTrigger className="w-full">
                     <span>
-                      {categories.find(
-                        (category) => category.id === Number(field.value)
+                      {categories?.data.find(
+                        (category: BlogCategory) =>
+                          category.id === Number(field.value)
                       )?.name || "Select a category"}
                     </span>
                   </SelectTrigger>
                   <SelectContent className="w-full">
-                    {categories.map((category) => (
+                    {categories?.data.map((category: BlogCategory) => (
                       <SelectItem
                         key={category.id}
                         value={String(category.id)}
@@ -206,7 +225,6 @@ export default function EditForm({ data, categories }: Prop) {
                           onClick={() => {
                             onChange(null);
                             setImagePreview(null);
-                            setValue("imagePreview", null);
                           }}
                         >
                           X
@@ -268,20 +286,22 @@ export default function EditForm({ data, categories }: Prop) {
   );
 }
 
-import StarterKit from "@tiptap/starter-kit";
-import Bold from "@tiptap/extension-bold";
-import Italic from "@tiptap/extension-italic";
-import BulletList from "@tiptap/extension-bullet-list";
-import OrderedList from "@tiptap/extension-ordered-list";
-import ListItem from "@tiptap/extension-list-item";
-import { useForm, Controller } from "react-hook-form";
-import { useEditor, EditorContent } from "@tiptap/react";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
 } from "@/components/ui/select";
+import Bold from "@tiptap/extension-bold";
+import BulletList from "@tiptap/extension-bullet-list";
+import Italic from "@tiptap/extension-italic";
+import ListItem from "@tiptap/extension-list-item";
+import OrderedList from "@tiptap/extension-ordered-list";
+import { EditorContent, useEditor } from "@tiptap/react";
+import StarterKit from "@tiptap/starter-kit";
+import { Controller, useForm } from "react-hook-form";
+import { useBlogCategories } from "../../categories/api/get-blogCategories";
+import { useUpdateBlog } from "../api/update-blog";
 
 export function TiptapEditor() {
   const { control, handleSubmit, setValue, getValues, formState } = useForm({

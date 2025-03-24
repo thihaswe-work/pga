@@ -3,18 +3,18 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { api } from "@/lib/api-client";
 import { MutationConfig } from "@/lib/react-query";
 
-import { getBannersQueryOptions } from "./get-banners";
-export const deleteBanner = ({ bannerId }: { bannerId: number }) => {
-  return api.delete(`/banner/${bannerId}`);
+import { getBlogsQueryOptions } from "./get-blogs";
+export const deleteBlog = ({ blogId }: { blogId: number }) => {
+  return api.delete(`/blogs/${blogId}`);
 };
 
-type UseDeleteBannerOptions = {
-  mutationConfig?: MutationConfig<typeof deleteBanner>;
+type UseDeleteBlogOptions = {
+  mutationConfig?: MutationConfig<typeof deleteBlog>;
 };
 
-export const useDeleteBanner = ({
+export const useDeleteBlog = ({
   mutationConfig,
-}: UseDeleteBannerOptions = {}) => {
+}: UseDeleteBlogOptions = {}) => {
   const queryClient = useQueryClient();
 
   const { onSuccess, ...restConfig } = mutationConfig || {};
@@ -22,11 +22,11 @@ export const useDeleteBanner = ({
   return useMutation({
     onSuccess: (...args) => {
       queryClient.invalidateQueries({
-        queryKey: getBannersQueryOptions().queryKey,
+        queryKey: getBlogsQueryOptions().queryKey,
       });
       onSuccess?.(...args);
     },
     ...restConfig,
-    mutationFn: deleteBanner,
+    mutationFn: deleteBlog,
   });
 };

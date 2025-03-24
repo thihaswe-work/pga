@@ -7,7 +7,8 @@ import { Button } from "@/components/ui/button";
 import { paths } from "@/config/paths";
 import { useDeleteBanner } from "@/features/banner/api/delete-banner";
 import { useBanners } from "@/features/banner/api/get-banners";
-import { Banner, getColumns } from "@/features/banner/components/columns";
+import { getColumns } from "@/features/banner/components/columns";
+import { Banner } from "@/types/api";
 
 import { useState } from "react";
 import { useNavigate } from "react-router";
@@ -64,13 +65,13 @@ export default function BannerPage() {
         />
         {selectedDetail && (
           <>
-            <OpenDialog
+            <OpenDialog<Banner>
               detail={selectedDetail}
               open={dialogOpen}
               setOpen={setDialogOpen}
               navlink={paths.app.banner.edit.getHref(selectedDetail.id)}
             />
-            <DeleteDialog
+            <DeleteDialog<Banner>
               detail={selectedDetail}
               open={dialogDelete}
               setOpen={setDialogDelete}

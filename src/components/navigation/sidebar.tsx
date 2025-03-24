@@ -91,7 +91,11 @@ export const SideBar = () => {
       to: paths.app.aboutus.getHref(),
       icon: HiOutlineUserGroup,
     },
-    { name: "Miles Stone", to: paths.app.milestone.getHref(), icon: Trophy },
+    {
+      name: "Milestones",
+      to: paths.app.milestone.root.getHref(),
+      icon: Trophy,
+    },
 
     {
       name: "Blog",

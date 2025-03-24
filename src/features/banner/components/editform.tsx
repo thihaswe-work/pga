@@ -20,6 +20,7 @@ export default function EditForm({ data }: Prop) {
   const [imagePreview, setImagePreview] = useState<string | null>(
     data?.image || null
   );
+
   const { control, handleSubmit } = useForm({
     defaultValues: {
       status: data.status || false,
@@ -67,6 +68,7 @@ export default function EditForm({ data }: Prop) {
     },
     []
   );
+
   const updateBannerMutation = useUpdateBanner({
     mutationConfig: {
       onSuccess: () => {
@@ -78,6 +80,7 @@ export default function EditForm({ data }: Prop) {
       },
     },
   });
+
   // Form Submission
   const onSubmit = (formData: any) => {
     console.log("Submitting Form Data:", formData);

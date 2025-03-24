@@ -1,39 +1,42 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable react-hooks/rules-of-hooks */
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
-import { paths } from "@/config/paths";
+import { Label } from "@/components/ui/label";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { useCallback, useState } from "react";
 import { useNavigate } from "react-router";
-import { useBlogCategories } from "../../categories/api/get-blogCategories";
+import { paths } from "@/config/paths";
+import { useMilestones } from "../api/get-milestones";
+import Loading from "@/components/loading/loading";
 import { Controller, useForm } from "react-hook-form";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-} from "@/components/ui/select";
-import { BlogCategory } from "@/types/api";
-import { Textarea } from "@/components/ui/textarea";
-import { useCreateBlog } from "../api/create-blog";
+import { useCreateMilestone } from "../api/create-milestone";
+import { Milestone } from "@/types/api";
+import { toast } from "sonner";
 
 export default function CreateForm() {
   const navigate = useNavigate();
-  const [dragging, setDragging] = useState(false);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const [dragging, setDragging] = useState(false);
+  const { data, isLoading, isError } = useMilestones({});
+  if (isLoading) return <Loading />;
+  if (isError)
+    return <p className="text-red-500">Failed to fetch Milestones.</p>;
 
-  const { data: categories } = useBlogCategories({});
   const { control, handleSubmit } = useForm({
     defaultValues: {
-      category: "",
-      title: "",
-      description: "",
       status: false,
       image: null,
     },
   });
+
+  // Count how many Milestones are active
+  const activeCount = data?.data.filter(
+    (Milestone: Milestone) => Milestone.status
+  ).length;
+
+  // Disable switch if there are already 2 active Milestones and current is inactive
+  const isSwitchDisabled = activeCount >= 2;
 
   // Handle File Selection
   const handleImageUpload = (
@@ -42,7 +45,6 @@ export default function CreateForm() {
   ) => {
     if (event.target.files?.length) {
       const file = event.target.files[0];
-      console.log(file);
       onChange(file); // Update form state
       setImagePreview(URL.createObjectURL(file)); // Show preview
     }
@@ -76,28 +78,25 @@ export default function CreateForm() {
     },
     []
   );
-  const createBlogMutation = useCreateBlog({
+  const createMilestoneMutation = useCreateMilestone({
     mutationConfig: {
       onSuccess: () => {
-        console.log("Update successful!");
-        navigate(paths.app.blog.blogs.root.getHref()); // Navigate after success
+        toast("Milestone Created");
+        console.log("create successful!");
+        navigate(paths.app.milestone.root.getHref()); // Navigate after success
       },
-      onError: (error) => {
-        console.error("Update failed:", error);
+      onError: (error: any) => {
+        console.error("create failed:", error);
       },
     },
   });
-
   // Form Submission
   const onSubmit = (formData: any) => {
-    console.log("Form Data:", formData);
-    createBlogMutation.mutate({
+    console.log("Submitting Form Data:", formData);
+    createMilestoneMutation.mutate({
       data: {
         status: formData.status,
         image: formData.image,
-        title: formData.title,
-        description: formData.description,
-        blogCategoryId: formData.category,
       },
       // Ensure this value is correct
     });
@@ -106,76 +105,6 @@ export default function CreateForm() {
   return (
     <div className="flex w-full gap-8">
       <div className="max-w-[628px] space-y-6 w-full p-6 bg-background rounded-md">
-        {/* Category Select */}
-        <div className="space-y-2 ">
-          <Label className="font-medium">
-            Category<span className="text-primaryText">*</span>
-          </Label>
-          <Controller
-            name="category"
-            control={control}
-            render={({ field }) => (
-              <div className="w-full">
-                <Select
-                  value={field.value as string}
-                  onValueChange={field.onChange}
-                >
-                  <SelectTrigger className="w-full">
-                    <span>
-                      {categories?.data.find(
-                        (category: BlogCategory) =>
-                          category.id === Number(field.value)
-                      )?.name || "Select a category"}
-                    </span>
-                  </SelectTrigger>
-                  <SelectContent className="w-full">
-                    {categories?.data.map((category: BlogCategory) => (
-                      <SelectItem
-                        key={category.id}
-                        value={String(category.id)}
-                        className="w-full"
-                      >
-                        {category.name}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-            )}
-          />
-        </div>
-
-        {/* Header */}
-        <div className="space-y-2">
-          <Label className="font-medium">
-            Title<span className="text-primaryText">*</span>
-          </Label>
-          <Controller
-            name="title"
-            control={control}
-            render={({ field }) => (
-              <Input {...field} placeholder="300+" className="mt-1" />
-            )}
-          />
-        </div>
-        {/* Description */}
-        <div className="space-y-2">
-          <Label className="font-medium">
-            Description<span className="text-primaryText">*</span>
-          </Label>
-          <Controller
-            name="description"
-            control={control}
-            render={({ field }) => (
-              <Textarea
-                {...field}
-                placeholder="Enter description..."
-                className="mt-1"
-                rows={3}
-              />
-            )}
-          />
-        </div>
         {/* Image Upload */}
         <Card className="p-0 bg-secondaryBackground gap-0">
           <CardHeader>
@@ -245,10 +174,8 @@ export default function CreateForm() {
           </CardContent>
         </Card>
       </div>
-
-      {/* Right Section */}
+      {/* Status Toggle */}
       <div className="w-full max-w-[436px] space-y-6">
-        {/* Active Toggle */}
         <div className="flex justify-between border flex-col rounded-lg bg-background">
           <Label className="font-medium px-6 py-4">Active</Label>
           <div className="h-[1px] w-full bg-[#e9e9ea]"></div>
@@ -259,11 +186,19 @@ export default function CreateForm() {
               render={({ field }) => (
                 <Switch
                   checked={field.value}
-                  onCheckedChange={field.onChange} // This ensures it works with boolean values
-                  className={"data-[state=checked]:bg-switchCheck"}
+                  onCheckedChange={field.onChange}
+                  disabled={isSwitchDisabled} // Disable switch if needed
+                  className={`data-[state=checked]:bg-switchCheck ${
+                    isSwitchDisabled ? "opacity-50 cursor-not-allowed" : ""
+                  }`}
                 />
               )}
             />
+            {isSwitchDisabled && (
+              <p className="text-red-500 text-sm mt-2">
+                Only 2 Milestones can be active at a time.
+              </p>
+            )}
           </div>
         </div>
 
@@ -278,7 +213,7 @@ export default function CreateForm() {
           </Button>
           <Button
             variant="outline"
-            onClick={() => navigate(paths.app.blog.blogs.root.getHref())}
+            onClick={() => navigate(paths.app.milestone.root.getHref())}
           >
             Cancel
           </Button>

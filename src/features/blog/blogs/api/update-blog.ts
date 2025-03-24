@@ -3,25 +3,29 @@ import { z } from "zod";
 
 import { api } from "@/lib/api-client";
 import { MutationConfig } from "@/lib/react-query";
-import { Banner } from "@/types/api";
-import { getBannerQueryOptions } from "./get-banner";
 
-export const updateBannerInputSchema = z.object({
+import { getBlogQueryOptions } from "./get-blog";
+import { Blog } from "@/types/api";
+
+export const updateBlogInputSchema = z.object({
   status: z.boolean(),
+  title: z.string(),
+  description: z.string(),
+  blogCategoryId: z.number(),
   image: z.any().nullable(),
 });
-export type UpdateBannerInput = z.infer<typeof updateBannerInputSchema>;
+export type UpdateBlogInput = z.infer<typeof updateBlogInputSchema>;
 
-export const updateBanner = async ({
+export const updateBlog = async ({
   data,
   id,
 }: {
-  data: UpdateBannerInput;
+  data: UpdateBlogInput;
   id: number;
-}): Promise<Banner> => {
+}): Promise<Blog> => {
   try {
-    console.log("Updating Banner with Data:", data); // Log the data
-    const response = await api.put(`/banner/${id}`, data, {
+    console.log("Updating Blog with Data:", data); // Log the data
+    const response = await api.put(`/blogs/${id}`, data, {
       headers: {
         "Content-Type": "multipart/form-data",
       },
@@ -29,18 +33,18 @@ export const updateBanner = async ({
     console.log("Response:", response.data);
     return response.data;
   } catch (error) {
-    console.error("Error updating Banner:", error);
+    console.error("Error updating Blog:", error);
     throw error;
   }
 };
 
-type UseUpdateBannerOptions = {
-  mutationConfig?: MutationConfig<typeof updateBanner>;
+type UseUpdateBlogOptions = {
+  mutationConfig?: MutationConfig<typeof updateBlog>;
 };
 
-export const useUpdateBanner = ({
+export const useUpdateBlog = ({
   mutationConfig,
-}: UseUpdateBannerOptions = {}) => {
+}: UseUpdateBlogOptions = {}) => {
   const queryClient = useQueryClient();
 
   const { onSuccess, ...restConfig } = mutationConfig || {};
@@ -48,11 +52,11 @@ export const useUpdateBanner = ({
   return useMutation({
     onSuccess: (data, ...args) => {
       queryClient.refetchQueries({
-        queryKey: getBannerQueryOptions(data.id).queryKey,
+        queryKey: getBlogQueryOptions(data.id).queryKey,
       });
       onSuccess?.(data, ...args);
     },
     ...restConfig,
-    mutationFn: updateBanner,
+    mutationFn: updateBlog,
   });
 };

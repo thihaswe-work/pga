@@ -6,14 +6,14 @@ import { FiEdit } from "react-icons/fi";
 import { TbEye } from "react-icons/tb";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import { paths } from "@/config/paths";
-import { Banner } from "@/types/api";
+import { Milestone } from "@/types/api";
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
 
 export const getColumns = (
-  onViewClick: (detail: Banner) => void,
-  onViewDelete: (detail: Banner) => void
-): ColumnDef<Banner>[] => {
+  onViewClick: (detail: Milestone) => void,
+  onViewDelete: (detail: Milestone) => void
+): ColumnDef<Milestone>[] => {
   return [
     {
       accessorKey: "id",
@@ -21,15 +21,15 @@ export const getColumns = (
     },
 
     {
-      accessorKey: "image",
+      accessorKey: "icon",
       header: () => <div className="text-left">Image</div>,
       cell: ({ row }) => {
-        const image = row.getValue("image") as string;
+        const image = row.getValue("icon") as string;
 
         return (
-          <div className="px-4 py-3 w-[213px]">
+          <div className="px-4 py-3 w-[74px] h-[72px]">
             <img
-              className="w-[180px] h-[43px] object-cover"
+              className="w-[36px] h-[36px] rounded-full object-cover"
               src={image}
               alt="image"
             />
@@ -37,7 +37,53 @@ export const getColumns = (
         );
       },
     },
+    {
+      accessorKey: "colorCode",
+      header: () => <div className="text-left">Color Code</div>,
+    },
+    {
+      accessorKey: "image",
+      header: () => <div className="text-left">Image</div>,
+      cell: ({ row }) => {
+        const image = row.getValue("image") as string;
 
+        return (
+          <div className="px-4 py-3 w-[77px] h-[72px]">
+            <img
+              className="w-[46px] h-[56px] object-cover"
+              src={image}
+              alt="image"
+            />
+          </div>
+        );
+      },
+    },
+    {
+      accessorKey: "title",
+      header: () => <div className="text-left">Title</div>,
+    },
+    {
+      accessorKey: "description",
+      header: () => <div className="pl-4"> Description</div>,
+      cell: ({ row }) => {
+        return (
+          <div className="px-4 py-3 w-[152px] h-[70px] text-wrap overflow-y-hidden">
+            <p className="">{row.getValue("description")}</p>
+          </div>
+        );
+      },
+    },
+    {
+      accessorKey: "link",
+      header: () => <div className="pl-4">Website Link</div>,
+      cell: ({ row }) => {
+        return (
+          <div className="px-4 py-3 w-[152px]  text-wrap overflow-y-hidden underline text-primaryText ">
+            <p className="">{row.getValue("link")}</p>
+          </div>
+        );
+      },
+    },
     {
       accessorKey: "status",
       header: ({ table }) => {

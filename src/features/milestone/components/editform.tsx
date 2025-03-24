@@ -1,40 +1,81 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { paths } from "@/config/paths";
+import { Milestone } from "@/types/api";
 import { useCallback, useState } from "react";
-import { useNavigate } from "react-router";
-import { useBlogCategories } from "../../categories/api/get-blogCategories";
 import { Controller, useForm } from "react-hook-form";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-} from "@/components/ui/select";
-import { BlogCategory } from "@/types/api";
-import { Textarea } from "@/components/ui/textarea";
-import { useCreateBlog } from "../api/create-blog";
+import { useNavigate } from "react-router";
+import { useUpdateMilestone } from "../api/update-milestone";
 
-export default function CreateForm() {
+interface Prop {
+  data: Milestone;
+}
+
+export default function EditForm({ data }: Prop) {
   const navigate = useNavigate();
   const [dragging, setDragging] = useState(false);
-  const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const [draggingIcon, setDraggingIcon] = useState(false);
+  const [imagePreview, setImagePreview] = useState<string | null>(
+    data?.image || null
+  );
+  const [iconPreview, setIconPreview] = useState<string | null>(
+    data?.icon || null
+  );
 
-  const { data: categories } = useBlogCategories({});
   const { control, handleSubmit } = useForm({
     defaultValues: {
-      category: "",
-      title: "",
-      description: "",
-      status: false,
-      image: null,
+      title: data.title || "",
+      descritpion: data.description || "",
+      status: data.status || false,
+      timeline: data.timeline || 0,
+      link: data.link || "",
+      image: data.image || null,
+      icon: data.icon || null,
     },
   });
 
+  const handleIconUpload = (
+    event: React.ChangeEvent<HTMLInputElement>,
+    onChange: (file: File | null) => void
+  ) => {
+    if (event.target.files?.length) {
+      const file = event.target.files[0];
+      onChange(file); // Update form state
+      setIconPreview(URL.createObjectURL(file)); // Show preview
+    }
+  };
+
+  const handleDragEnterIcon = useCallback((event: React.DragEvent) => {
+    event.preventDefault();
+    setDraggingIcon(true);
+  }, []);
+
+  const handleDragOverIcon = useCallback((event: React.DragEvent) => {
+    event.preventDefault();
+    setDraggingIcon(true);
+  }, []);
+
+  const handleDragLeaveIcon = useCallback(() => {
+    setDraggingIcon(false);
+  }, []);
+
+  const handleDropIcon = useCallback(
+    (event: React.DragEvent, onChange: (file: File | null) => void) => {
+      event.preventDefault();
+      setDraggingIcon(false);
+
+      if (event.dataTransfer.files.length) {
+        const file = event.dataTransfer.files[0];
+        onChange(file);
+        setImagePreview(URL.createObjectURL(file));
+      }
+    },
+    []
+  );
+  // Drag and Drop Handlers
   // Handle File Selection
   const handleImageUpload = (
     event: React.ChangeEvent<HTMLInputElement>,
@@ -42,13 +83,10 @@ export default function CreateForm() {
   ) => {
     if (event.target.files?.length) {
       const file = event.target.files[0];
-      console.log(file);
       onChange(file); // Update form state
       setImagePreview(URL.createObjectURL(file)); // Show preview
     }
   };
-
-  // Drag and Drop Handlers
   const handleDragEnter = useCallback((event: React.DragEvent) => {
     event.preventDefault();
     setDragging(true);
@@ -76,11 +114,12 @@ export default function CreateForm() {
     },
     []
   );
-  const createBlogMutation = useCreateBlog({
+
+  const updateMilestoneMutation = useUpdateMilestone({
     mutationConfig: {
       onSuccess: () => {
         console.log("Update successful!");
-        navigate(paths.app.blog.blogs.root.getHref()); // Navigate after success
+        navigate(paths.app.milestone.root.getHref()); // Navigate after success
       },
       onError: (error) => {
         console.error("Update failed:", error);
@@ -90,92 +129,24 @@ export default function CreateForm() {
 
   // Form Submission
   const onSubmit = (formData: any) => {
-    console.log("Form Data:", formData);
-    createBlogMutation.mutate({
+    console.log("Submitting Form Data:", formData);
+    updateMilestoneMutation.mutate({
       data: {
         status: formData.status,
         image: formData.image,
+        icon: formData.icon,
+        timeline: formData.timeline,
         title: formData.title,
+        link: formData.link,
         description: formData.description,
-        blogCategoryId: formData.category,
       },
-      // Ensure this value is correct
+      id: data.id, // Ensure this value is correct
     });
   };
 
   return (
     <div className="flex w-full gap-8">
       <div className="max-w-[628px] space-y-6 w-full p-6 bg-background rounded-md">
-        {/* Category Select */}
-        <div className="space-y-2 ">
-          <Label className="font-medium">
-            Category<span className="text-primaryText">*</span>
-          </Label>
-          <Controller
-            name="category"
-            control={control}
-            render={({ field }) => (
-              <div className="w-full">
-                <Select
-                  value={field.value as string}
-                  onValueChange={field.onChange}
-                >
-                  <SelectTrigger className="w-full">
-                    <span>
-                      {categories?.data.find(
-                        (category: BlogCategory) =>
-                          category.id === Number(field.value)
-                      )?.name || "Select a category"}
-                    </span>
-                  </SelectTrigger>
-                  <SelectContent className="w-full">
-                    {categories?.data.map((category: BlogCategory) => (
-                      <SelectItem
-                        key={category.id}
-                        value={String(category.id)}
-                        className="w-full"
-                      >
-                        {category.name}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-            )}
-          />
-        </div>
-
-        {/* Header */}
-        <div className="space-y-2">
-          <Label className="font-medium">
-            Title<span className="text-primaryText">*</span>
-          </Label>
-          <Controller
-            name="title"
-            control={control}
-            render={({ field }) => (
-              <Input {...field} placeholder="300+" className="mt-1" />
-            )}
-          />
-        </div>
-        {/* Description */}
-        <div className="space-y-2">
-          <Label className="font-medium">
-            Description<span className="text-primaryText">*</span>
-          </Label>
-          <Controller
-            name="description"
-            control={control}
-            render={({ field }) => (
-              <Textarea
-                {...field}
-                placeholder="Enter description..."
-                className="mt-1"
-                rows={3}
-              />
-            )}
-          />
-        </div>
         {/* Image Upload */}
         <Card className="p-0 bg-secondaryBackground gap-0">
           <CardHeader>
@@ -244,6 +215,75 @@ export default function CreateForm() {
             />
           </CardContent>
         </Card>
+
+        {/*Icon Upload */}
+        <Card className="p-0 bg-secondaryBackground gap-0">
+          <CardHeader>
+            <Label className="font-medium w-full p-6 text-lg">Image</Label>
+          </CardHeader>
+          <CardContent className="bg-background p-6">
+            <Controller
+              name="icon"
+              control={control}
+              render={({ field: { onChange } }) => (
+                <>
+                  {/* Drag & Drop Box */}
+                  <div
+                    className={`border-2 ${
+                      draggingIcon
+                        ? "border-blue-500 bg-blue-50"
+                        : "border-gray-300"
+                    } 
+                    border-dashed rounded-lg p-6 text-center transition-all bg-secondaryBackground`}
+                    onDragEnter={handleDragEnterIcon}
+                    onDragOver={handleDragOverIcon}
+                    onDragLeave={handleDragLeaveIcon}
+                    onDrop={(event) => handleDropIcon(event, onChange)}
+                  >
+                    <input
+                      type="file"
+                      className="hidden"
+                      id="fileUpload"
+                      accept="image/*"
+                      onChange={(event) => handleIconUpload(event, onChange)}
+                    />
+                    <label
+                      htmlFor="fileUpload"
+                      className="cursor-pointer text-secondaryText hover:underline"
+                    >
+                      {draggingIcon
+                        ? "Drop your file here"
+                        : "Drag & Drop your files or "}
+                      <span className="text-red-500">Browse</span>
+                    </label>
+                  </div>
+
+                  {/* Image Preview */}
+                  {iconPreview && (
+                    <div className="mt-4 flex flex-col gap-4 bg-black text-white p-2 rounded-md pb-10">
+                      <div>
+                        <Button
+                          size="sm"
+                          onClick={() => {
+                            onChange(null);
+                            setIconPreview(null);
+                          }}
+                        >
+                          X
+                        </Button>
+                      </div>
+                      <img
+                        src={iconPreview}
+                        alt="Preview"
+                        className="w-[368px] h-[86px] rounded-md object-cover mx-auto"
+                      />
+                    </div>
+                  )}
+                </>
+              )}
+            />
+          </CardContent>
+        </Card>
       </div>
 
       {/* Right Section */}
@@ -259,7 +299,7 @@ export default function CreateForm() {
               render={({ field }) => (
                 <Switch
                   checked={field.value}
-                  onCheckedChange={field.onChange} // This ensures it works with boolean values
+                  onCheckedChange={field.onChange}
                   className={"data-[state=checked]:bg-switchCheck"}
                 />
               )}
@@ -278,7 +318,7 @@ export default function CreateForm() {
           </Button>
           <Button
             variant="outline"
-            onClick={() => navigate(paths.app.blog.blogs.root.getHref())}
+            onClick={() => navigate(paths.app.milestone.root.getHref())}
           >
             Cancel
           </Button>

@@ -18,6 +18,7 @@ interface Prop {
   open: boolean;
   setOpen: (open: boolean) => void;
   categories: BlogCategory[];
+  deleteFunc?: (para?: any) => void;
 }
 
 export function BlogDialog({ blogDetail, open, setOpen, categories }: Prop) {
@@ -111,7 +112,7 @@ export function BlogDialog({ blogDetail, open, setOpen, categories }: Prop) {
   );
 }
 
-export function DeleteDialog({ open, setOpen, blogDetail }: Prop) {
+export function DeleteDialog({ open, setOpen, blogDetail, deleteFunc }: Prop) {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogContent
@@ -129,7 +130,7 @@ export function DeleteDialog({ open, setOpen, blogDetail }: Prop) {
           </h3>
           <Button
             className="bg-primaryText hover:bg-red-500 text-white flex items-center justify-center gap-2"
-            onClick={() => console.log(blogDetail?.id)}
+            onClick={() => deleteFunc && deleteFunc()}
           >
             <Pencil className="w-4 h-4" />
             Delete
