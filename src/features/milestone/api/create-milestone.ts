@@ -15,6 +15,7 @@ export const createMilestoneInputSchema = z.object({
   description: z.string(),
   link: z.string(),
   timeline: z.number(),
+  colorCode: z.string(),
 });
 
 export type CreateMilestoneInput = z.infer<typeof createMilestoneInputSchema>;

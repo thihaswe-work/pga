@@ -41,12 +41,28 @@ export const getColumns = (
       header: () => <div className="text-left">Title</div>,
     },
     {
-      accessorKey: "categoryId",
+      accessorKey: "blogCategoryId", // Change accessorKey to reflect the transformed value
       header: () => <div className="text-left">Category</div>,
-      accessorFn: (row) =>
-        categories.find((c) => c.id === row.categoryId)?.name || "Unknown",
-    },
+      accessorFn: (row) => {
+        // Ensure categories exist before trying to find
+        if (!categories || !Array.isArray(categories)) return "Unknown";
 
+        return (
+          categories.find((c) => c.id === row.blogCategoryId)?.name || "Unknown"
+        );
+      },
+    },
+    // {
+    //   accessorKey: "blogCategoryId", // Keep the raw ID in the data
+    //   header: () => <div className="text-left">Category</div>,
+    //   cell: ({ row }) => {
+    //     const categoryName =
+    //       categories.find((c) => c.id === row.original.blogCategoryId)?.name ||
+    //       "Unknown";
+
+    //     return <div className="text-left">{categoryName}</div>;
+    //   },
+    // },
     {
       accessorKey: "description",
       header: () => <div className="text-left">Description</div>,

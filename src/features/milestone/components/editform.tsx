@@ -9,6 +9,7 @@ import { useCallback, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { useNavigate } from "react-router";
 import { useUpdateMilestone } from "../api/update-milestone";
+import { Input } from "@/components/ui/input";
 
 interface Prop {
   data: Milestone;
@@ -27,13 +28,14 @@ export default function EditForm({ data }: Prop) {
 
   const { control, handleSubmit } = useForm({
     defaultValues: {
-      title: data.title || "",
-      descritpion: data.description || "",
-      status: data.status || false,
-      timeline: data.timeline || 0,
-      link: data.link || "",
-      image: data.image || null,
-      icon: data.icon || null,
+      title: data?.title || "",
+      colorCode: data.colorCode || "",
+      descritpion: data?.description || "",
+      status: data?.status || false,
+      timeline: data?.timeline || 0,
+      link: data?.link || "",
+      image: data?.image || null,
+      icon: data?.icon || null,
     },
   });
 
@@ -132,6 +134,7 @@ export default function EditForm({ data }: Prop) {
     console.log("Submitting Form Data:", formData);
     updateMilestoneMutation.mutate({
       data: {
+        colorCode: formData.colorCode,
         status: formData.status,
         image: formData.image,
         icon: formData.icon,
@@ -147,6 +150,42 @@ export default function EditForm({ data }: Prop) {
   return (
     <div className="flex w-full gap-8">
       <div className="max-w-[628px] space-y-6 w-full p-6 bg-background rounded-md">
+        <div className="space-y-2">
+          <Label className="font-medium">
+            Title<span className="text-primaryText">*</span>
+          </Label>
+          <Controller
+            name="title"
+            control={control}
+            render={({ field }) => (
+              <Input {...field} placeholder="300+" className="mt-1" />
+            )}
+          />
+        </div>
+        <div className="space-y-2">
+          <Label className="font-medium">
+            Header<span className="text-primaryText">*</span>
+          </Label>
+          <Controller
+            name="link"
+            control={control}
+            render={({ field }) => (
+              <Input {...field} placeholder="300+" className="mt-1" />
+            )}
+          />
+        </div>
+        <div className="space-y-2">
+          <Label className="font-medium">
+            Header<span className="text-primaryText">*</span>
+          </Label>
+          <Controller
+            name="colorCode"
+            control={control}
+            render={({ field }) => (
+              <Input {...field} placeholder="300+" className="mt-1" />
+            )}
+          />
+        </div>
         {/* Image Upload */}
         <Card className="p-0 bg-secondaryBackground gap-0">
           <CardHeader>

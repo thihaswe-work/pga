@@ -22,7 +22,7 @@ export const getColumns = (
 
     {
       accessorKey: "icon",
-      header: () => <div className="text-left">Image</div>,
+      header: () => <div className="text-left">Icon</div>,
       cell: ({ row }) => {
         const image = row.getValue("icon") as string;
 
@@ -86,20 +86,7 @@ export const getColumns = (
     },
     {
       accessorKey: "status",
-      header: ({ table }) => {
-        // Get all rows
-        const totalCount = 2;
-        // Count rows with a specific status (e.g., "Completed" or truthy value)
-        const matchedCount = table
-          .getPrePaginationRowModel()
-          .rows.filter((row) => row.getValue("status")).length; // Adjust condition as needed
-
-        return (
-          <div className="text-left">
-            Status ({matchedCount}/{totalCount})
-          </div>
-        );
-      },
+      header: "Status",
       cell(props) {
         return (
           <div>
@@ -109,7 +96,7 @@ export const getColumns = (
               </div>
             ) : (
               <div className="text-primaryText p-2 w-20 rounded-lg text-center border-2 border-primaryText bg-bgStatusUnactive">
-                Unactive
+                Inactive
               </div>
             )}
           </div>
@@ -137,7 +124,7 @@ export const getColumns = (
         const id = row.original.id; // Assuming id name exists in the row data
 
         return (
-          <NavLink to={`${paths.app.banner.edit.getHref(id)}`}>
+          <NavLink to={`${paths.app.milestone.edit.getHref(id)}`}>
             <Button
               variant="ghost"
               className={" text-edit hover:text-edit active:text-edit"}

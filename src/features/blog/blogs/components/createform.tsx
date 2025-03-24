@@ -102,7 +102,7 @@ export default function CreateForm() {
       // Ensure this value is correct
     });
   };
-
+  if (!categories) return <p>no caegories</p>;
   return (
     <div className="flex w-full gap-8">
       <div className="max-w-[628px] space-y-6 w-full p-6 bg-background rounded-md">

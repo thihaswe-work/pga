@@ -27,6 +27,12 @@ export default function CreateForm() {
     defaultValues: {
       status: false,
       image: null,
+      icon: null,
+      title: "",
+      description: "",
+      link: "",
+      timeline: 0,
+      colorCode: "",
     },
   });
 
@@ -97,6 +103,12 @@ export default function CreateForm() {
       data: {
         status: formData.status,
         image: formData.image,
+        icon: formData.icon,
+        link: formData.link,
+        timeline: formData.timeline,
+        description: formData.description,
+        colorCode: formData.colorCode,
+        title: formData.title,
       },
       // Ensure this value is correct
     });

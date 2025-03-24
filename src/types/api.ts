@@ -85,6 +85,7 @@ export type Milestone = {
   link: string;
   image: string;
   icon: string;
+  colorCode: string;
   createdAt: string;
   updatedAt: string;
 };

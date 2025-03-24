@@ -9,7 +9,7 @@ export default function EditPage() {
   const { id } = useParams();
   const MilestoneId = Number(id) as number;
   const { data: milestone, isLoading } = useMilestone({ id: MilestoneId });
-  if (isLoading) return <Loading />;
+  if (isLoading && !milestone) return <Loading />;
 
   return (
     <ContentLayout title={`Editing Milestone`}>

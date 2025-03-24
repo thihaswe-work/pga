@@ -14,6 +14,7 @@ export const updateMileStoneInputSchema = z.object({
   description: z.string(),
   link: z.string(),
   timeline: z.number(),
+  colorCode: z.string(),
 });
 export type UpdateMileStoneInput = z.infer<typeof updateMileStoneInputSchema>;
 

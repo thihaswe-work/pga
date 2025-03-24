@@ -11,6 +11,7 @@ import { useDeleteMilestone } from "@/features/milestone/api/delete-milestone";
 import { paths } from "@/config/paths";
 import { useNavigate } from "react-router";
 import { toast } from "sonner";
+import { Button } from "@/components/ui/button";
 
 export default function MilestonePage() {
   const [selectedDetail, setSelectedDetail] = useState<Milestone | null>(null);
@@ -42,7 +43,19 @@ export default function MilestonePage() {
   };
 
   return (
-    <ContentLayout title="Milestones">
+    <ContentLayout
+      title="Milestones"
+      create={
+        <Button
+          className="bg-primaryText hover:bg-red-500 "
+          onClick={() => {
+            navigate(paths.app.milestone.create.getHref());
+          }}
+        >
+          Create New Milestone
+        </Button>
+      }
+    >
       <div>
         <DataTable
           columns={getColumns(handleViewClick, handleViewDelete)}

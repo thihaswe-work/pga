@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -24,7 +26,7 @@ interface Prop {
 export function BlogDialog({ blogDetail, open, setOpen, categories }: Prop) {
   const navigate = useNavigate();
   const category = categories.find(
-    (item) => item.id === blogDetail?.categoryId
+    (item) => item.id === (blogDetail?.blogCategoryId as number)
   );
   return (
     <Dialog open={open} onOpenChange={setOpen}>
