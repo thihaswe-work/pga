@@ -161,3 +161,11 @@ export type HiringPost = {
   region: Region;
   relatedField: RelatedField;
 };
+
+export type ContactMessage = {
+  id: number;
+  name: string;
+  email: string;
+  message: string;
+  applyDate: string;
+};

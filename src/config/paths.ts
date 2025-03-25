@@ -187,6 +187,20 @@ export const paths = {
             return "/app/career/related-fields";
           },
         },
+        edit: {
+          // name: "career",
+          path: "career/related-fields/:id/edit",
+          getHref: (id: string | number) => {
+            return `/app/career/related-fields/${id}/edit`;
+          },
+        },
+        create: {
+          // name: "career",
+          path: "career/related-fields/create",
+          getHref: () => {
+            return "/app/career/related-fields/create";
+          },
+        },
       },
       regions: {
         root: {

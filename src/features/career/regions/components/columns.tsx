@@ -1,19 +1,17 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import { ColumnDef } from "@tanstack/react-table";
 import { Button } from "@/components/ui/button";
-import { NavLink } from "react-router";
-import { FiEdit } from "react-icons/fi";
-import { TbEye } from "react-icons/tb";
-import { RiDeleteBin6Line } from "react-icons/ri";
 import { paths } from "@/config/paths";
-import { Blog, BlogCategory } from "@/types/api";
 import { formatDate } from "@/lib/format";
+import { Region } from "@/types/api";
+import { ColumnDef } from "@tanstack/react-table";
+import { FiEdit } from "react-icons/fi";
+import { RiDeleteBin6Line } from "react-icons/ri";
+import { TbEye } from "react-icons/tb";
+import { NavLink } from "react-router";
 
 export const getColumns = (
-  onViewClick: (detail: Blog) => void,
-  onViewDelete: (detail: Blog) => void,
-  categories: BlogCategory[]
-): ColumnDef<Blog>[] => {
+  onViewClick: (detail: Region) => void,
+  onViewDelete: (detail: Region) => void
+): ColumnDef<Region>[] => {
   return [
     {
       accessorKey: "id",
@@ -37,14 +35,8 @@ export const getColumns = (
       },
     },
     {
-      accessorKey: "title",
-      header: () => <div className="text-left">Title</div>,
-    },
-    {
-      accessorKey: "categoryId",
-      header: () => <div className="text-left">Category</div>,
-      accessorFn: (row) =>
-        categories.find((c) => c.id === row.categoryId)?.name || "Unknown",
+      accessorKey: "name",
+      header: () => <div className="text-left">Name</div>,
     },
 
     {
@@ -68,7 +60,7 @@ export const getColumns = (
 
     {
       accessorKey: "status",
-      header: ({ table }) => {
+      header: () => {
         return <div className="text-left">Status</div>;
       },
       cell(props) {
@@ -122,7 +114,7 @@ export const getColumns = (
     {
       id: "delete",
       cell: ({ row }) => {
-        const id = row.original.id; // Assuming id name exists in the row data
+        // Assuming id name exists in the row data
 
         return (
           <Button

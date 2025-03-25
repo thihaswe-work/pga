@@ -6,19 +6,23 @@ import { FiEdit } from "react-icons/fi";
 import { TbEye } from "react-icons/tb";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import { paths } from "@/config/paths";
-import { Blog, BlogCategory } from "@/types/api";
+import { Blog, BlogCategory, CareerCategory } from "@/types/api";
 import { formatDate } from "@/lib/format";
 
 export const getColumns = (
-  onViewClick: (detail: Blog) => void,
-  onViewDelete: (detail: Blog) => void,
-  categories: BlogCategory[]
-): ColumnDef<Blog>[] => {
+  onViewClick: (detail: CareerCategory) => void,
+  onViewDelete: (detail: CareerCategory) => void
+): ColumnDef<CareerCategory>[] => {
   return [
     {
       accessorKey: "id",
       header: "ID",
     },
+    {
+      accessorKey: "name",
+      header: () => <div className="text-left">Name</div>,
+    },
+
     {
       accessorKey: "image",
       header: () => <div className="text-left">Image</div>,
@@ -34,35 +38,6 @@ export const getColumns = (
             />
           </div>
         );
-      },
-    },
-    {
-      accessorKey: "title",
-      header: () => <div className="text-left">Title</div>,
-    },
-    {
-      accessorKey: "categoryId",
-      header: () => <div className="text-left">Category</div>,
-      accessorFn: (row) =>
-        categories.find((c) => c.id === row.categoryId)?.name || "Unknown",
-    },
-
-    {
-      accessorKey: "description",
-      header: () => <div className="text-left">Description</div>,
-      cell: ({ row }) => (
-        <div className="overflow-hidden w-32 h-[58px] text-ellipsis text-wrap">
-          {row.getValue("description")}
-        </div>
-      ),
-    },
-
-    {
-      accessorKey: "createdAt",
-      header: () => <div className="text-left">Uploaded Date</div>,
-      cell(props) {
-        const createdate = props.row.getValue("createdAt") as string;
-        return <div>{formatDate(createdate)}</div>;
       },
     },
 

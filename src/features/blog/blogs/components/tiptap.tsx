@@ -12,7 +12,11 @@ import StarterKit from "@tiptap/starter-kit";
 import { Controller, useForm } from "react-hook-form";
 import { FaListOl, FaListUl } from "react-icons/fa";
 
-export function TiptapEditor({ setContent }: any) {
+export function TiptapEditor({
+  setContent,
+}: {
+  setContent: (para?: string) => void;
+}) {
   const { control, handleSubmit, setValue, getValues, formState } = useForm({
     defaultValues: { description: "" },
   });
@@ -153,7 +157,7 @@ export function TiptapEditor({ setContent }: any) {
   );
 }
 
-export function Tpp({ content }: any) {
+export function Tpp({ content }: { content: string }) {
   // Function to preserve spaces and line breaks in the output content
   const formatOutputContent = (html: string) => {
     return html.replace(/<p><\/p>/g, "<p>&nbsp;</p>"); // Replace empty paragraphs with a non-breaking space (or use <br />)

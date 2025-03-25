@@ -1,74 +1,29 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import { ColumnDef } from "@tanstack/react-table";
 import { Button } from "@/components/ui/button";
-import { NavLink } from "react-router";
-import { FiEdit } from "react-icons/fi";
-import { TbEye } from "react-icons/tb";
-import { RiDeleteBin6Line } from "react-icons/ri";
 import { paths } from "@/config/paths";
-import { Blog, BlogCategory } from "@/types/api";
-import { formatDate } from "@/lib/format";
+import { RelatedField } from "@/types/api";
+import { ColumnDef } from "@tanstack/react-table";
+import { FiEdit } from "react-icons/fi";
+import { RiDeleteBin6Line } from "react-icons/ri";
+import { TbEye } from "react-icons/tb";
+import { NavLink } from "react-router";
 
 export const getColumns = (
-  onViewClick: (detail: Blog) => void,
-  onViewDelete: (detail: Blog) => void,
-  categories: BlogCategory[]
-): ColumnDef<Blog>[] => {
+  onViewClick: (detail: RelatedField) => void,
+  onViewDelete: (detail: RelatedField) => void
+): ColumnDef<RelatedField>[] => {
   return [
     {
       accessorKey: "id",
       header: "ID",
     },
     {
-      accessorKey: "image",
-      header: () => <div className="text-left">Image</div>,
-      cell: ({ row }) => {
-        const image = row.getValue("image") as string;
-
-        return (
-          <div className="px-4 py-3 w-[213px]">
-            <img
-              className="w-[180px] h-[43px] object-cover"
-              src={image}
-              alt="image"
-            />
-          </div>
-        );
-      },
-    },
-    {
-      accessorKey: "title",
-      header: () => <div className="text-left">Title</div>,
-    },
-    {
-      accessorKey: "categoryId",
-      header: () => <div className="text-left">Category</div>,
-      accessorFn: (row) =>
-        categories.find((c) => c.id === row.categoryId)?.name || "Unknown",
-    },
-
-    {
-      accessorKey: "description",
-      header: () => <div className="text-left">Description</div>,
-      cell: ({ row }) => (
-        <div className="overflow-hidden w-32 h-[58px] text-ellipsis text-wrap">
-          {row.getValue("description")}
-        </div>
-      ),
-    },
-
-    {
-      accessorKey: "createdAt",
-      header: () => <div className="text-left">Uploaded Date</div>,
-      cell(props) {
-        const createdate = props.row.getValue("createdAt") as string;
-        return <div>{formatDate(createdate)}</div>;
-      },
+      accessorKey: "name",
+      header: () => <div className="text-left">Name</div>,
     },
 
     {
       accessorKey: "status",
-      header: ({ table }) => {
+      header: () => {
         return <div className="text-left">Status</div>;
       },
       cell(props) {
@@ -122,8 +77,6 @@ export const getColumns = (
     {
       id: "delete",
       cell: ({ row }) => {
-        const id = row.original.id; // Assuming id name exists in the row data
-
         return (
           <Button
             variant="ghost"
