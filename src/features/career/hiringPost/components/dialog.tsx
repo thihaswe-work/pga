@@ -10,7 +10,6 @@ import { Blog, BlogCategory } from "@/types/api";
 import { Pencil } from "lucide-react";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import { useNavigate } from "react-router";
-
 import "@/index.css";
 
 interface Prop {
@@ -23,7 +22,7 @@ interface Prop {
 export function OpenDialog({ blogDetail, open, setOpen, categories }: Prop) {
   const navigate = useNavigate();
   const category = categories.find(
-    (item) => item.id === blogDetail?.categoryId
+    (item) => item.id === blogDetail?.blogCategoryId
   );
   return (
     <Dialog open={open} onOpenChange={setOpen}>

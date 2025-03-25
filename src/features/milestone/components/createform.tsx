@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable react-hooks/rules-of-hooks */
 import { Button } from "@/components/ui/button";
@@ -11,17 +12,20 @@ import { useMilestones } from "../api/get-milestones";
 import Loading from "@/components/loading/loading";
 import { Controller, useForm } from "react-hook-form";
 import { useCreateMilestone } from "../api/create-milestone";
-import { Milestone } from "@/types/api";
 import { toast } from "sonner";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 
 export default function CreateForm() {
   const navigate = useNavigate();
-  const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [dragging, setDragging] = useState(false);
-  const { data, isLoading, isError } = useMilestones({});
-  if (isLoading) return <Loading />;
-  if (isError)
-    return <p className="text-red-500">Failed to fetch Milestones.</p>;
+  const [draggingIcon, setDraggingIcon] = useState(false);
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const [iconPreview, setIconPreview] = useState<string | null>(null);
+  // const { data, isLoading, isError } = useMilestones({});
+  // if (isLoading) return <Loading />;
+  // if (isError)
+  //   return <p className="text-red-500">Failed to fetch Milestones.</p>;
 
   const { control, handleSubmit } = useForm({
     defaultValues: {
@@ -36,14 +40,45 @@ export default function CreateForm() {
     },
   });
 
-  // Count how many Milestones are active
-  const activeCount = data?.data.filter(
-    (Milestone: Milestone) => Milestone.status
-  ).length;
+  const handleIconUpload = (
+    event: React.ChangeEvent<HTMLInputElement>,
+    onChange: (file: File | null) => void
+  ) => {
+    if (event.target.files?.length) {
+      const file = event.target.files[0];
+      onChange(file); // Update form state
+      setIconPreview(URL.createObjectURL(file)); // Show preview
+    }
+  };
 
-  // Disable switch if there are already 2 active Milestones and current is inactive
-  const isSwitchDisabled = activeCount >= 2;
+  const handleDragEnterIcon = useCallback((event: React.DragEvent) => {
+    event.preventDefault();
+    setDraggingIcon(true);
+  }, []);
 
+  const handleDragOverIcon = useCallback((event: React.DragEvent) => {
+    event.preventDefault();
+    setDraggingIcon(true);
+  }, []);
+
+  const handleDragLeaveIcon = useCallback(() => {
+    setDraggingIcon(false);
+  }, []);
+
+  const handleDropIcon = useCallback(
+    (event: React.DragEvent, onChange: (file: File | null) => void) => {
+      event.preventDefault();
+      setDraggingIcon(false);
+
+      if (event.dataTransfer.files.length) {
+        const file = event.dataTransfer.files[0];
+        onChange(file);
+        setImagePreview(URL.createObjectURL(file));
+      }
+    },
+    []
+  );
+  // Drag and Drop Handlers
   // Handle File Selection
   const handleImageUpload = (
     event: React.ChangeEvent<HTMLInputElement>,
@@ -55,8 +90,6 @@ export default function CreateForm() {
       setImagePreview(URL.createObjectURL(file)); // Show preview
     }
   };
-
-  // Drag and Drop Handlers
   const handleDragEnter = useCallback((event: React.DragEvent) => {
     event.preventDefault();
     setDragging(true);
@@ -84,6 +117,7 @@ export default function CreateForm() {
     },
     []
   );
+
   const createMilestoneMutation = useCreateMilestone({
     mutationConfig: {
       onSuccess: () => {
@@ -117,6 +151,72 @@ export default function CreateForm() {
   return (
     <div className="flex w-full gap-8">
       <div className="max-w-[628px] space-y-6 w-full p-6 bg-background rounded-md">
+        <div className="space-y-2">
+          <Label className="font-medium">
+            Title<span className="text-primaryText">*</span>
+          </Label>
+          <Controller
+            name="title"
+            control={control}
+            render={({ field }) => (
+              <Input {...field} placeholder="300+" className="mt-1" />
+            )}
+          />
+        </div>
+        <div className="space-y-2">
+          <Label className="font-medium">
+            Website Links<span className="text-primaryText">*</span>
+          </Label>
+          <Controller
+            name="link"
+            control={control}
+            render={({ field }) => (
+              <Input {...field} placeholder="300+" className="mt-1" />
+            )}
+          />
+        </div>
+        <div className="space-y-2">
+          <Label className="font-medium">
+            Color Code<span className="text-primaryText">*</span>
+          </Label>
+          <Controller
+            name="colorCode"
+            control={control}
+            render={({ field }) => (
+              <Input {...field} placeholder="300+" className="mt-1" />
+            )}
+          />
+        </div>
+        <div className="space-y-2">
+          <Label className="font-medium">
+            Founded<span className="text-primaryText">*</span>
+          </Label>
+          <Controller
+            name="timeline"
+            control={control}
+            render={({ field }) => (
+              <Input {...field} placeholder="300+" className="mt-1" />
+            )}
+          />
+        </div>
+        <div className="space-y-2">
+          <Label className="font-medium">
+            Description<span className="text-primaryText">*</span>
+          </Label>
+          <Controller
+            name="description"
+            control={control}
+            render={({ field }) => (
+              <Textarea
+                {...field}
+                placeholder="Enter description..."
+                className="mt-1"
+                rows={3}
+              />
+            )}
+          />
+        </div>
+
         {/* Image Upload */}
         <Card className="p-0 bg-secondaryBackground gap-0">
           <CardHeader>
@@ -135,7 +235,7 @@ export default function CreateForm() {
                         ? "border-blue-500 bg-blue-50"
                         : "border-gray-300"
                     } 
-                    border-dashed rounded-lg p-6 text-center transition-all bg-secondaryBackground`}
+                  border-dashed rounded-lg p-6 text-center transition-all bg-secondaryBackground`}
                     onDragEnter={handleDragEnter}
                     onDragOver={handleDragOver}
                     onDragLeave={handleDragLeave}
@@ -185,9 +285,80 @@ export default function CreateForm() {
             />
           </CardContent>
         </Card>
+
+        {/*Icon Upload */}
+        <Card className="p-0 bg-secondaryBackground gap-0">
+          <CardHeader>
+            <Label className="font-medium w-full p-6 text-lg">Icon</Label>
+          </CardHeader>
+          <CardContent className="bg-background p-6">
+            <Controller
+              name="icon"
+              control={control}
+              render={({ field: { onChange } }) => (
+                <>
+                  {/* Drag & Drop Box */}
+                  <div
+                    className={`border-2 ${
+                      draggingIcon
+                        ? "border-blue-500 bg-blue-50"
+                        : "border-gray-300"
+                    } 
+                  border-dashed rounded-lg p-6 text-center transition-all bg-secondaryBackground`}
+                    onDragEnter={handleDragEnterIcon}
+                    onDragOver={handleDragOverIcon}
+                    onDragLeave={handleDragLeaveIcon}
+                    onDrop={(event) => handleDropIcon(event, onChange)}
+                  >
+                    <input
+                      type="file"
+                      className="hidden"
+                      id="fileUpload"
+                      accept="image/*"
+                      onChange={(event) => handleIconUpload(event, onChange)}
+                    />
+                    <label
+                      htmlFor="fileUpload"
+                      className="cursor-pointer text-secondaryText hover:underline"
+                    >
+                      {draggingIcon
+                        ? "Drop your file here"
+                        : "Drag & Drop your files or "}
+                      <span className="text-red-500">Browse</span>
+                    </label>
+                  </div>
+
+                  {/* Image Preview */}
+                  {iconPreview && (
+                    <div className="mt-4 flex flex-col gap-4 bg-black text-white p-2 rounded-md pb-10">
+                      <div>
+                        <Button
+                          size="sm"
+                          onClick={() => {
+                            onChange(null);
+                            setIconPreview(null);
+                          }}
+                        >
+                          X
+                        </Button>
+                      </div>
+                      <img
+                        src={iconPreview}
+                        alt="Preview"
+                        className="w-[368px] h-[86px] rounded-md object-cover mx-auto"
+                      />
+                    </div>
+                  )}
+                </>
+              )}
+            />
+          </CardContent>
+        </Card>
       </div>
-      {/* Status Toggle */}
+
+      {/* Right Section */}
       <div className="w-full max-w-[436px] space-y-6">
+        {/* Active Toggle */}
         <div className="flex justify-between border flex-col rounded-lg bg-background">
           <Label className="font-medium px-6 py-4">Active</Label>
           <div className="h-[1px] w-full bg-[#e9e9ea]"></div>
@@ -199,18 +370,10 @@ export default function CreateForm() {
                 <Switch
                   checked={field.value}
                   onCheckedChange={field.onChange}
-                  disabled={isSwitchDisabled} // Disable switch if needed
-                  className={`data-[state=checked]:bg-switchCheck ${
-                    isSwitchDisabled ? "opacity-50 cursor-not-allowed" : ""
-                  }`}
+                  className={"data-[state=checked]:bg-switchCheck"}
                 />
               )}
             />
-            {isSwitchDisabled && (
-              <p className="text-red-500 text-sm mt-2">
-                Only 2 Milestones can be active at a time.
-              </p>
-            )}
           </div>
         </div>
 

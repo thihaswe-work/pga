@@ -10,6 +10,7 @@ import { Controller, useForm } from "react-hook-form";
 import { useNavigate } from "react-router";
 import { useUpdateMilestone } from "../api/update-milestone";
 import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 
 interface Prop {
   data: Milestone;
@@ -30,7 +31,7 @@ export default function EditForm({ data }: Prop) {
     defaultValues: {
       title: data?.title || "",
       colorCode: data.colorCode || "",
-      descritpion: data?.description || "",
+      description: data?.description || "",
       status: data?.status || false,
       timeline: data?.timeline || 0,
       link: data?.link || "",
@@ -164,7 +165,7 @@ export default function EditForm({ data }: Prop) {
         </div>
         <div className="space-y-2">
           <Label className="font-medium">
-            Header<span className="text-primaryText">*</span>
+            Website Links<span className="text-primaryText">*</span>
           </Label>
           <Controller
             name="link"
@@ -176,7 +177,7 @@ export default function EditForm({ data }: Prop) {
         </div>
         <div className="space-y-2">
           <Label className="font-medium">
-            Header<span className="text-primaryText">*</span>
+            Color Code<span className="text-primaryText">*</span>
           </Label>
           <Controller
             name="colorCode"
@@ -186,6 +187,36 @@ export default function EditForm({ data }: Prop) {
             )}
           />
         </div>
+        <div className="space-y-2">
+          <Label className="font-medium">
+            Founded<span className="text-primaryText">*</span>
+          </Label>
+          <Controller
+            name="timeline"
+            control={control}
+            render={({ field }) => (
+              <Input {...field} placeholder="300+" className="mt-1" />
+            )}
+          />
+        </div>
+        <div className="space-y-2">
+          <Label className="font-medium">
+            Description<span className="text-primaryText">*</span>
+          </Label>
+          <Controller
+            name="description"
+            control={control}
+            render={({ field }) => (
+              <Textarea
+                {...field}
+                placeholder="Enter description..."
+                className="mt-1"
+                rows={3}
+              />
+            )}
+          />
+        </div>
+
         {/* Image Upload */}
         <Card className="p-0 bg-secondaryBackground gap-0">
           <CardHeader>
@@ -258,7 +289,7 @@ export default function EditForm({ data }: Prop) {
         {/*Icon Upload */}
         <Card className="p-0 bg-secondaryBackground gap-0">
           <CardHeader>
-            <Label className="font-medium w-full p-6 text-lg">Image</Label>
+            <Label className="font-medium w-full p-6 text-lg">Icon</Label>
           </CardHeader>
           <CardContent className="bg-background p-6">
             <Controller

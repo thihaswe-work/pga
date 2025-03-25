@@ -1,22 +1,30 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Switch } from "@/components/ui/switch";
-import { paths } from "@/config/paths";
-import { useCallback, useState } from "react";
-import { useNavigate } from "react-router";
-import { useBlogCategories } from "../../categories/api/get-blogCategories";
-import { Controller, useForm } from "react-hook-form";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
 } from "@/components/ui/select";
+import { Switch } from "@/components/ui/switch";
+import { paths } from "@/config/paths";
 import { BlogCategory } from "@/types/api";
-import { Textarea } from "@/components/ui/textarea";
+import Bold from "@tiptap/extension-bold";
+import BulletList from "@tiptap/extension-bullet-list";
+import Italic from "@tiptap/extension-italic";
+import ListItem from "@tiptap/extension-list-item";
+import OrderedList from "@tiptap/extension-ordered-list";
+import { EditorContent, useEditor } from "@tiptap/react";
+import StarterKit from "@tiptap/starter-kit";
+import { useCallback, useState } from "react";
+import { Controller, useForm } from "react-hook-form";
+import { FaListOl, FaListUl } from "react-icons/fa";
+import { useNavigate } from "react-router";
+import { useBlogCategories } from "../../categories/api/get-blogCategories";
 import { useCreateBlog } from "../api/create-blog";
 
 export default function CreateForm() {
@@ -25,13 +33,21 @@ export default function CreateForm() {
   const [imagePreview, setImagePreview] = useState<string | null>(null);
 
   const { data: categories } = useBlogCategories({});
-  const { control, handleSubmit } = useForm({
+  const { control, handleSubmit, setValue } = useForm({
     defaultValues: {
       category: "",
       title: "",
       description: "",
       status: false,
       image: null,
+    },
+  });
+  const editor = useEditor({
+    extensions: [StarterKit, Bold, Italic, BulletList, OrderedList, ListItem],
+    content: "",
+    onUpdate: ({ editor }) => {
+      // Update form field value when editor content changes
+      setValue("description", editor.getHTML(), { shouldValidate: true });
     },
   });
 
@@ -159,23 +175,106 @@ export default function CreateForm() {
           />
         </div>
         {/* Description */}
-        <div className="space-y-2">
-          <Label className="font-medium">
-            Description<span className="text-primaryText">*</span>
+        <div>
+          <Label className="font-medium ">
+            Description <span className="text-primaryText">*</span>
           </Label>
+          {/* Toolbar */}
+          <div className="flex gap-2 border-b pb-2 mb-2">
+            {/* Bold */}
+            <Button
+              type="button"
+              onClick={() => editor?.chain().focus().toggleBold().run()}
+              className={`p-1 hover:bg-transparent ${
+                editor?.isActive("bold")
+                  ? "bg-transparent text-foreground"
+                  : "text-gray-300 bg-transparent"
+              }`}
+            >
+              <b>B</b>
+            </Button>
+
+            {/* Italic */}
+            <Button
+              type="button"
+              onClick={() => editor?.chain().focus().toggleItalic().run()}
+              className={`p-1 hover:bg-transparent ${
+                editor?.isActive("italic")
+                  ? "bg-transparent text-foreground"
+                  : "text-gray-300 bg-transparent"
+              }`}
+            >
+              <i>I</i>
+            </Button>
+
+            {/* Bullet List */}
+            <Button
+              type="button"
+              onClick={() => {
+                if (editor?.isActive("orderedList")) {
+                  editor.chain().focus().toggleOrderedList().run(); // Remove ordered list first
+                }
+                editor?.chain().focus().toggleBulletList().run(); // Then toggle bullet list
+              }}
+              className={`p-1 hover:bg-transparent ${
+                editor?.isActive("bulletList")
+                  ? "bg-transparent text-foreground"
+                  : "text-gray-300 bg-transparent"
+              }`}
+            >
+              <FaListUl />
+            </Button>
+
+            {/* Ordered List */}
+            <Button
+              type="button"
+              onClick={() => {
+                if (editor?.isActive("bulletList")) {
+                  editor.chain().focus().toggleBulletList().run(); // Remove bullet list first
+                }
+                editor?.chain().focus().toggleOrderedList().run(); // Then toggle ordered list
+              }}
+              className={`p-1 hover:bg-transparent ${
+                editor?.isActive("orderedList")
+                  ? "bg-transparent text-foreground"
+                  : "text-gray-300 bg-transparent"
+              }`}
+            >
+              <FaListOl />
+            </Button>
+          </div>
+
           <Controller
             name="description"
             control={control}
+            rules={{ required: "Description is required" }}
             render={({ field }) => (
-              <Textarea
-                {...field}
-                placeholder="Enter description..."
-                className="mt-1"
-                rows={3}
-              />
+              <div className="mt-2 border rounded-lg p-2 bg-white min-h-[150px]">
+                <EditorContent
+                  editor={editor}
+                  className="editor-content h-full" // Add a class for custom styling
+                />
+              </div>
             )}
           />
         </div>
+        {/* <div className="space-y-2">
+             <Label className="font-medium">
+               Description<span className="text-primaryText">*</span>
+             </Label>
+             <Controller
+               name="description"
+               control={control}
+               render={({ field }) => (
+                 <Textarea
+                   {...field}
+                   placeholder="Enter description..."
+                   className="mt-1"
+                   rows={3}
+                 />
+               )}
+             />
+           </div> */}
         {/* Image Upload */}
         <Card className="p-0 bg-secondaryBackground gap-0">
           <CardHeader>
@@ -194,7 +293,7 @@ export default function CreateForm() {
                         ? "border-blue-500 bg-blue-50"
                         : "border-gray-300"
                     } 
-                    border-dashed rounded-lg p-6 text-center transition-all bg-secondaryBackground`}
+                       border-dashed rounded-lg p-6 text-center transition-all bg-secondaryBackground`}
                     onDragEnter={handleDragEnter}
                     onDragOver={handleDragOver}
                     onDragLeave={handleDragLeave}

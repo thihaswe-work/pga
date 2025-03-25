@@ -2,7 +2,6 @@ import { ContentLayout } from "@/components/layouts/content-layout";
 import { DataTable } from "@/components/table/data-table";
 import { DeleteDialog, OpenDialog } from "@/components/table/dialog";
 import { getColumns } from "@/features/milestone/components/columns";
-
 import { useMilestones } from "@/features/milestone/api/get-milestones";
 import { useState } from "react";
 import { Milestone } from "@/types/api";
@@ -12,6 +11,7 @@ import { paths } from "@/config/paths";
 import { useNavigate } from "react-router";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
+import { TiptapEditor, Tpp } from "@/features/blog/blogs/components/tiptap";
 
 export default function MilestonePage() {
   const [selectedDetail, setSelectedDetail] = useState<Milestone | null>(null);
@@ -33,6 +33,79 @@ export default function MilestonePage() {
   if (isError)
     return <p className="text-red-500">Failed to fetch milestones.</p>;
   if (!milestones) return <p>no milestones found</p>;
+
+  // const milestones: Milestone[] = [
+  //   {
+  //     id: 1,
+  //     title: "Initial Planning & Research",
+  //     description:
+  //       "Define project goals, gather requirements, and outline the roadmap.",
+  //     status: true,
+  //     timeline: 7,
+  //     link: "#",
+  //     image: "/office.svg",
+  //     icon: "/office.svg",
+  //     colorCode: "#4CAF50",
+  //     createdAt: "2025-03-25",
+  //     updatedAt: "2025-03-25",
+  //   },
+  //   {
+  //     id: 2,
+  //     title: "Configure SQLite & API Structure",
+  //     description:
+  //       "Set up SQLite database and define API endpoints for data access.",
+  //     status: false,
+  //     timeline: 10,
+  //     link: "#",
+  //     image: "/office.svg",
+  //     icon: "/office.svg",
+  //     colorCode: "#2196F3",
+  //     createdAt: "2025-03-25",
+  //     updatedAt: "2025-03-25",
+  //   },
+  //   {
+  //     id: 3,
+  //     title: "Implement Zustand Authentication",
+  //     description:
+  //       "Integrate user authentication using Zustand for state management.",
+  //     status: false,
+  //     timeline: 14,
+  //     link: "#",
+  //     image: "/office.svg",
+  //     icon: "/office.svg",
+  //     colorCode: "#FF9800",
+  //     createdAt: "2025-03-25",
+  //     updatedAt: "2025-03-25",
+  //   },
+  //   {
+  //     id: 4,
+  //     title: "Build Expense Tracking UI",
+  //     description:
+  //       "Develop the front-end interface for adding, editing, and deleting expenses.",
+  //     status: false,
+  //     timeline: 21,
+  //     link: "#",
+  //     image: "/office.svg",
+  //     icon: "/office.svg",
+  //     colorCode: "#E91E63",
+  //     createdAt: "2025-03-25",
+  //     updatedAt: "2025-03-25",
+  //   },
+  //   {
+  //     id: 5,
+  //     title: "Final Testing & App Launch",
+  //     description: "Perform rigorous testing and deploy the app for users.",
+  //     status: false,
+  //     timeline: 30,
+  //     link: "#",
+  //     image: "/office.svg",
+  //     icon: "/office.svg",
+  //     colorCode: "#9C27B0",
+  //     createdAt: "2025-03-25",
+  //     updatedAt: "2025-03-25",
+  //   },
+  // ];
+
   const handleViewClick = (detail: Milestone) => {
     setSelectedDetail(detail);
     setDialogOpen(true);
@@ -41,6 +114,7 @@ export default function MilestonePage() {
     setSelectedDetail(detail);
     setDialogDelete(true);
   };
+  // const [content, setContent] = useState("");
 
   return (
     <ContentLayout
@@ -59,7 +133,7 @@ export default function MilestonePage() {
       <div>
         <DataTable
           columns={getColumns(handleViewClick, handleViewDelete)}
-          data={milestones?.data || []} // Use fetched data
+          data={milestones.data || []} // Use fetched data
           pagination={false}
         />
         {selectedDetail && (
@@ -83,6 +157,8 @@ export default function MilestonePage() {
           </>
         )}
       </div>
+      {/* <TiptapEditor setContent={setContent} />
+      <Tpp content={content} /> */}
     </ContentLayout>
   );
 }
