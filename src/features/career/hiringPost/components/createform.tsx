@@ -23,9 +23,9 @@ import { useNavigate } from "react-router";
 import { useCareerCategories } from "../../categories/api/get-careerCategories";
 import { useRegions } from "../../regions/api/get-regions";
 import { useRelatedFields } from "../../relatedFields/api/get-relatedFields";
+import { useCreateHiringPost } from "../api/create-hiringPost";
 import { useJobTypes } from "../api/get-jobTypes";
 import { useLocations } from "../api/get-locations";
-import { useUpdateHiringPost } from "../api/update-hiringPost";
 export default function CreateForm() {
   const navigate = useNavigate();
   const { data: categories } = useCareerCategories({});
@@ -74,14 +74,14 @@ export default function CreateForm() {
     },
   });
 
-  const updateHiringPostMutation = useUpdateHiringPost({
+  const createHiringPostMutation = useCreateHiringPost({
     mutationConfig: {
       onSuccess: () => {
-        console.log("Update successful!");
+        console.log("create successful!");
         navigate(paths.app.career.hiringPost.root.getHref()); // Navigate after success
       },
       onError: (error) => {
-        console.error("Update failed:", error);
+        console.error("create failed:", error);
       },
     },
   });
@@ -90,7 +90,7 @@ export default function CreateForm() {
   const onSubmit = (formData: any) => {
     console.log("Form Data:", formData);
     console.log(typeof formData.relatedField);
-    updateHiringPostMutation.mutate({
+    createHiringPostMutation.mutate({
       data: {
         categoryId: formData.categoryId,
         relatedFieldId: formData.relatedField,
@@ -105,7 +105,7 @@ export default function CreateForm() {
         responsibility: formData.responsibility,
         benefit: formData?.benefit,
       },
-      id: data.id, // Ensure this value is correct
+      // Ensure this value is correct
     });
   };
 
