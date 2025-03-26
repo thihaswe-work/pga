@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
@@ -98,6 +97,7 @@ export default function EditForm({ data }: Prop) {
     },
     []
   );
+
   const updateBlogMutation = useUpdateBlog({
     mutationConfig: {
       onSuccess: () => {
@@ -254,7 +254,7 @@ export default function EditForm({ data }: Prop) {
             name="description"
             control={control}
             rules={{ required: "Description is required" }}
-            render={({ field }) => (
+            render={() => (
               <div className="mt-2 border rounded-lg p-2 bg-white min-h-[150px]">
                 <EditorContent
                   editor={editor}
@@ -264,23 +264,7 @@ export default function EditForm({ data }: Prop) {
             )}
           />
         </div>
-        {/* <div className="space-y-2">
-          <Label className="font-medium">
-            Description<span className="text-primaryText">*</span>
-          </Label>
-          <Controller
-            name="description"
-            control={control}
-            render={({ field }) => (
-              <Textarea
-                {...field}
-                placeholder="Enter description..."
-                className="mt-1"
-                rows={3}
-              />
-            )}
-          />
-        </div> */}
+
         {/* Image Upload */}
         <Card className="p-0 bg-secondaryBackground gap-0">
           <CardHeader>

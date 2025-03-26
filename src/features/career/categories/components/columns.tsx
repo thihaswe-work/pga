@@ -83,7 +83,7 @@ export const getColumns = (
         const id = row.original.id; // Assuming id name exists in the row data
 
         return (
-          <NavLink to={paths.app.blog.blogs.edit.getHref(id)}>
+          <NavLink to={paths.app.career.categories.edit.getHref(id)}>
             <Button
               variant="ghost"
               className={" text-edit hover:text-edit active:text-edit"}

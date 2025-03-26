@@ -147,19 +147,19 @@
 /* i have to make it in the frontend to show the content properly */
 /* Apply list styling to both the editor and output */
 .editor-content ul,
-.text-active ul {
+.text-active ul,.content ul {
   list-style-type: disc; /* Ensure bullet points for unordered lists */
   padding-left: 20px;  /* Add padding to the left for indentation */
 }
 
 .editor-content ol,
-.text-active ol {
+.text-active ol,.content ol {
   list-style-type: decimal; /* Ensure numbering for ordered lists */
   padding-left: 20px;  /* Add padding to the left for indentation */
 }
 
 .editor-content li,
-.text-active li {
+.text-active li,.content li {
   margin-bottom: 5px; /* Space between list items */
 }
 
@@ -170,7 +170,7 @@
 }
 
 /* Optional: apply same styling to the output area */
-.text-active {
+.text-active ,.content {
   white-space: pre-wrap;
   word-wrap: break-word;
 }

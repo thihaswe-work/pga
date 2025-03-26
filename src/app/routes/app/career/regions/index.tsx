@@ -21,7 +21,7 @@ export default function Page() {
   const useDeleteRegionMutation = useDeleteRegion({
     mutationConfig: {
       onSuccess: () => {
-        navigate(paths.app.blog.categories.root.getHref());
+        navigate(paths.app.career.regions.root.getHref());
         setDialogDelete(false);
         toast("Region Deleted");
       },
@@ -29,7 +29,7 @@ export default function Page() {
   });
 
   if (isLoading) return <Loading />;
-  if (isError) return <p className="text-red-500">Failed to fetch banners.</p>;
+  if (isError) return <p className="text-red-500">Failed to fetch Regions.</p>;
 
   const handleViewClick = (detail: Region) => {
     setSelectedDetail(detail);
@@ -46,10 +46,10 @@ export default function Page() {
         <Button
           className="bg-primaryText hover:bg-red-500 "
           onClick={() => {
-            navigate(paths.app.career.categories.create.getHref());
+            navigate(paths.app.career.regions.create.getHref());
           }}
         >
-          Create New Category
+          Create New Region
         </Button>
       }
     >

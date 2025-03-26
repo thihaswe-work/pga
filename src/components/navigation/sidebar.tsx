@@ -9,7 +9,6 @@ import {
   Home,
   LayoutGrid,
   Mail,
-  MessageCircleMore,
   Trophy,
   WholeWordIcon,
 } from "lucide-react";
@@ -148,11 +147,11 @@ export const SideBar = () => {
         ],
       ],
     },
-    {
-      name: "FeedBack",
-      to: paths.app.feedback.getHref(),
-      icon: MessageCircleMore,
-    },
+    // {
+    //   name: "FeedBack",
+    //   to: paths.app.feedback.getHref(),
+    //   icon: MessageCircleMore,
+    // },
 
     { title: "Maintenance" }, // Added at the end
     {

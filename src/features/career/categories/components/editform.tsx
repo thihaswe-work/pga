@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
@@ -9,19 +9,67 @@ import { CareerCategory } from "@/types/api";
 import { Controller, useForm } from "react-hook-form";
 import { useNavigate } from "react-router";
 import { useUpdateCareerCategory } from "../api/update-careerCategory";
+import { useCallback, useState } from "react";
 interface Prop {
   data: CareerCategory;
 }
 
 export default function EditForm({ data }: Prop) {
   const navigate = useNavigate();
+  const [dragging, setDragging] = useState(false);
 
+  const [imagePreview, setImagePreview] = useState<string | null>(
+    data?.image || null
+  );
   const { control, handleSubmit } = useForm({
     defaultValues: {
       status: data?.status || false,
       name: data?.name || "",
+      image: data.image || null,
     },
   });
+
+  // Handle File Selection
+  const handleImageUpload = (
+    event: React.ChangeEvent<HTMLInputElement>,
+    onChange: (file: File | null) => void
+  ) => {
+    if (event.target.files?.length) {
+      const file = event.target.files[0];
+      console.log(file);
+      onChange(file); // Update form state
+      setImagePreview(URL.createObjectURL(file)); // Show preview
+    }
+  };
+
+  // Drag and Drop Handlers
+  const handleDragEnter = useCallback((event: React.DragEvent) => {
+    event.preventDefault();
+    setDragging(true);
+  }, []);
+
+  const handleDragOver = useCallback((event: React.DragEvent) => {
+    event.preventDefault();
+    setDragging(true);
+  }, []);
+
+  const handleDragLeave = useCallback(() => {
+    setDragging(false);
+  }, []);
+
+  const handleDrop = useCallback(
+    (event: React.DragEvent, onChange: (file: File | null) => void) => {
+      event.preventDefault();
+      setDragging(false);
+
+      if (event.dataTransfer.files.length) {
+        const file = event.dataTransfer.files[0];
+        onChange(file);
+        setImagePreview(URL.createObjectURL(file));
+      }
+    },
+    []
+  );
   const updateCareerCategoryMutation = useUpdateCareerCategory({
     mutationConfig: {
       onSuccess: () => {
@@ -61,6 +109,73 @@ export default function EditForm({ data }: Prop) {
                   id="category"
                   className="border-none focus:ring-0 bg-secondaryBackground"
                 />
+              )}
+            />
+          </CardContent>
+        </Card>
+        <Card className="p-0 bg-secondaryBackground gap-0">
+          <CardHeader>
+            <Label className="font-medium w-full p-6 text-lg">Image</Label>
+          </CardHeader>
+          <CardContent className="bg-background p-6">
+            <Controller
+              name="image"
+              control={control}
+              render={({ field: { onChange } }) => (
+                <>
+                  {/* Drag & Drop Box */}
+                  <div
+                    className={`border-2 ${
+                      dragging
+                        ? "border-blue-500 bg-blue-50"
+                        : "border-gray-300"
+                    } 
+                    border-dashed rounded-lg p-6 text-center transition-all bg-secondaryBackground`}
+                    onDragEnter={handleDragEnter}
+                    onDragOver={handleDragOver}
+                    onDragLeave={handleDragLeave}
+                    onDrop={(event) => handleDrop(event, onChange)}
+                  >
+                    <input
+                      type="file"
+                      className="hidden"
+                      id="fileUpload"
+                      accept="image/*"
+                      onChange={(event) => handleImageUpload(event, onChange)}
+                    />
+                    <label
+                      htmlFor="fileUpload"
+                      className="cursor-pointer text-secondaryText hover:underline"
+                    >
+                      {dragging
+                        ? "Drop your file here"
+                        : "Drag & Drop your files or "}
+                      <span className="text-red-500">Browse</span>
+                    </label>
+                  </div>
+
+                  {/* Image Preview */}
+                  {imagePreview && (
+                    <div className="mt-4 flex flex-col gap-4 bg-black text-white p-2 rounded-md pb-10">
+                      <div>
+                        <Button
+                          size="sm"
+                          onClick={() => {
+                            onChange(null);
+                            setImagePreview(null);
+                          }}
+                        >
+                          X
+                        </Button>
+                      </div>
+                      <img
+                        src={imagePreview}
+                        alt="Preview"
+                        className="w-[368px] h-[86px] rounded-md object-cover mx-auto"
+                      />
+                    </div>
+                  )}
+                </>
               )}
             />
           </CardContent>

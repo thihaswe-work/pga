@@ -1,6 +1,5 @@
 import { Button } from "@/components/ui/button";
 import { paths } from "@/config/paths";
-import { formatDate } from "@/lib/format";
 import { Region } from "@/types/api";
 import { ColumnDef } from "@tanstack/react-table";
 import { FiEdit } from "react-icons/fi";
@@ -18,6 +17,10 @@ export const getColumns = (
       header: "ID",
     },
     {
+      accessorKey: "name",
+      header: () => <div className="text-left">Name</div>,
+    },
+    {
       accessorKey: "image",
       header: () => <div className="text-left">Image</div>,
       cell: ({ row }) => {
@@ -32,29 +35,6 @@ export const getColumns = (
             />
           </div>
         );
-      },
-    },
-    {
-      accessorKey: "name",
-      header: () => <div className="text-left">Name</div>,
-    },
-
-    {
-      accessorKey: "description",
-      header: () => <div className="text-left">Description</div>,
-      cell: ({ row }) => (
-        <div className="overflow-hidden w-32 h-[58px] text-ellipsis text-wrap">
-          {row.getValue("description")}
-        </div>
-      ),
-    },
-
-    {
-      accessorKey: "createdAt",
-      header: () => <div className="text-left">Uploaded Date</div>,
-      cell(props) {
-        const createdate = props.row.getValue("createdAt") as string;
-        return <div>{formatDate(createdate)}</div>;
       },
     },
 
@@ -100,7 +80,7 @@ export const getColumns = (
         const id = row.original.id; // Assuming id name exists in the row data
 
         return (
-          <NavLink to={paths.app.blog.blogs.edit.getHref(id)}>
+          <NavLink to={paths.app.career.regions.edit.getHref(id)}>
             <Button
               variant="ghost"
               className={" text-edit hover:text-edit active:text-edit"}

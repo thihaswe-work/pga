@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { ContentLayout } from "@/components/layouts/content-layout";
 import Loading from "@/components/loading/loading";
 import { DataTable } from "@/components/table/data-table";
@@ -46,9 +45,8 @@ export default function Blogs() {
     },
   });
 
-  if (isLoading && !categories) return <Loading />;
-  if (isError && !categories)
-    return <p className="text-red-500">Failed to fetch banners.</p>;
+  if (isLoading) return <Loading />;
+  if (isError) return <p className="text-red-500">Failed to fetch blogs.</p>;
 
   return (
     <ContentLayout
@@ -70,11 +68,12 @@ export default function Blogs() {
           columns={getColumns(
             handleViewClick,
             handleViewDelete,
-            categories?.data
+            categories?.data ?? []
           )}
-          data={data?.data}
+          data={data?.data ?? []} // Ensuring it's always an array
           pagination={true}
         />
+
         {selectedDetail && (
           <>
             <BlogDialog

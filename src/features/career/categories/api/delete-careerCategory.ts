@@ -9,7 +9,7 @@ export const deleteCareerCategory = ({
 }: {
   CareerCategoryId: number;
 }) => {
-  return api.delete(`/CareerCategory/${CareerCategoryId}`);
+  return api.delete(`/categories/${CareerCategoryId}`);
 };
 
 type UseDeleteCareerCategoryOptions = {

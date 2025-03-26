@@ -8,6 +8,7 @@ import { getRegionQueryOptions } from "./get-region";
 
 export const updateRegionInputSchema = z.object({
   status: z.boolean(),
+  image: z.any().nullable(),
   name: z.string(),
 });
 export type UpdateRegionInput = z.infer<typeof updateRegionInputSchema>;
@@ -21,7 +22,7 @@ export const updateRegion = async ({
 }): Promise<Region> => {
   try {
     console.log("Updating Region with Data:", data); // Log the data
-    const response = await api.put(`/Region/${id}`, data, {
+    const response = await api.put(`/regions/${id}`, data, {
       headers: {
         "Content-Type": "multipart/form-data",
       },

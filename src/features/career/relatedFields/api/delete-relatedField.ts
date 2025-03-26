@@ -9,7 +9,7 @@ export const deleteRelatedField = ({
 }: {
   RelatedFieldId: number;
 }) => {
-  return api.delete(`/RelatedField/${RelatedFieldId}`);
+  return api.delete(`/related-field/${RelatedFieldId}`);
 };
 
 type UseDeleteRelatedFieldOptions = {

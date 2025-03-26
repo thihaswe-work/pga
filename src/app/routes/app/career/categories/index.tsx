@@ -1,12 +1,11 @@
-/* eslint-disable react-hooks/rules-of-hooks */
 import { ContentLayout } from "@/components/layouts/content-layout";
 import Loading from "@/components/loading/loading";
 import { DataTable } from "@/components/table/data-table";
 import { DeleteDialog, OpenDialog } from "@/components/table/dialog";
 import { Button } from "@/components/ui/button";
 import { paths } from "@/config/paths";
-import { useDeleteBlogCategory } from "@/features/blog/categories/api/delete-blogCategory";
-import { useBlogCategories } from "@/features/blog/categories/api/get-blogCategories";
+import { useDeleteCareerCategory } from "@/features/career/categories/api/delete-careerCategory";
+import { useCareerCategories } from "@/features/career/categories/api/get-careerCategories";
 import { getColumns } from "@/features/career/categories/components/columns";
 
 import { CareerCategory } from "@/types/api";
@@ -21,11 +20,11 @@ export default function CategoryPage() {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [dialogDelete, setDialogDelete] = useState(false);
   const navigate = useNavigate();
-  const { data, isLoading, isError } = useBlogCategories({});
-  const deleteBlogCategoryMutation = useDeleteBlogCategory({
+  const { data, isLoading, isError } = useCareerCategories({});
+  const deleteCareerCategoryMutation = useDeleteCareerCategory({
     mutationConfig: {
       onSuccess: () => {
-        navigate(paths.app.blog.categories.root.getHref());
+        navigate(paths.app.career.categories.root.getHref());
         setDialogDelete(false);
         toast("Category Deleted");
       },
@@ -33,7 +32,8 @@ export default function CategoryPage() {
   });
 
   if (isLoading) return <Loading />;
-  if (isError) return <p className="text-red-500">Failed to fetch banners.</p>;
+  if (isError)
+    return <p className="text-red-500">Failed to fetch Categories.</p>;
 
   const handleViewClick = (detail: CareerCategory) => {
     setSelectedDetail(detail);
@@ -71,7 +71,7 @@ export default function CategoryPage() {
               detail={selectedDetail}
               open={dialogOpen}
               setOpen={setDialogOpen}
-              navlink={paths.app.blog.categories.edit.getHref(
+              navlink={paths.app.career.categories.edit.getHref(
                 selectedDetail.id
               )}
             />
@@ -80,8 +80,8 @@ export default function CategoryPage() {
               open={dialogDelete}
               setOpen={setDialogDelete}
               deleteFunc={() => {
-                deleteBlogCategoryMutation.mutate({
-                  blogCategoryId: selectedDetail.id,
+                deleteCareerCategoryMutation.mutate({
+                  CareerCategoryId: selectedDetail.id,
                 });
               }}
             />

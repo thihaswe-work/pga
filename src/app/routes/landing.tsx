@@ -32,8 +32,7 @@ const LandingRoute = () => {
             <div className="inline-flex rounded-md shadow">
               <Button
                 onClick={() => {
-                  // handleStart();
-                  navigate(paths.app.dashboard.getHref());
+                  handleStart();
                 }}
                 icon={
                   <svg

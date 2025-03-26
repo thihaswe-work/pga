@@ -1,3 +1,4 @@
+/* eslint-disable react-refresh/only-export-components */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { QueryClient, useQueryClient } from "@tanstack/react-query";
 import { useMemo } from "react";
@@ -97,11 +98,7 @@ export const createAppRouter = (queryClient: QueryClient) =>
           lazy: () =>
             import("./routes/app/banner/create").then(convert(queryClient)),
         },
-        {
-          path: paths.app.feedback.path,
-          lazy: () =>
-            import("./routes/app/feedback/feedback").then(convert(queryClient)),
-        },
+
         {
           path: paths.app.milestone.root.path,
           lazy: () =>
@@ -119,11 +116,7 @@ export const createAppRouter = (queryClient: QueryClient) =>
           lazy: () =>
             import("./routes/app/milestone/edit").then(convert(queryClient)),
         },
-        {
-          path: paths.app.feedback.path,
-          lazy: () =>
-            import("./routes/app/feedback/feedback").then(convert(queryClient)),
-        },
+
         {
           path: paths.app.blog.categories.root.path,
           lazy: () =>
@@ -168,9 +161,37 @@ export const createAppRouter = (queryClient: QueryClient) =>
             ),
         },
         {
+          path: paths.app.career.categories.create.path,
+          lazy: () =>
+            import("./routes/app/career/categories/create").then(
+              convert(queryClient)
+            ),
+        },
+        {
+          path: paths.app.career.categories.edit.path,
+          lazy: () =>
+            import("./routes/app/career/categories/edit").then(
+              convert(queryClient)
+            ),
+        },
+        {
           path: paths.app.career.relatedFields.root.path,
           lazy: () =>
             import("./routes/app/career/relatedFields/index").then(
+              convert(queryClient)
+            ),
+        },
+        {
+          path: paths.app.career.relatedFields.create.path,
+          lazy: () =>
+            import("./routes/app/career/relatedFields/create").then(
+              convert(queryClient)
+            ),
+        },
+        {
+          path: paths.app.career.relatedFields.edit.path,
+          lazy: () =>
+            import("./routes/app/career/relatedFields/edit").then(
               convert(queryClient)
             ),
         },
@@ -182,18 +203,41 @@ export const createAppRouter = (queryClient: QueryClient) =>
             ),
         },
         {
+          path: paths.app.career.regions.create.path,
+          lazy: () =>
+            import("./routes/app/career/regions/create").then(
+              convert(queryClient)
+            ),
+        },
+        {
+          path: paths.app.career.regions.edit.path,
+          lazy: () =>
+            import("./routes/app/career/regions/edit").then(
+              convert(queryClient)
+            ),
+        },
+        {
           path: paths.app.career.hiringPost.root.path,
           lazy: () =>
             import("./routes/app/career/hiringPost/index").then(
               convert(queryClient)
             ),
         },
-
         {
-          path: paths.app.feedback.path,
+          path: paths.app.career.hiringPost.create.path,
           lazy: () =>
-            import("./routes/app/feedback/feedback").then(convert(queryClient)),
+            import("./routes/app/career/hiringPost/create").then(
+              convert(queryClient)
+            ),
         },
+        {
+          path: paths.app.career.hiringPost.edit.path,
+          lazy: () =>
+            import("./routes/app/career/hiringPost/edit").then(
+              convert(queryClient)
+            ),
+        },
+
         {
           path: paths.app.roleAndPermission.path,
           lazy: () =>

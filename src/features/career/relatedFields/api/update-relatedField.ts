@@ -23,11 +23,7 @@ export const updateRelatedField = async ({
 }): Promise<RelatedField> => {
   try {
     console.log("Updating RelatedField with Data:", data); // Log the data
-    const response = await api.put(`/RelatedField/${id}`, data, {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    });
+    const response = await api.put(`/related-field/${id}`, data, {});
     console.log("Response:", response.data);
     return response.data;
   } catch (error) {

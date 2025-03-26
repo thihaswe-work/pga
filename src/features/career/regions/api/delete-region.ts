@@ -5,7 +5,7 @@ import { MutationConfig } from "@/lib/react-query";
 import { getRegionsQueryOptions } from "./get-regions";
 
 export const deleteRegion = ({ RegionId }: { RegionId: number }) => {
-  return api.delete(`/Region/${RegionId}`);
+  return api.delete(`/regions/${RegionId}`);
 };
 
 type UseDeleteRegionOptions = {

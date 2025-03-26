@@ -10,7 +10,7 @@ export const getRelatedField = ({
 }: {
   id: number;
 }): Promise<{ data: RelatedField }> => {
-  return api.get(`/RelatedField/${id}`);
+  return api.get(`/related-field/${id}`);
 };
 
 export const getRelatedFieldQueryOptions = (id: number) => {

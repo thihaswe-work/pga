@@ -21,11 +21,7 @@ export const createRelatedField = ({
 }: {
   data: CreateRelatedFieldInput;
 }): Promise<RelatedField> => {
-  return api.post(`/RelatedField`, data, {
-    headers: {
-      "Content-Type": "multipart/form-data",
-    },
-  });
+  return api.post(`/related-field`, data, {});
 };
 
 type UseCreateRelatedFieldOptions = {

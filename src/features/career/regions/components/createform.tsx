@@ -25,7 +25,7 @@ export default function CreateForm() {
       onSuccess: () => {
         toast("Region Created");
         console.log("create successful!");
-        navigate(paths.app.career.categories.root.getHref()); // Navigate after success
+        navigate(paths.app.career.regions.root.getHref()); // Navigate after success
       },
       onError: (error) => {
         console.error("create failed:", error);

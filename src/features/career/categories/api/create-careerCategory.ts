@@ -21,7 +21,7 @@ export const createCareerCategory = ({
 }: {
   data: CreateCareerCategoryInput;
 }): Promise<CareerCategory> => {
-  return api.post(`/CareerCategory`, data, {
+  return api.post(`/categories`, data, {
     headers: {
       "Content-Type": "multipart/form-data",
     },

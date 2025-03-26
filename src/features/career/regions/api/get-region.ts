@@ -10,7 +10,7 @@ export const getRegion = ({
 }: {
   id: number;
 }): Promise<{ data: Region }> => {
-  return api.get(`/Region/${id}`);
+  return api.get(`/regions/${id}`);
 };
 
 export const getRegionQueryOptions = (id: number) => {

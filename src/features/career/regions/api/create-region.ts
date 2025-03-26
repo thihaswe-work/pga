@@ -9,6 +9,7 @@ import { getRegionsQueryOptions } from "./get-regions";
 
 export const createRegionInputSchema = z.object({
   status: z.boolean(),
+  image: z.any().nullable(),
   name: z.string().min(1, "required"),
 });
 
@@ -19,7 +20,7 @@ export const createRegion = ({
 }: {
   data: CreateRegionInput;
 }): Promise<Region> => {
-  return api.post(`/Region`, data, {
+  return api.post(`/regions`, data, {
     headers: {
       "Content-Type": "multipart/form-data",
     },

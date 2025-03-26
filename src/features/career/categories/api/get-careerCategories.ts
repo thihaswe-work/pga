@@ -5,7 +5,7 @@ import { api } from "@/lib/api-client";
 import { QueryConfig } from "@/lib/react-query";
 
 export const getCareerCategories = () => {
-  return api.get(`/CareerCategory`);
+  return api.get(`/categories`);
 };
 
 export const getCareerCategoriesQueryOptions = () => {

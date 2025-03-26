@@ -4,24 +4,24 @@ import { api } from "@/lib/api-client";
 
 import { QueryConfig } from "@/lib/react-query";
 
-export const getRegions = () => {
-  return api.get(`/CareerCategory`);
+export const getHiringPosts = () => {
+  return api.get(`/hiringpost`);
 };
 
-export const getRegionsQueryOptions = () => {
+export const getHiringPostsQueryOptions = () => {
   return queryOptions({
-    queryKey: ["Regions"],
-    queryFn: () => getRegions(),
+    queryKey: ["HiringPosts"],
+    queryFn: () => getHiringPosts(),
   });
 };
 
-type UseRegionsOptions = {
-  queryConfig?: QueryConfig<typeof getRegionsQueryOptions>;
+type UseHiringPostsOptions = {
+  queryConfig?: QueryConfig<typeof getHiringPostsQueryOptions>;
 };
 
-export const useRegions = ({ queryConfig }: UseRegionsOptions) => {
+export const useHiringPosts = ({ queryConfig }: UseHiringPostsOptions) => {
   return useQuery({
-    ...getRegionsQueryOptions(),
+    ...getHiringPostsQueryOptions(),
     staleTime: 0, // Ensures data is always considered "stale" and refetched
     refetchOnMount: true, // Refetches when the component mounts
     refetchOnWindowFocus: false,

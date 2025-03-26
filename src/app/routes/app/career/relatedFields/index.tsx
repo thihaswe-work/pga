@@ -31,7 +31,8 @@ export default function Page() {
   });
 
   if (isLoading) return <Loading />;
-  if (isError) return <p className="text-red-500">Failed to fetch banners.</p>;
+  if (isError)
+    return <p className="text-red-500">Failed to fetch relatedField.</p>;
 
   const handleViewClick = (detail: RelatedField) => {
     setSelectedDetail(detail);

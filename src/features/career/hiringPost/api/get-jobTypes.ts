@@ -4,24 +4,24 @@ import { api } from "@/lib/api-client";
 
 import { QueryConfig } from "@/lib/react-query";
 
-export const getRelatedFields = () => {
-  return api.get(`/related-field`);
+export const getJobTypes = () => {
+  return api.get(`/jobtype`);
 };
 
-export const getRelatedFieldsQueryOptions = () => {
+export const getJobTypesQueryOptions = () => {
   return queryOptions({
-    queryKey: ["RelatedFields"],
-    queryFn: () => getRelatedFields(),
+    queryKey: ["JobTypes"],
+    queryFn: () => getJobTypes(),
   });
 };
 
-type UseRelatedFieldsOptions = {
-  queryConfig?: QueryConfig<typeof getRelatedFieldsQueryOptions>;
+type UseJobTypesOptions = {
+  queryConfig?: QueryConfig<typeof getJobTypesQueryOptions>;
 };
 
-export const useRelatedFields = ({ queryConfig }: UseRelatedFieldsOptions) => {
+export const useJobTypes = ({ queryConfig }: UseJobTypesOptions) => {
   return useQuery({
-    ...getRelatedFieldsQueryOptions(),
+    ...getJobTypesQueryOptions(),
     staleTime: 0, // Ensures data is always considered "stale" and refetched
     refetchOnMount: true, // Refetches when the component mounts
     refetchOnWindowFocus: false,

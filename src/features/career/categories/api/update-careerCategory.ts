@@ -23,7 +23,7 @@ export const updateCareerCategory = async ({
 }): Promise<CareerCategory> => {
   try {
     console.log("Updating CareerCategory with Data:", data); // Log the data
-    const response = await api.put(`/CareerCategory/${id}`, data, {
+    const response = await api.put(`/categories/${id}`, data, {
       headers: {
         "Content-Type": "multipart/form-data",
       },

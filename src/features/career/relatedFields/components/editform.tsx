@@ -27,7 +27,7 @@ export default function EditForm({ data }: Prop) {
     mutationConfig: {
       onSuccess: () => {
         console.log("Update successful!");
-        navigate(paths.app.blog.categories.root.getHref()); // Navigate after success
+        navigate(paths.app.career.relatedFields.root.getHref()); // Navigate after success
       },
       onError: (error) => {
         console.error("Update failed:", error);
@@ -99,7 +99,9 @@ export default function EditForm({ data }: Prop) {
           </Button>
           <Button
             variant="outline"
-            onClick={() => navigate(paths.app.blog.categories.root.getHref())}
+            onClick={() =>
+              navigate(paths.app.career.relatedFields.root.getHref())
+            }
           >
             Cancel
           </Button>

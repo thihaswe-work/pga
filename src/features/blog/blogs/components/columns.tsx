@@ -9,6 +9,9 @@ import { paths } from "@/config/paths";
 import { Blog, BlogCategory } from "@/types/api";
 import { formatDate } from "@/lib/format";
 
+const formatOutputContent = (html: string) => {
+  return html.replace(/<p><\/p>/g, "<p>&nbsp;</p>"); // Replace empty paragraphs with a non-breaking space (or use <br />)
+};
 export const getColumns = (
   onViewClick: (detail: Blog) => void,
   onViewDelete: (detail: Blog) => void,
@@ -67,9 +70,17 @@ export const getColumns = (
       accessorKey: "description",
       header: () => <div className="text-left">Description</div>,
       cell: ({ row }) => (
-        <div className="overflow-hidden w-32 h-[58px] text-ellipsis text-wrap">
-          {row.getValue("description")}
-        </div>
+        <div
+          className="overflow-hidden w-32 h-[58px] text-ellipsis text-wrap content"
+          style={{
+            whiteSpace: "pre-wrap", // Preserve spaces and line breaks
+            wordBreak: "break-word", // Prevent long words from overflowing
+            minHeight: "100px", // Ensure the div has a defined height
+          }}
+          dangerouslySetInnerHTML={{
+            __html: formatOutputContent(row.getValue("description")),
+          }}
+        />
       ),
     },
 

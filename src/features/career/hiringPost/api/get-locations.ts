@@ -4,24 +4,24 @@ import { api } from "@/lib/api-client";
 
 import { QueryConfig } from "@/lib/react-query";
 
-export const getRelatedFields = () => {
-  return api.get(`/related-field`);
+export const getLocations = () => {
+  return api.get(`/location`);
 };
 
-export const getRelatedFieldsQueryOptions = () => {
+export const getLocationsQueryOptions = () => {
   return queryOptions({
-    queryKey: ["RelatedFields"],
-    queryFn: () => getRelatedFields(),
+    queryKey: ["Locations"],
+    queryFn: () => getLocations(),
   });
 };
 
-type UseRelatedFieldsOptions = {
-  queryConfig?: QueryConfig<typeof getRelatedFieldsQueryOptions>;
+type UseLocationsOptions = {
+  queryConfig?: QueryConfig<typeof getLocationsQueryOptions>;
 };
 
-export const useRelatedFields = ({ queryConfig }: UseRelatedFieldsOptions) => {
+export const useLocations = ({ queryConfig }: UseLocationsOptions) => {
   return useQuery({
-    ...getRelatedFieldsQueryOptions(),
+    ...getLocationsQueryOptions(),
     staleTime: 0, // Ensures data is always considered "stale" and refetched
     refetchOnMount: true, // Refetches when the component mounts
     refetchOnWindowFocus: false,

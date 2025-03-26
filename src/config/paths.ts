@@ -209,6 +209,20 @@ export const paths = {
             return "/app/career/regions";
           },
         },
+        edit: {
+          // name: "career",
+          path: "career/regions/:id/edit",
+          getHref: (id: string | number) => {
+            return `/app/career/regions/${id}/edit`;
+          },
+        },
+        create: {
+          // name: "career",
+          path: "career/regions/create",
+          getHref: () => {
+            return "/app/career/regions/create";
+          },
+        },
       },
       hiringPost: {
         root: {
@@ -217,15 +231,29 @@ export const paths = {
             return "/app/career/hiring-post";
           },
         },
+        edit: {
+          // name: "career",
+          path: "career/hiring-post/:id/edit",
+          getHref: (id: string | number) => {
+            return `/app/career/hiring-post/${id}/edit`;
+          },
+        },
+        create: {
+          // name: "career",
+          path: "career/hiring-post/create",
+          getHref: () => {
+            return "/app/career/hiring-post/create";
+          },
+        },
       },
     },
-    feedback: {
-      // name: "Banner",
-      path: "feedback",
-      getHref: () => {
-        return "/app/feedback";
-      },
-    },
+    // feedback: {
+    //   // name: "Banner",
+    //   path: "feedback",
+    //   getHref: () => {
+    //     return "/app/feedback";
+    //   },
+    // },
     roleAndPermission: {
       // name: "Banner",
       path: "role-and-permission",

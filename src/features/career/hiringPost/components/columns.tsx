@@ -1,74 +1,71 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { ColumnDef } from "@tanstack/react-table";
 import { Button } from "@/components/ui/button";
-import { NavLink } from "react-router";
-import { FiEdit } from "react-icons/fi";
-import { TbEye } from "react-icons/tb";
-import { RiDeleteBin6Line } from "react-icons/ri";
 import { paths } from "@/config/paths";
-import { Blog, BlogCategory } from "@/types/api";
 import { formatDate } from "@/lib/format";
+import { HiringPost } from "@/types/api";
+import { ColumnDef } from "@tanstack/react-table";
+import { FiEdit } from "react-icons/fi";
+import { RiDeleteBin6Line } from "react-icons/ri";
+import { TbEye } from "react-icons/tb";
+import { NavLink } from "react-router";
 
 export const getColumns = (
-  onViewClick: (detail: Blog) => void,
-  onViewDelete: (detail: Blog) => void,
-  categories: BlogCategory[]
-): ColumnDef<Blog>[] => {
+  onViewClick: (detail: HiringPost) => void,
+  onViewDelete: (detail: HiringPost) => void
+): ColumnDef<HiringPost>[] => {
   return [
     {
-      accessorKey: "id",
-      header: "ID",
+      accessorKey: "jobID",
+      header: "Job Id",
     },
     {
-      accessorKey: "image",
+      accessorKey: "region.image", // This doesn't work directly, so use cell rendering
       header: () => <div className="text-left">Image</div>,
       cell: ({ row }) => {
-        const image = row.getValue("image") as string;
+        const region = row.original.region; // Get the region object
+        const image = region?.image; // Extract the image URL
 
         return (
-          <div className="px-4 py-3 w-[213px]">
-            <img
-              className="w-[180px] h-[43px] object-cover"
-              src={image}
-              alt="image"
-            />
+          <div className="px-4 py-3 w-[84px]">
+            {image ? (
+              <img
+                className="w-[36px] h-[24px] object-cover"
+                src={image}
+                alt="Region Image"
+              />
+            ) : (
+              <span>No Image</span>
+            )}
           </div>
         );
       },
     },
     {
-      accessorKey: "title",
-      header: () => <div className="text-left">Title</div>,
-    },
-    {
-      accessorKey: "categoryId",
-      header: () => <div className="text-left">Category</div>,
-      accessorFn: (row) =>
-        categories.find((c) => c.id === row.categoryId)?.name || "Unknown",
+      accessorKey: "position",
+      header: () => <div className="text-left">Position Name</div>,
     },
 
     {
-      accessorKey: "description",
-      header: () => <div className="text-left">Description</div>,
-      cell: ({ row }) => (
-        <div className="overflow-hidden w-32 h-[58px] text-ellipsis text-wrap">
-          {row.getValue("description")}
-        </div>
-      ),
+      accessorKey: "location.name",
+      header: () => <div className="text-left">Location</div>,
+    },
+    {
+      accessorKey: "jobType.name",
+      header: () => <div className="text-left">JobType</div>,
     },
 
     {
-      accessorKey: "createdAt",
-      header: () => <div className="text-left">Uploaded Date</div>,
+      accessorKey: "jobClose",
+      header: () => <div className="text-left">Close Date</div>,
       cell(props) {
-        const createdate = props.row.getValue("createdAt") as string;
+        const createdate = props.row.getValue("jobClose") as string;
         return <div>{formatDate(createdate)}</div>;
       },
     },
 
     {
       accessorKey: "status",
-      header: ({ table }) => {
+      header: () => {
         return <div className="text-left">Status</div>;
       },
       cell(props) {
@@ -108,7 +105,7 @@ export const getColumns = (
         const id = row.original.id; // Assuming id name exists in the row data
 
         return (
-          <NavLink to={paths.app.blog.blogs.edit.getHref(id)}>
+          <NavLink to={paths.app.career.hiringPost.edit.getHref(id)}>
             <Button
               variant="ghost"
               className={" text-edit hover:text-edit active:text-edit"}
@@ -122,8 +119,6 @@ export const getColumns = (
     {
       id: "delete",
       cell: ({ row }) => {
-        const id = row.original.id; // Assuming id name exists in the row data
-
         return (
           <Button
             variant="ghost"

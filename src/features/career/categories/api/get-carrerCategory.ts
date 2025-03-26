@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useQuery, queryOptions } from "@tanstack/react-query";
 
 import { api } from "@/lib/api-client";
@@ -10,7 +9,7 @@ export const getCareerCategory = ({
 }: {
   id: number;
 }): Promise<{ data: CareerCategory }> => {
-  return api.get(`/CareerCategory/${id}`);
+  return api.get(`/categories/${id}`);
 };
 
 export const getCareerCategoryQueryOptions = (id: number) => {
