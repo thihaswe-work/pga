@@ -46,7 +46,7 @@ export default function CreateForm() {
     <div className="flex w-full gap-8">
       <div className="max-w-[628px] space-y-6 w-full p-6 bg-background rounded-md">
         <Label htmlFor="category" className="font-semibold">
-          Region Name <span className="text-red-500">*</span>
+          Name <span className="text-red-500">*</span>
         </Label>
         <Card className="border border-gray-300 rounded-md">
           <CardContent className="p-2 px-4">

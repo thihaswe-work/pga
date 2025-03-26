@@ -49,7 +49,7 @@ export default function Page() {
         <Button
           className="bg-primaryText hover:bg-red-500 "
           onClick={() => {
-            navigate(paths.app.career.categories.create.getHref());
+            navigate(paths.app.career.relatedFields.create.getHref());
           }}
         >
           Create New RelatedField

@@ -56,7 +56,7 @@ export default function EditForm({ data }: Prop) {
   });
   const require = useEditor({
     extensions: [StarterKit, BulletList, OrderedList, ListItem],
-    content: data.description,
+    content: data.requirement,
     onUpdate: ({ editor }) => {
       // Update form field value when editor content changes
       setValue("requirement", editor.getHTML(), { shouldValidate: true });
@@ -64,7 +64,7 @@ export default function EditForm({ data }: Prop) {
   });
   const respon = useEditor({
     extensions: [StarterKit, BulletList, OrderedList, ListItem],
-    content: data.description,
+    content: data.responsibility,
     onUpdate: ({ editor }) => {
       // Update form field value when editor content changes
       setValue("responsibility", editor.getHTML(), { shouldValidate: true });
@@ -72,7 +72,7 @@ export default function EditForm({ data }: Prop) {
   });
   const bene = useEditor({
     extensions: [StarterKit, BulletList, OrderedList, ListItem],
-    content: data.description,
+    content: data.benefit,
     onUpdate: ({ editor }) => {
       // Update form field value when editor content changes
       setValue("benefit", editor.getHTML(), { shouldValidate: true });
