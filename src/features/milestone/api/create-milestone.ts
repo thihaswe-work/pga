@@ -25,7 +25,7 @@ export const createMilestone = ({
 }: {
   data: CreateMilestoneInput;
 }): Promise<Milestone> => {
-  return api.post(`/Milestone`, data, {
+  return api.post(`/milestones`, data, {
     headers: {
       "Content-Type": "multipart/form-data",
     },

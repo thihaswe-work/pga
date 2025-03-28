@@ -87,7 +87,7 @@ export const SideBar = () => {
     { name: "Home Page", to: paths.app.home.root.getHref(), icon: Home },
     {
       name: "About Us",
-      to: paths.app.aboutus.getHref(),
+      to: paths.app.aboutus.root.getHref(),
       icon: HiOutlineUserGroup,
     },
     {
@@ -95,7 +95,6 @@ export const SideBar = () => {
       to: paths.app.milestone.root.getHref(),
       icon: Trophy,
     },
-
     {
       name: "Blog",
       icon: BookOpenText,

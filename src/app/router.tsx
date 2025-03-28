@@ -79,9 +79,14 @@ export const createAppRouter = (queryClient: QueryClient) =>
             import("./routes/app/home/edit").then(convert(queryClient)),
         },
         {
-          path: paths.app.aboutus.path,
+          path: paths.app.aboutus.root.path,
           lazy: () =>
-            import("./routes/app/aboutus/aboutus").then(convert(queryClient)),
+            import("./routes/app/aboutus/index").then(convert(queryClient)),
+        },
+        {
+          path: paths.app.aboutus.edit.path,
+          lazy: () =>
+            import("./routes/app/aboutus/edit").then(convert(queryClient)),
         },
         {
           path: paths.app.banner.root.path,

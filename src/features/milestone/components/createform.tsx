@@ -2,19 +2,17 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable react-hooks/rules-of-hooks */
 import { Button } from "@/components/ui/button";
-import { Switch } from "@/components/ui/switch";
-import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import { useCallback, useState } from "react";
-import { useNavigate } from "react-router";
-import { paths } from "@/config/paths";
-import { useMilestones } from "../api/get-milestones";
-import Loading from "@/components/loading/loading";
-import { Controller, useForm } from "react-hook-form";
-import { useCreateMilestone } from "../api/create-milestone";
-import { toast } from "sonner";
 import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Switch } from "@/components/ui/switch";
 import { Textarea } from "@/components/ui/textarea";
+import { paths } from "@/config/paths";
+import { useCallback, useState } from "react";
+import { Controller, useForm } from "react-hook-form";
+import { useNavigate } from "react-router";
+import { toast } from "sonner";
+import { useCreateMilestone } from "../api/create-milestone";
 
 export default function CreateForm() {
   const navigate = useNavigate();
@@ -39,15 +37,15 @@ export default function CreateForm() {
       colorCode: "",
     },
   });
-
+  console.log("image", imagePreview, "icon", iconPreview);
   const handleIconUpload = (
     event: React.ChangeEvent<HTMLInputElement>,
     onChange: (file: File | null) => void
   ) => {
     if (event.target.files?.length) {
       const file = event.target.files[0];
-      onChange(file); // Update form state
-      setIconPreview(URL.createObjectURL(file)); // Show preview
+      onChange(file);
+      setIconPreview(URL.createObjectURL(file)); // Ensure icon preview is updated
     }
   };
 
@@ -73,11 +71,12 @@ export default function CreateForm() {
       if (event.dataTransfer.files.length) {
         const file = event.dataTransfer.files[0];
         onChange(file);
-        setImagePreview(URL.createObjectURL(file));
+        setIconPreview(URL.createObjectURL(file)); // Ensure iconPreview is updated correctly
       }
     },
     []
   );
+
   // Drag and Drop Handlers
   // Handle File Selection
   const handleImageUpload = (
@@ -313,12 +312,12 @@ export default function CreateForm() {
                     <input
                       type="file"
                       className="hidden"
-                      id="fileUpload"
+                      id="iconUpload" // Ensure this is different from the image input
                       accept="image/*"
-                      onChange={(event) => handleIconUpload(event, onChange)}
+                      onChange={(event) => handleIconUpload(event, onChange)} // Ensure this is calling the correct function
                     />
                     <label
-                      htmlFor="fileUpload"
+                      htmlFor="iconUpload" // Use correct label reference
                       className="cursor-pointer text-secondaryText hover:underline"
                     >
                       {draggingIcon

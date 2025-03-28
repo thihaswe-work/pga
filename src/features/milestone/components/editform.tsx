@@ -30,7 +30,7 @@ export default function EditForm({ data }: Prop) {
   const { control, handleSubmit } = useForm({
     defaultValues: {
       title: data?.title || "",
-      colorCode: data.colorCode || "",
+      colorCode: data?.colorCode || "",
       description: data?.description || "",
       status: data?.status || false,
       timeline: data?.timeline || 0,
@@ -73,12 +73,12 @@ export default function EditForm({ data }: Prop) {
       if (event.dataTransfer.files.length) {
         const file = event.dataTransfer.files[0];
         onChange(file);
-        setImagePreview(URL.createObjectURL(file));
+        setIconPreview(URL.createObjectURL(file));
       }
     },
     []
   );
-  // Drag and Drop Handlers
+
   // Handle File Selection
   const handleImageUpload = (
     event: React.ChangeEvent<HTMLInputElement>,
@@ -132,7 +132,7 @@ export default function EditForm({ data }: Prop) {
 
   // Form Submission
   const onSubmit = (formData: any) => {
-    console.log("Submitting Form Data:", formData);
+    console.log("Submitting Form Data:", formData, data.id);
     updateMilestoneMutation.mutate({
       data: {
         colorCode: formData.colorCode,

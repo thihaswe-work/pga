@@ -59,10 +59,18 @@ export const paths = {
       },
     },
     aboutus: {
-      // name: "About Us",
-      path: "about-us",
-      getHref: () => {
-        return "/app/about-us";
+      root: {
+        // name: "Home Page",
+        path: "about-us",
+        getHref: () => {
+          return "/app/about-us";
+        },
+      },
+      edit: {
+        path: "about-us/:section/edit",
+        getHref: (section: string) => {
+          return `/app/about-us/${section}/edit`;
+        },
       },
     },
     milestone: {

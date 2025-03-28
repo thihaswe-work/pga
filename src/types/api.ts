@@ -61,6 +61,17 @@ export type Home = {
   createdAt: string;
   updatedAt: string;
 };
+export type AboutUs = {
+  id: number;
+  sectionType: string;
+  image?: string[];
+  header: string;
+  label: string;
+  description: string;
+  status: boolean;
+  createdAt: string;
+  updatedAt: string;
+};
 
 export type Banner = {
   id: number;
