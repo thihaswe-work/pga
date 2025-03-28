@@ -22,14 +22,14 @@ export const getColumns = (
     },
     {
       accessorKey: "image",
-      header: () => <div className="text-left">Image</div>,
+      header: () => <div className="text-center px-4 w-[213px]">Image</div>,
       cell: ({ row }) => {
         const image = row.getValue("image") as string;
 
         return (
           <div className="px-4 py-3 w-[213px]">
             <img
-              className="w-[180px] h-[43px] object-cover"
+              className="w-[100px] h-[43px] object-contain mx-auto"
               src={image}
               alt="image"
             />

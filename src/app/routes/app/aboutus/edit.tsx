@@ -54,7 +54,6 @@ export default function EditPage() {
             </TabsContent>
           </div>
         </Tabs>
-        <EditForm data={AboutUs?.data as AboutUs} />
       </div>
     </ContentLayout>
   );
