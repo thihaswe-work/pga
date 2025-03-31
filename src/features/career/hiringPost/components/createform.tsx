@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { format } from "date-fns";
 import { Label } from "@/components/ui/label";
 import {
   Select,
@@ -8,6 +9,7 @@ import {
   SelectItem,
   SelectTrigger,
 } from "@/components/ui/select";
+
 import { Switch } from "@/components/ui/switch";
 import { paths } from "@/config/paths";
 import BulletList from "@tiptap/extension-bullet-list";
@@ -26,6 +28,14 @@ import { useRelatedFields } from "../../relatedFields/api/get-relatedFields";
 import { useCreateHiringPost } from "../api/create-hiringPost";
 import { useJobTypes } from "../api/get-jobTypes";
 import { useLocations } from "../api/get-locations";
+import { toast } from "sonner";
+import { CalendarIcon } from "lucide-react";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { Calendar } from "@/components/ui/calendar";
 export default function CreateForm() {
   const navigate = useNavigate();
   const { data: categories } = useCareerCategories({});
@@ -42,7 +52,7 @@ export default function CreateForm() {
       position: "",
       location: "",
       jobType: "",
-      closeDate: "",
+      jobClose: "",
       description: "",
       requirement: "",
       responsibility: "",
@@ -77,6 +87,7 @@ export default function CreateForm() {
   const createHiringPostMutation = useCreateHiringPost({
     mutationConfig: {
       onSuccess: () => {
+        toast("Hiring Post created");
         console.log("create successful!");
         navigate(paths.app.career.hiringPost.root.getHref()); // Navigate after success
       },
@@ -88,17 +99,17 @@ export default function CreateForm() {
 
   // Form Submission
   const onSubmit = (formData: any) => {
-    console.log("Form Data:", formData);
-    console.log(typeof formData.relatedField);
+    console.log("submitted Form Data:", formData);
+
     createHiringPostMutation.mutate({
       data: {
-        categoryId: formData.categoryId,
-        relatedFieldId: formData.relatedField,
-        regionId: formData.region,
+        categoryId: Number(formData.category),
+        relatedFieldId: Number(formData.relatedField),
+        regionId: Number(formData.region),
         status: formData.status || false,
         position: formData.position,
-        locationId: formData.location,
-        jobTypeId: formData.jobType,
+        locationId: Number(formData.location),
+        jobTypeId: Number(formData.jobType),
         jobClose: formData.jobClose,
         description: formData.description,
         requirement: formData.requirement,
@@ -311,6 +322,32 @@ export default function CreateForm() {
                   </SelectContent>
                 </Select>
               </div>
+            )}
+          />
+        </div>
+
+        {/* Job Closing Date */}
+        <div className="space-y-2">
+          <Label className="font-medium">Job Closing Date</Label>
+          <Controller
+            name="jobClose"
+            control={control}
+            render={({ field }) => (
+              <Popover>
+                <PopoverTrigger asChild>
+                  <Button variant="outline" className="w-full justify-start">
+                    <CalendarIcon className="mr-2 h-4 w-4" />
+                    {field.value ? format(field.value, "PPP") : "Select a date"}
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent align="start" className="w-auto p-0">
+                  <Calendar
+                    mode="single"
+                    selected={field.value}
+                    onSelect={field.onChange}
+                  />
+                </PopoverContent>
+              </Popover>
             )}
           />
         </div>
@@ -544,9 +581,7 @@ export default function CreateForm() {
           </Button>
           <Button
             variant="outline"
-            onClick={() =>
-              navigate(paths.app.career.relatedFields.root.getHref())
-            }
+            onClick={() => navigate(paths.app.career.hiringPost.root.getHref())}
           >
             Cancel
           </Button>

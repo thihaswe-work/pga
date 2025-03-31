@@ -8,6 +8,12 @@ import {
   SelectItem,
   SelectTrigger,
 } from "@/components/ui/select";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+
 import { Switch } from "@/components/ui/switch";
 import { paths } from "@/config/paths";
 import { HiringPost } from "@/types/api";
@@ -27,6 +33,9 @@ import { useJobTypes } from "../api/get-jobTypes";
 import { useLocations } from "../api/get-locations";
 import { useUpdateHiringPost } from "../api/update-hiringPost";
 import { Textarea } from "@/components/ui/textarea";
+import { Calendar } from "@/components/ui/calendar";
+import { format, parseISO } from "date-fns";
+import { CalendarIcon } from "lucide-react";
 interface Prop {
   data: HiringPost;
 }
@@ -38,16 +47,18 @@ export default function EditForm({ data }: Prop) {
   const { data: locations } = useLocations({});
   const { data: jobtypes } = useJobTypes({});
   const { data: relatedFields } = useRelatedFields({});
+
+  console.log(data.jobClose);
   const { control, handleSubmit, setValue } = useForm({
     defaultValues: {
-      category: data.categoryId || "",
+      category: data?.categoryId || "",
       relatedField: data.relatedFieldId || "",
       region: data.regionId || "",
       status: data?.status || false,
       position: data?.position || "",
       location: data.locationId || "",
       jobType: data.jobTypeId || "",
-      closeDate: data.jobClose || "",
+      jobClose: data.jobClose || "",
       description: data?.description || "",
       requirement: data?.requirement || "",
       responsibility: data?.responsibility || "",
@@ -93,17 +104,15 @@ export default function EditForm({ data }: Prop) {
 
   // Form Submission
   const onSubmit = (formData: any) => {
-    console.log("Form Data:", formData);
-    console.log(typeof formData.relatedField);
     updateHiringPostMutation.mutate({
       data: {
-        categoryId: formData.categoryId,
-        relatedFieldId: formData.relatedField,
-        regionId: formData.region,
+        categoryId: Number(formData.category),
+        relatedFieldId: Number(formData.relatedField),
+        regionId: Number(formData.region),
         status: formData.status || false,
         position: formData.position,
-        locationId: formData.location,
-        jobTypeId: formData.jobType,
+        locationId: Number(formData.location),
+        jobTypeId: Number(formData.jobType),
         jobClose: formData.jobClose,
         description: formData.description,
         requirement: formData.requirement,
@@ -319,7 +328,32 @@ export default function EditForm({ data }: Prop) {
             )}
           />
         </div>
-
+        {/* jobClose */}
+        <div className="space-y-2">
+          <Label className="font-medium">Job Closing Date</Label>
+          <Controller
+            name="jobClose"
+            control={control}
+            render={({ field }) => (
+              <Popover>
+                <PopoverTrigger asChild>
+                  <Button variant="outline" className="w-full justify-start">
+                    <CalendarIcon className="mr-2 h-4 w-4" />
+                    {field.value ? format(field.value, "PPP") : "Select a date"}
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent align="start" className="w-auto p-0">
+                  <Calendar
+                    mode="single"
+                    selected={field.value}
+                    onSelect={field.onChange}
+                    initialFocus
+                  />
+                </PopoverContent>
+              </Popover>
+            )}
+          />
+        </div>
         {/* description */}
         <div className="space-y-2">
           <Label className="font-medium">
@@ -549,9 +583,7 @@ export default function EditForm({ data }: Prop) {
           </Button>
           <Button
             variant="outline"
-            onClick={() =>
-              navigate(paths.app.career.relatedFields.root.getHref())
-            }
+            onClick={() => navigate(paths.app.career.hiringPost.root.getHref())}
           >
             Cancel
           </Button>

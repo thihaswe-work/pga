@@ -23,8 +23,7 @@ export default function CreateForm() {
   const createREluseCreateRelatedFieldMutation = useCreateRelatedField({
     mutationConfig: {
       onSuccess: () => {
-        toast("Categories Created");
-        console.log("create successful!");
+        toast("RelatedField Created");
         navigate(paths.app.career.relatedFields.root.getHref()); // Navigate after success
       },
       onError: (error) => {

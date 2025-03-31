@@ -28,11 +28,18 @@ export const getColumns = (
 
         return (
           <div className="px-4 py-3 w-[213px]">
-            <img
-              className="w-[180px] h-[43px] object-cover"
-              src={image && image[0]}
-              alt="image"
-            />
+            {image ? (
+              <div>
+                <img
+                  className="w-[180px] h-[43px] object-cover"
+                  src={image && image[0]}
+                  alt="image"
+                />
+                <span>{image.length - 2}</span>
+              </div>
+            ) : (
+              <div></div>
+            )}
           </div>
         );
       },

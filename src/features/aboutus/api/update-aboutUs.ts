@@ -8,11 +8,10 @@ import { getAboutUsQueryOptions } from "./get-aboutUs";
 
 export const updateAboutUsInputSchema = z.object({
   header: z.string().min(1, "Required"),
-  label: z.string().min(1, "Required"),
   sectionType: z.string(),
   description: z.string().min(1, "Required"),
   status: z.boolean(),
-  image: z.any().nullable(),
+  images: z.any().nullable(),
   // imagePreview: z.string(),
 });
 export type UpdateAboutUsInput = z.infer<typeof updateAboutUsInputSchema>;

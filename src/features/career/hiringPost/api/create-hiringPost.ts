@@ -29,11 +29,7 @@ export const createHiringPost = ({
 }: {
   data: CreateHiringPostInput;
 }): Promise<HiringPost> => {
-  return api.post(`/hiringpost`, data, {
-    headers: {
-      "Content-Type": "multipart/form-data",
-    },
-  });
+  return api.post(`/hiringpost`, data, {});
 };
 
 type UseCreateHiringPostOptions = {

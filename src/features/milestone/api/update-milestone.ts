@@ -27,7 +27,7 @@ export const updateMilestone = async ({
 }): Promise<Milestone> => {
   try {
     console.log("Updating MileStone with Data:", data); // Log the data
-    const response = await api.put(`/Milestone/${id}`, data, {
+    const response = await api.put(`/milestones/${id}`, data, {
       headers: {
         "Content-Type": "multipart/form-data",
       },

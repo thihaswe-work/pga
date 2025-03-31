@@ -10,7 +10,6 @@ export default function EditPage() {
   const MilestoneId = Number(id) as number;
   const { data: milestone, isLoading } = useMilestone({ id: MilestoneId });
   if (isLoading && !milestone) return <Loading />;
-
   return (
     <ContentLayout title={`Editing Milestone`}>
       <EditForm data={milestone?.data as Milestone} />

@@ -1,5 +1,5 @@
 import { ContentLayout } from "@/components/layouts";
-import CreateForm from "@/features/career/relatedFields/components/createform";
+import CreateForm from "@/features/career/hiringPost/components/createform";
 
 export default function CreatePage() {
   return (

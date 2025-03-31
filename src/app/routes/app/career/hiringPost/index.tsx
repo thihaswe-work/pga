@@ -57,7 +57,7 @@ export default function Page() {
     >
       <div className="">
         <DataTable
-          search="name"
+          search="position"
           columns={getColumns(handleViewClick, handleViewDelete)}
           data={data?.data}
           pagination={true}

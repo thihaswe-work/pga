@@ -64,7 +64,7 @@ export type Home = {
 export type AboutUs = {
   id: number;
   sectionType: string;
-  image?: string[];
+  images?: string[];
   header: string;
   label: string;
   description: string;

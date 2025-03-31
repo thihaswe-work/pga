@@ -31,7 +31,6 @@ export const updateHiringPost = async ({
   id: number;
 }): Promise<HiringPost> => {
   try {
-    console.log("Updating HiringPost with Data:", data); // Log the data
     const response = await api.put(`/hiringpost/${id}`, data, {});
     console.log("Response:", response.data);
     return response.data;

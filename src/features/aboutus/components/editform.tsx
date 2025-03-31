@@ -12,19 +12,20 @@ import { useUpdateAboutUs } from "../api/update-aboutUs";
 
 interface Prop {
   data: AboutUs;
+  images?: any[];
 }
 
-export default function EditForm({ data }: Prop) {
+export default function EditForm({ data, images }: Prop) {
   const navigate = useNavigate();
 
   const { control, handleSubmit } = useForm({
     defaultValues: {
       header: data.header || "",
-      label: data.label || "",
+
       sectionType: data.sectionType || "",
       description: data.description || "",
       status: data?.status || false,
-      image: data.image || null,
+      images: images || null,
     },
   });
 
@@ -46,15 +47,15 @@ export default function EditForm({ data }: Prop) {
     updateAboutUsMutation.mutate({
       data: {
         header: formData.header,
-        label: formData.label,
         sectionType: formData.sectionType,
         description: formData.description,
         status: formData.status,
-        image: formData.image,
+        images: formData.images,
       },
       AboutUsSection: data.sectionType, // Ensure this value is correct
     });
   };
+
   return (
     <div className="flex w-full gap-8">
       <div className="max-w-[628px] space-y-6 w-full p-6 bg-background rounded-md">
@@ -73,7 +74,7 @@ export default function EditForm({ data }: Prop) {
         </div>
 
         {/* Label */}
-        <div className="space-y-2">
+        {/* <div className="space-y-2">
           <Label className="font-medium">
             Label<span className="text-primaryText">*</span>
           </Label>
@@ -88,7 +89,7 @@ export default function EditForm({ data }: Prop) {
               />
             )}
           />
-        </div>
+        </div> */}
 
         {/* Description */}
         <div className="space-y-2">
