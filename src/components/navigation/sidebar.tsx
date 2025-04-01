@@ -155,13 +155,13 @@ export const SideBar = () => {
     { title: "Maintenance" }, // Added at the end
     {
       name: "Role & Permission",
-      to: paths.app.roleAndPermission.getHref(),
+      to: paths.app.roleAndPermission.root.getHref(),
       icon: PiScrewdriverBold,
     },
 
     {
       name: "User Maintain",
-      to: paths.app.userMaintain.getHref(),
+      to: paths.app.userMaintain.root.getHref(),
       icon: FiUserPlus,
     },
   ];

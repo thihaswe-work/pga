@@ -264,16 +264,47 @@ export const paths = {
     // },
     roleAndPermission: {
       // name: "Banner",
-      path: "role-and-permission",
-      getHref: () => {
-        return "/app/role-and-permission";
+      root: {
+        path: "role-and-permission",
+        getHref: () => {
+          return "/app/role-and-permission";
+        },
+      },
+      edit: {
+        // name: "career",
+        path: "role-and-permission/:id/edit",
+        getHref: (id: string | number) => {
+          return `/app/role-and-permission/${id}/edit`;
+        },
+      },
+      create: {
+        // name: ",
+        path: "role-and-permission/create",
+        getHref: () => {
+          return "/app/role-and-permission/create";
+        },
       },
     },
     userMaintain: {
-      // name: "Banner",
-      path: "user-maintain",
-      getHref: () => {
-        return "/app/user-maintain";
+      root: {
+        path: "user-maintain",
+        getHref: () => {
+          return "/app/user-maintain";
+        },
+      },
+      edit: {
+        // name: ",
+        path: "user-maintain/:id/edit",
+        getHref: (id: string | number) => {
+          return `/app/user-maintain/${id}/edit`;
+        },
+      },
+      create: {
+        // name: ",
+        path: "user-maintain/create",
+        getHref: () => {
+          return "/app/user-maintain/create";
+        },
       },
     },
   },

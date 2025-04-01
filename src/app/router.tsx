@@ -244,14 +244,28 @@ export const createAppRouter = (queryClient: QueryClient) =>
         },
 
         {
-          path: paths.app.roleAndPermission.path,
+          path: paths.app.roleAndPermission.root.path,
           lazy: () =>
             import("./routes/app/roleAndPermission/roles").then(
               convert(queryClient)
             ),
         },
         {
-          path: paths.app.userMaintain.path,
+          path: paths.app.roleAndPermission.edit.path,
+          lazy: () =>
+            import("./routes/app/roleAndPermission/edit").then(
+              convert(queryClient)
+            ),
+        },
+        {
+          path: paths.app.roleAndPermission.create.path,
+          lazy: () =>
+            import("./routes/app/roleAndPermission/create").then(
+              convert(queryClient)
+            ),
+        },
+        {
+          path: paths.app.userMaintain.root.path,
           lazy: () =>
             import("./routes/app/userMaintain/userMaintain").then(
               convert(queryClient)

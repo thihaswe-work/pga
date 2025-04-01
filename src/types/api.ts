@@ -180,3 +180,13 @@ export type ContactMessage = {
   message: string;
   applyDate: string;
 };
+
+export type RoleAndPermission = {
+  id: number;
+  role: string;
+  systemModules: any | unknown;
+  permission: any;
+  status: boolean;
+  createdAt: string;
+  updatedAt: string;
+};

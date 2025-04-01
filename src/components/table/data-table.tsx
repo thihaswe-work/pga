@@ -67,7 +67,7 @@ export function DataTable<TData, TValue>({
         {search && (
           <div className="p-3 flex justify-end border-b w-full">
             <Input
-              placeholder={`Filter ${search}... `}
+              placeholder={`Search `}
               value={
                 (table.getColumn(search)?.getFilterValue() as string) ?? ""
               }
