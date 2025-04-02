@@ -16,69 +16,69 @@ export default function EditForm({ data }: Prop) {
 
   const { control, handleSubmit } = useForm({
     defaultValues: {
-      name: "",
+      role: data.role,
       status: data.status,
       systemModules1: {
         homePage: {
-          edit: false,
-          view: false,
+          edit: data.systemModules.systemModules1.homePage.edit,
+          view: data.systemModules.systemModules1.homePage.view,
         },
         aboutUs: {
-          edit: false,
-          view: false,
+          edit: data.systemModules.systemModules1.aboutUs.edit,
+          view: data.systemModules.systemModules1.aboutUs.view,
         },
       },
       systemModules2: {
         milestones: {
-          create: false,
-          edit: false,
-          view: false,
-          delete: false,
+          create: data.systemModules.systemModules2.milestones.create,
+          edit: data.systemModules.systemModules2.milestones.edit,
+          view: data.systemModules.systemModules2.milestones.view,
+          delete: data.systemModules.systemModules2.milestones.delete,
         },
         banners: {
-          create: false,
-          edit: false,
-          view: false,
-          delete: false,
+          create: data.systemModules.systemModules2.banners.create,
+          edit: data.systemModules.systemModules2.banners.edit,
+          view: data.systemModules.systemModules2.banners.view,
+          delete: data.systemModules.systemModules2.banners.delete,
         },
         blogs: {
-          create: false,
-          edit: false,
-          view: false,
-          delete: false,
+          create: data.systemModules.systemModules2.blogs.create,
+          edit: data.systemModules.systemModules2.blogs.edit,
+          view: data.systemModules.systemModules2.blogs.view,
+          delete: data.systemModules.systemModules2.blogs.delete,
         },
 
         careers: {
-          create: false,
-          edit: false,
-          view: false,
-          delete: false,
+          create: data.systemModules.systemModules2.careers.create,
+          edit: data.systemModules.systemModules2.careers.edit,
+          view: data.systemModules.systemModules2.careers.view,
+          delete: data.systemModules.systemModules2.careers.delete,
         },
       },
       systemModules3: {
         jobApplicationForms: {
-          reply: false,
-          view: false,
-          delete: false,
+          reply: data.systemModules.systemModules3.jobApplicationForms.reply,
+          view: data.systemModules.systemModules3.jobApplicationForms.view,
+          delete: data.systemModules.systemModules3.jobApplicationForms.delete,
         },
         contactMessages: {
-          reply: false,
-          view: false,
-          delete: false,
+          reply: data.systemModules.systemModules3.contactMessages.reply,
+          view: data.systemModules.systemModules3.contactMessages.view,
+          delete: data.systemModules.systemModules3.contactMessages.delete,
         },
       },
       maintenance: {
         rolesAndPermissions: {
-          create: false,
-          edit: false,
-          view: false,
-          delete: false,
+          create: data.systemModules.maintenance.rolesAndPermissions.create,
+          edit: data.systemModules.maintenance.rolesAndPermissions.edit,
+          view: data.systemModules.maintenance.rolesAndPermissions.view,
+          delete: data.systemModules.maintenance.rolesAndPermissions.delete,
         },
         userMaintain: {
-          create: false,
-          edit: false,
-          view: false,
-          delete: false,
+          create: data.systemModules.maintenance.userMaintain.create,
+          edit: data.systemModules.maintenance.userMaintain.edit,
+          view: data.systemModules.maintenance.userMaintain.view,
+          delete: data.systemModules.maintenance.userMaintain.delete,
         },
       },
     },
@@ -125,7 +125,7 @@ export default function EditForm({ data }: Prop) {
             Role Name<span className="text-primaryText">*</span>
           </Label>
           <Controller
-            name="name"
+            name="role"
             control={control}
             render={({ field }) => (
               <Input {...field} placeholder="" className="mt-1" />

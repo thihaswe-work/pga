@@ -1,39 +1,26 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { ContentLayout } from "@/components/layouts/content-layout";
-import Loading from "@/components/loading/loading";
-import { DataTable } from "@/components/table/data-table";
-import { DeleteDialog, OpenDialog } from "@/components/table/dialog";
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+} from "@/components/ui/select";
+import { Switch } from "@/components/ui/switch";
 import { paths } from "@/config/paths";
-import { getColumns } from "@/features/roleAndPermission/components/columns";
-import { RoleDialog } from "@/features/roleAndPermission/components/dialog";
-import { RoleAndPermission } from "@/types/api";
-import { useState } from "react";
+import { RoleAndPermission, UserMaintain } from "@/types/api";
+import { Controller, useForm } from "react-hook-form";
 import { useNavigate } from "react-router";
-
-export default function Roles() {
-  const [selectedDetail, setSelectedDetail] =
-    useState<RoleAndPermission | null>(null);
-  const [dialogOpen, setDialogOpen] = useState(false);
+interface Prop {
+  data: UserMaintain;
+}
+export default function EditForm({ data }: Prop) {
   const navigate = useNavigate();
-  const [dialogDelete, setDialogDelete] = useState(false);
-
-  // const { data: milestones, isLoading, isError } = useMilestones({});
-  // const deleteMilestoneMutation = useDeleteMilestone({
-  //   mutationConfig: {
-  //     onSuccess: () => {
-  //       navigate(paths.app.milestone.root.getHref());
-  //       setDialogDelete(false);
-  //       toast("Milestone Deleted");
-  //     },
-  //   },
-  // });
-
-  // if (isLoading) return <Loading />;
-  // if (isError)
-  //   return <p className="text-red-500">Failed to fetch milestones.</p>;
-  // if (!milestones) return <p>no milestones found</p>;
-  const fakeRolesAndPermissions: RoleAndPermission[] = [
+  const roles: RoleAndPermission[] = [
     {
       id: 1,
       role: "Admin",
@@ -206,60 +193,140 @@ export default function Roles() {
       updatedAt: "2024-03-01T16:45:00Z",
     },
   ];
+  const { control, handleSubmit } = useForm({
+    defaultValues: {
+      username: data.username,
+      email: data.email,
+      password: data.password,
+      status: data.status,
+      roleId: data.roleId,
+    },
+  });
 
-  const handleViewClick = (detail: RoleAndPermission) => {
-    setSelectedDetail(detail);
-    setDialogOpen(true);
-  };
-  const handleViewDelete = (detail: RoleAndPermission) => {
-    setSelectedDetail(detail);
-    setDialogDelete(true);
+  // Form Submission
+  const onSubmit = (formData: any) => {
+    console.log("Submitting Form Data:", formData);
   };
 
   return (
-    <ContentLayout
-      title="Roles & Permissions"
-      create={
-        <Button
-          className="bg-primaryText hover:bg-red-500 "
-          onClick={() => {
-            navigate(paths.app.roleAndPermission.create.getHref());
-          }}
-        >
-          Create New Role
-        </Button>
-      }
-    >
-      <div>
-        <DataTable
-          columns={getColumns(handleViewClick, handleViewDelete)}
-          data={fakeRolesAndPermissions || []} // Use fetched data
-          pagination={false}
-        />
-        {selectedDetail && (
-          <>
-            <RoleDialog
-              roleDetail={selectedDetail}
-              open={dialogOpen}
-              setOpen={setDialogOpen}
-              navlink={paths.app.milestone.edit.getHref(selectedDetail.id)}
-            />
-            <DeleteDialog<RoleAndPermission>
-              detail={selectedDetail}
-              open={dialogDelete}
-              setOpen={setDialogDelete}
-              // deleteFunc={() => {
-              //   deleteMilestoneMutation.mutate({
-              //     milestoneId: selectedDetail.id,
-              //   });
-              // }}
-              deleteFunc={() => {
-                console.log("delete role and permission");
-              }}
-            />
-          </>
-        )}
+    <div className="flex w-full gap-8">
+      <div className="max-w-[628px] space-y-6 w-full p-6 bg-background rounded-md">
+        {/* Header */}
+        <div className="space-y-2">
+          <Label className="font-medium">
+            Role Name<span className="text-primaryText">*</span>
+          </Label>
+          <Controller
+            name="username"
+            control={control}
+            render={({ field }) => (
+              <Input {...field} placeholder="" className="mt-1" />
+            )}
+          />
+        </div>
+
+        <div className="space-y-2">
+          <Label className="font-medium">
+            Login Email<span className="text-primaryText">*</span>
+          </Label>
+          <Controller
+            name="email"
+            control={control}
+            render={({ field }) => (
+              <Input {...field} placeholder="" className="mt-1" />
+            )}
+          />
+        </div>
+        <div className="space-y-2">
+          <Label className="font-medium">
+            Password<span className="text-primaryText">*</span>
+          </Label>
+          <Controller
+            name="password"
+            control={control}
+            render={({ field }) => (
+              <Input {...field} placeholder="" className="mt-1" />
+            )}
+          />
+        </div>
+        {/* Role Select */}
+        <div className="space-y-2 ">
+          <Label className="font-medium">
+            Role<span className="text-primaryText">*</span>
+          </Label>
+          <Controller
+            name="roleId"
+            control={control}
+            render={({ field }) => (
+              <div className="w-full">
+                <Select
+                  value={String(field.value)}
+                  onValueChange={field.onChange}
+                >
+                  <SelectTrigger className="w-full">
+                    <span>
+                      {roles?.find(
+                        (role: RoleAndPermission) =>
+                          role.id === Number(field.value)
+                      )?.role || "Select a role"}
+                    </span>
+                  </SelectTrigger>
+                  <SelectContent className="w-full">
+                    {roles?.map((role: RoleAndPermission) => (
+                      <SelectItem
+                        key={role.id}
+                        value={String(role.id)}
+                        className="w-full"
+                      >
+                        {role.role}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+            )}
+          />
+        </div>
       </div>
-    </ContentLayout>
+
+      {/* Right Section */}
+      <div className="w-full max-w-[436px] space-y-6">
+        {/* Active Toggle */}
+        <div className="flex justify-between border flex-col rounded-lg bg-background">
+          <Label className="font-medium px-6 py-4">Active</Label>
+          <div className="h-[1px] w-full bg-[#e9e9ea]"></div>
+          <div className="p-6">
+            <Controller
+              name="status"
+              control={control}
+              render={({ field }) => (
+                <Switch
+                  checked={field.value}
+                  onCheckedChange={field.onChange}
+                  className={"data-[state=checked]:bg-switchCheck"}
+                />
+              )}
+            />
+          </div>
+        </div>
+
+        {/* Buttons */}
+        <div className="flex gap-2">
+          <Button
+            variant="default"
+            className="bg-primaryText hover:bg-text-500"
+            onClick={handleSubmit(onSubmit)}
+          >
+            Save changes
+          </Button>
+          <Button
+            variant="outline"
+            onClick={() => navigate(paths.app.userMaintain.root.getHref())}
+          >
+            Cancel
+          </Button>
+        </div>
+      </div>
+    </div>
   );
 }

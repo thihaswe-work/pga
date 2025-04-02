@@ -272,6 +272,18 @@ export const createAppRouter = (queryClient: QueryClient) =>
             ),
         },
         {
+          path: paths.app.userMaintain.edit.path,
+          lazy: () =>
+            import("./routes/app/userMaintain/edit").then(convert(queryClient)),
+        },
+        {
+          path: paths.app.userMaintain.create.path,
+          lazy: () =>
+            import("./routes/app/userMaintain/create").then(
+              convert(queryClient)
+            ),
+        },
+        {
           path: "test",
           lazy: () =>
             import("../testtable/test-page").then(convert(queryClient)),

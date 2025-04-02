@@ -33,7 +33,8 @@ export default function CategoryPage() {
   });
 
   if (isLoading) return <Loading />;
-  if (isError) return <p className="text-red-500">Failed to fetch banners.</p>;
+  if (isError)
+    return <p className="text-red-500">Failed to fetch categories.</p>;
 
   const handleViewClick = (detail: BlogCategory) => {
     setSelectedDetail(detail);

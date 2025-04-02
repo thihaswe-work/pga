@@ -13,7 +13,7 @@ export default function CreateForm() {
 
   const { control, handleSubmit } = useForm({
     defaultValues: {
-      name: "",
+      role: "",
       status: false,
       systemModules1: {
         homePage: {
@@ -123,7 +123,7 @@ export default function CreateForm() {
             Role Name<span className="text-primaryText">*</span>
           </Label>
           <Controller
-            name="name"
+            name="role"
             control={control}
             render={({ field }) => (
               <Input {...field} placeholder="" className="mt-1" />

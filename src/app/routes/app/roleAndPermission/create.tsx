@@ -3,7 +3,7 @@ import CreateForm from "@/features/roleAndPermission/components/createform";
 
 export default function CreatePage() {
   return (
-    <ContentLayout title="Create Milestone">
+    <ContentLayout title="Create Roles">
       <CreateForm />
     </ContentLayout>
   );
